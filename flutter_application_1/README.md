@@ -1,16 +1,17 @@
-# flutter_application_1
+# COM4104 Group 11 Flutter Mobile App – flutter_application_1
 
-A new Flutter project.
+## Historical Data Comparsion
 
-## Getting Started
+### Data Source
 
-This project is a starting point for a Flutter application.
+Yahoo Finance | SPDR ETF | URL
 
-A few resources to get you started if this is your first Flutter project:
+```
+https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=1666047422&period2=1697472000&interval=1d&events=history&includeAdjustedClose=true
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Ref
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  - Yahoo Finance URL https://stackoverflow.com/questions/44030983/yahoo-finance-url-not-working
+  - UNIX Timestamp Converter https://www.unixtimestamp.com/
+  - UNIX Timestamp in Dart https://stackoverflow.com/questions/13110542/how-to-get-a-timestamp-in-dart
