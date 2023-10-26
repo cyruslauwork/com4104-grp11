@@ -14,8 +14,6 @@ Future<void> bootstrap(Flavor flavor) async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
     await initServices(flavor);
     await addGlobalController(flavor);
 

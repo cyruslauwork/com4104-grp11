@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,8 +19,8 @@ class ScreenUtils {
   double get textScaleFactor => Get.textScaleFactor;
   double get extraTextScaleFactor =>
       min((_maxTextScaleFactor - 1), max(0, textScaleFactor - 1));
-  double get screenWidth => Get.width;
-  double get screenHeight => Get.height;
+  double get screenWidth => WidgetsBinding.instance.window.physicalSize.width;
+  double get screenHeight => WidgetsBinding.instance.window.physicalSize.height;
 
   ///The ratio of actual height to UI design
   double get scaleHeight => screenHeight / _uiSize.height;

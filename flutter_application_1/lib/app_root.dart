@@ -17,8 +17,8 @@ class AppRoot extends StatefulWidget {
 }
 
 class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
-  Size currentScreenSize =
-      Size(ScreenUtils().screenWidth, ScreenUtils().screenHeight);
+  // Size currentScreenSize =
+  //     Size(ScreenUtils().screenWidth, ScreenUtils().screenHeight);
 
   @override
   void initState() {
@@ -56,26 +56,26 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      builder: (BuildContext context, Widget? child) {
-        final MediaQueryData data = MediaQuery.of(context);
-        // Rebuild the screen to fix mobile setting horizontal screen issue
-        if (currentScreenSize != data.size) {
-          Future.delayed(const Duration(seconds: 0), () {
-            _rebuildAllChildren(context);
-            logger.d(
-                'update MediaQueryData width: ${data.size.width}, height: ${data.size.height}');
-          });
-          currentScreenSize = data.size;
-        }
-        return MediaQuery(
-          data: data.copyWith(
-              textScaleFactor:
-                  data.textScaleFactor > ScreenUtils().maxTextScaleFactor
-                      ? ScreenUtils().maxTextScaleFactor
-                      : data.textScaleFactor),
-          child: child!,
-        );
-      },
+      // builder: (BuildContext context, Widget? child) {
+      //   final MediaQueryData data = MediaQuery.of(context);
+      //   // Rebuild the screen to fix mobile setting horizontal screen issue
+      //   if (currentScreenSize != data.size) {
+      //     Future.delayed(const Duration(seconds: 0), () {
+      //       _rebuildAllChildren(context);
+      //       logger.d(
+      //           'update MediaQueryData width: ${data.size.width}, height: ${data.size.height}');
+      //     });
+      //     currentScreenSize = data.size;
+      //   }
+      //   return MediaQuery(
+      //     data: data.copyWith(
+      //         textScaleFactor:
+      //             data.textScaleFactor > ScreenUtils().maxTextScaleFactor
+      //                 ? ScreenUtils().maxTextScaleFactor
+      //                 : data.textScaleFactor),
+      //     child: child!,
+      //   );
+      // },
       theme: ThemeData(
         // This is the theme of your application.
         //
