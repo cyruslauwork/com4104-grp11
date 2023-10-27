@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'utils/utils.dart';
 import 'services/services.dart';
 import 'screens/main.dart';
 import 'controllers/controllers.dart';
@@ -102,8 +101,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
         //     name: RouteName.pageNotFound.path,
         //     page: () => const PageNotFoundScreen()),
         GetPage(
-            name: RouteName.mainScreen.path,
-            page: () => const MainScreen(title: 'Hello World!')),
+            name: RouteName.mainScreen.path, page: () => const MainScreen()),
         // GetPage(
         //   name: RouteName.mainScreen.path,
         //   page: () => const MainScreen(),
