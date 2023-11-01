@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
@@ -263,6 +265,17 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  _compareData() {
+    List<double> _lastFive = [];
+    for (int i = 5; i < 0; i--) {
+      double percentage = (_candleData[_candleData.length - i + 1].close! -
+              _candleData[_candleData.length - i].close!) /
+          (_candleData[_candleData.length - i].close!);
+      _lastFive.add(percentage);
+    }
+    //loop all data with lastfive
   }
 
   _computeTrendLines() {
