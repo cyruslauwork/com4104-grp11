@@ -225,6 +225,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             const Text('Hello'),
             const Text('data'),
+            Text(countMatches().toString()),
             SizedBox(
               width: 200,
               height: 100,
@@ -276,6 +277,51 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
+  }
+
+  int countMatches() {
+    int count = 0;
+    List<double> lastFive = [];
+    for (int i = 4; i > 0; i--) {
+      double percentage = (_candleData[_candleData.length - (i + 1)].close! -
+              _candleData[_candleData.length - i].close!) /
+          (_candleData[_candleData.length - i].close!);
+      lastFive.add(percentage);
+    }
+    //loop all data with lastfive
+    for (int l = 0; l < _candleData.length - 6; l++) {
+      //-6 to avoid counting last five data as a same match
+      List<double> compareFive = [];
+      for (int i = 0; i < 4; i++) {
+        double percentage =
+            (_candleData[l + (i + 1)].close! - _candleData[l + i].close!) /
+                (_candleData[l + i].close!);
+        compareFive.add(percentage);
+      }
+      if (areDifferencesLargerThan30Percent(lastFive, compareFive)) {
+        //find match five data
+        count += 1;
+      }
+    }
+    return count;
+  }
+
+  bool areDifferencesLargerThan30Percent(
+      List<double> list1, List<double> list2) {
+    if (list1.length != list2.length) {
+      throw ArgumentError("Both lists must have the same length.");
+    }
+
+    for (int i = 0; i < list1.length; i++) {
+      double difference = list1[i] - list2[i];
+      double percentageDifference = (difference / list1[i]) * 100;
+
+      if (percentageDifference.abs() <= 30) {
+        return false; // Difference is not larger than 30%
+      }
+    }
+
+    return true; // All differences are larger than 30%
   }
 
   _compareData() {
