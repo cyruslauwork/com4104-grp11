@@ -1,9 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
+import '../controllers/controllers.dart';
 import '../models/models.dart';
+import '../utils/utils.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -223,12 +223,13 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
           children: [
-            const Text('Hello'),
-            const Text('data'),
-            Text(countMatches().toString()),
+            const Text('Hello World!'),
+            const Text('True | False | Execute (ms) | CSV Download (ms)'),
+            Text(countMatches().toString() +
+                GlobalController().csvDownloadTime.value.toString()),
             SizedBox(
-              width: 200,
-              height: 100,
+              width: 393.w,
+              height: 200.h,
               child: InteractiveChart(
                 /** Only [candles] is required */
                 candles: _candleData,
@@ -279,9 +280,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  int countMatches() {
-    int count = 0;
+  List<int> countMatches() {
+    int trueCount = 0;
+    int falseCount = 0;
     List<double> lastFive = [];
+    DateTime startTime = DateTime.now(); // Record the start time
     for (int i = 4; i > 0; i--) {
       double percentage = (_candleData[_candleData.length - (i + 1)].close! -
               _candleData[_candleData.length - i].close!) /
@@ -289,8 +292,8 @@ class _MainScreenState extends State<MainScreen> {
       lastFive.add(percentage);
     }
     //loop all data with lastfive
-    for (int l = 0; l < _candleData.length - 6; l++) {
-      //-6 to avoid counting last five data as a same match
+    for (int l = 0; l < _candleData.length - 5; l++) {
+      //-5 to avoid counting last five data as a same match
       List<double> compareFive = [];
       for (int i = 0; i < 4; i++) {
         double percentage =
@@ -300,10 +303,16 @@ class _MainScreenState extends State<MainScreen> {
       }
       if (areDifferencesLargerThan30Percent(lastFive, compareFive)) {
         //find match five data
-        count += 1;
+        falseCount += 1;
+      } else {
+        trueCount += 1;
       }
     }
-    return count;
+    DateTime endTime = DateTime.now(); // Record the end time
+    // Calculate the time difference
+    Duration executionDuration = endTime.difference(startTime);
+    int executionTime = executionDuration.inMilliseconds;
+    return [trueCount, falseCount, (executionTime)];
   }
 
   bool areDifferencesLargerThan30Percent(
@@ -325,12 +334,12 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _compareData() {
-    List<double> _lastFive = [];
+    List<double> lastFive = [];
     for (int i = 5; i < 0; i--) {
       double percentage = (_candleData[_candleData.length - i + 1].close! -
               _candleData[_candleData.length - i].close!) /
           (_candleData[_candleData.length - i].close!);
-      _lastFive.add(percentage);
+      lastFive.add(percentage);
     }
     //loop all data with lastfive
   }

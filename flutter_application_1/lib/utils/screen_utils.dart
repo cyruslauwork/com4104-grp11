@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +8,7 @@ import 'package:get/get.dart';
 * */
 class ScreenUtils {
   //Iphone 11 Pro / X Size
-  static const Size defaultSize = Size(375, 812);
+  static const Size defaultSize = Size(393, 852);
   static final ScreenUtils _instance = ScreenUtils._();
   static const double _defaultMaxTextScaleFactor = 1.5;
   ScreenUtils._();
@@ -19,7 +18,9 @@ class ScreenUtils {
   double get textScaleFactor => Get.textScaleFactor;
   double get extraTextScaleFactor =>
       min((_maxTextScaleFactor - 1), max(0, textScaleFactor - 1));
+  // ignore: deprecated_member_use
   double get screenWidth => WidgetsBinding.instance.window.physicalSize.width;
+  // ignore: deprecated_member_use
   double get screenHeight => WidgetsBinding.instance.window.physicalSize.height;
 
   ///The ratio of actual height to UI design

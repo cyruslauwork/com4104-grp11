@@ -8,4 +8,6 @@ class GlobalController extends GetxController {
     Get.put(GlobalController());
     super.onInit();
   }
+
+  var csvDownloadTime = 0.obs;
 }

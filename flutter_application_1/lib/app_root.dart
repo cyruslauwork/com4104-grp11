@@ -43,14 +43,14 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
   }
 
   //this method only use for special issue
-  void _rebuildAllChildren(BuildContext context) {
-    void rebuild(Element el) {
-      el.markNeedsBuild();
-      el.visitChildren(rebuild);
-    }
+  // void _rebuildAllChildren(BuildContext context) {
+  //   void rebuild(Element el) {
+  //     el.markNeedsBuild();
+  //     el.visitChildren(rebuild);
+  //   }
 
-    (context as Element).visitChildren(rebuild);
-  }
+  //   (context as Element).visitChildren(rebuild);
+  // }
 
   @override
   Widget build(BuildContext context) {
