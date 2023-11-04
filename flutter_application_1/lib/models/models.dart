@@ -1,1 +1,2 @@
-export 'csvtolisttocandledata.dart';
+export 'candle.dart';
+export 'trendmatch.dart';
