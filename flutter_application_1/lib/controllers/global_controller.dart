@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
+import 'package:interactive_chart/interactive_chart.dart';
 
 class GlobalController extends GetxController {
-  static GlobalController get to => GlobalController();
+  static GlobalController get to => Get.put(GlobalController());
 
   void reload() {
     Get.delete<GlobalController>();
@@ -9,5 +10,16 @@ class GlobalController extends GetxController {
     super.onInit();
   }
 
-  var csvDownloadTime = 0.obs;
+  RxBool darkMode = true.obs;
+  RxBool showAverage = true.obs;
+
+  RxInt csvDownloadTime = 0.obs;
+  RxList<int> trendMatchOutput = [0].obs;
+  RxList<double> selectedPeriodList = [0.0].obs;
+  RxList<List<double>> comparePeriodList = [
+    [0.0]
+  ].obs;
+  RxList<CandleData> listCandleData = [
+    CandleData(timestamp: 0000000000 * 1000, open: 0, close: 0, volume: 0)
+  ].obs;
 }

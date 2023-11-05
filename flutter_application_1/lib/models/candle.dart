@@ -1,10 +1,9 @@
 import 'package:csv/csv.dart';
-import '../controllers/controllers.dart';
-
 import 'package:logger/logger.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
 import '../services/services.dart';
+import '../controllers/controllers.dart';
 
 var logger = Logger();
 
@@ -31,7 +30,8 @@ class Candle {
     }
   }
 
-  Future<List<List<dynamic>>> csvToList(Future<String> futureCsvData) async {
+  Future<List<List<dynamic>>> csvToListList(
+      Future<String> futureCsvData) async {
     String csvData = await futureCsvData;
     // Process the CSV data as needed
     List<List<dynamic>> rowsAsListOfValues =
@@ -41,12 +41,12 @@ class Candle {
   }
 
   Future<List<CandleData>> listToCandles(
-      Future<List<List<dynamic>>> futureList) async {
-    List<List<dynamic>> list = await futureList;
-    list.removeAt(0);
-    return list
+      Future<List<List<dynamic>>> futureListList) async {
+    List<List<dynamic>> listList = await futureListList;
+    listList.removeAt(0);
+    return listList
         .map((row) => CandleData(
-              timestamp: TimeService().convertToUnixTimestamp(row[0]),
+              timestamp: TimeService().convertToUnixTimestamp(row[0]) * 1000,
               open: row[1],
               high: row[2],
               low: row[3],

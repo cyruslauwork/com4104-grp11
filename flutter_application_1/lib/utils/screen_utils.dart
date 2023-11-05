@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 * https://pub.dev/packages/flutter_screenutil
 * */
 class ScreenUtils {
-  //Iphone 11 Pro / X Size
-  static const Size defaultSize = Size(393, 852);
+  // iPhone 14 Pro Max Size
+  static const Size defaultSize = Size(430, 932);
   static final ScreenUtils _instance = ScreenUtils._();
   static const double _defaultMaxTextScaleFactor = 1.5;
   ScreenUtils._();

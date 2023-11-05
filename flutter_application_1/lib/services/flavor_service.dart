@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:get/get.dart';
 
 enum Flavor {

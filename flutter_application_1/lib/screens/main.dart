@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
+import 'package:collection/collection.dart';
 
 import '../controllers/controllers.dart';
 import '../models/models.dart';
@@ -22,16 +24,16 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  Future<List<CandleData>> get _futureCandleData async {
+  Future<List<CandleData>> get _futureListCandleData async {
     Future<String> futureCsvData = Candle().getCSV();
-    Future<List<List<dynamic>>> futureList = Candle().csvToList(futureCsvData);
-    Future<List<CandleData>> futureCandleData =
-        Candle().listToCandles(futureList);
-    _trendMatchOutput = await TrendMatch().countMatches(futureCandleData);
-    return futureCandleData;
+    Future<List<List<dynamic>>> futureListList =
+        Candle().csvToListList(futureCsvData);
+    Future<List<CandleData>> futureListCandleData =
+        Candle().listToCandles(futureListList);
+    TrendMatch().countMatches(futureListCandleData);
+    GlobalController.to.listCandleData.value = await futureListCandleData;
+    return futureListCandleData;
   }
-
-  late List<int> _trendMatchOutput;
 
   @override
   void initState() {
@@ -40,62 +42,46 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool darkMode = true;
-    bool showAverage = false;
-
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         actions: [
-          FutureBuilder<List<CandleData>>(
-              future: _futureCandleData,
-              builder: (context, AsyncSnapshot<List<CandleData>> snapshot) {
-                if (snapshot.hasData) {
-                  return Row(
+          Obx(
+            () => (GlobalController.to.listCandleData.length > 1
+                ? Row(
                     children: [
                       IconButton(
-                        icon:
-                            Icon(darkMode ? Icons.dark_mode : Icons.light_mode),
-                        onPressed: () => setState(() => darkMode = !darkMode),
+                        icon: Icon(GlobalController.to.darkMode.value
+                            ? Icons.dark_mode
+                            : Icons.light_mode),
+                        onPressed: () => GlobalController.to.darkMode.value =
+                            !GlobalController.to.darkMode.value,
                       ),
-                      IconButton(
-                        icon: Icon(
-                          showAverage
-                              ? Icons.show_chart
-                              : Icons.bar_chart_outlined,
-                        ),
-                        onPressed: () {
-                          setState(() => showAverage = !showAverage);
-                          if (showAverage) {
-                            _computeTrendLines(snapshot.data!);
-                          } else {
-                            _removeTrendLines(snapshot.data!);
-                          }
-                        },
-                      ),
+                      // IconButton(
+                      //   icon: Icon(GlobalController.to.showAverage.value
+                      //       ? Icons.show_chart
+                      //       : Icons.bar_chart_outlined),
+                      //   onPressed: () {
+                      //     GlobalController.to.showAverage.value =
+                      //         !GlobalController.to.showAverage.value;
+                      //   },
+                      // )
                     ],
-                  );
-                } else if (snapshot.hasError) {
-                  return const Icon(
-                    Icons.error_outline,
-                    color: Colors.red,
-                  );
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              }),
+                  )
+                : SizedBox(
+                    height: 3.h,
+                    width: 3.w,
+                    child: const CircularProgressIndicator(),
+                  )),
+          ),
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.all(24.0),
+        minimum: const EdgeInsets.all(5.0),
         child: FutureBuilder<List<CandleData>>(
-          future: _futureCandleData,
-          builder: (context, AsyncSnapshot<List<CandleData>> snapshot) {
+          future: _futureListCandleData,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<CandleData>> snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -123,8 +109,7 @@ class _MainScreenState extends State<MainScreen> {
                             Text('Rows', style: TextStyle(fontSize: 3.sp))
                           ]),
                           Column(children: [
-                            Text('Selected Count',
-                                style: TextStyle(fontSize: 3.sp))
+                            Text('Sel Count', style: TextStyle(fontSize: 3.sp))
                           ]),
                           Column(children: [
                             Text('CSV DL (ms)',
@@ -133,104 +118,143 @@ class _MainScreenState extends State<MainScreen> {
                         ]),
                         TableRow(children: [
                           Column(children: [
-                            Text(_trendMatchOutput[0].toString(),
-                                style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text(_trendMatchOutput[1].toString(),
-                                style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text(_trendMatchOutput[2].toString(),
-                                style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text(_trendMatchOutput[3].toString(),
-                                style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text(_trendMatchOutput[4].toString(),
-                                style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text(
-                                GlobalController()
-                                    .csvDownloadTime
-                                    .value
+                            Obx(() => Text(
+                                GlobalController.to.trendMatchOutput[0]
                                     .toString(),
-                                style: TextStyle(fontSize: 3.sp))
+                                style: TextStyle(fontSize: 3.sp)))
+                          ]),
+                          Column(children: [
+                            Obx(() => Text(
+                                GlobalController.to.trendMatchOutput[1]
+                                    .toString(),
+                                style: TextStyle(fontSize: 3.sp)))
+                          ]),
+                          Column(children: [
+                            Obx(() => Text(
+                                GlobalController.to.trendMatchOutput[2]
+                                    .toString(),
+                                style: TextStyle(fontSize: 3.sp)))
+                          ]),
+                          Column(children: [
+                            Obx(() => Text(
+                                GlobalController.to.trendMatchOutput[3]
+                                    .toString(),
+                                style: TextStyle(fontSize: 3.sp)))
+                          ]),
+                          Column(children: [
+                            Obx(() => Text(
+                                GlobalController.to.trendMatchOutput[4]
+                                    .toString(),
+                                style: TextStyle(fontSize: 3.sp)))
+                          ]),
+                          Column(children: [
+                            Obx(() => Text(
+                                GlobalController.to.csvDownloadTime.toString(),
+                                style: TextStyle(fontSize: 3.sp)))
                           ]),
                         ]),
                       ],
                     ),
-                    SizedBox(
-                      width: 393.w,
-                      height: 200.h,
-                      child: InteractiveChart(
-                        /** Only [candles] is required */
-                        candles: snapshot.data!,
-                        /** Uncomment the following for examples on optional parameters */
-
-                        /** Example styling */
-                        // style: ChartStyle(
-                        //   priceGainColor: Colors.teal[200]!,
-                        //   priceLossColor: Colors.blueGrey,
-                        //   volumeColor: Colors.teal.withOpacity(0.8),
-                        //   trendLineStyles: [
-                        //     Paint()
-                        //       ..strokeWidth = 2.0
-                        //       ..strokeCap = StrokeCap.round
-                        //       ..color = Colors.deepOrange,
-                        //     Paint()
-                        //       ..strokeWidth = 4.0
-                        //       ..strokeCap = StrokeCap.round
-                        //       ..color = Colors.orange,
-                        //   ],
-                        //   priceGridLineColor: Colors.blue[200]!,
-                        //   priceLabelStyle: TextStyle(color: Colors.blue[200]),
-                        //   timeLabelStyle: TextStyle(color: Colors.blue[200]),
-                        //   selectionHighlightColor: Colors.red.withOpacity(0.2),
-                        //   overlayBackgroundColor: Colors.red[900]!.withOpacity(0.6),
-                        //   overlayTextStyle: TextStyle(color: Colors.red[100]),
-                        //   timeLabelHeight: 32,
-                        //   volumeHeightFactor: 0.2, // volume area is 20% of total height
-                        // ),
-                        /** Customize axis labels */
-                        // timeLabel: (timestamp, visibleDataCount) => "📅",
-                        // priceLabel: (price) => "${price.round()} 💎",
-                        /** Customize overlay (tap and hold to see it)
-                     ** Or return an empty object to disable overlay info. */
-                        // overlayInfo: (candle) => {
-                        //   "💎": "🤚    ",
-                        //   "Hi": "${candle.high?.toStringAsFixed(2)}",
-                        //   "Lo": "${candle.low?.toStringAsFixed(2)}",
-                        // },
-                        /** Callbacks */
-                        // onTap: (candle) => print("user tapped on $candle"),
-                        // onCandleResize: (width) => print("each candle is $width wide"),
-                      ),
+                    Obx(
+                      () {
+                        GlobalController.to.showAverage.value
+                            ? _computeTrendLines()
+                            : _removeTrendLines();
+                        return SizedBox(
+                          width: 393.w,
+                          height: 200.h,
+                          child: InteractiveChart(
+                            candles: snapshot.data!,
+                            /** Example styling */
+                            // style: ChartStyle(
+                            //   priceGainColor: Colors.teal[200]!,
+                            //   priceLossColor: Colors.blueGrey,
+                            //   volumeColor: Colors.teal.withOpacity(0.8),
+                            //   trendLineStyles: [
+                            //     Paint()
+                            //       ..strokeWidth = 2.0
+                            //       ..strokeCap = StrokeCap.round
+                            //       ..color = Colors.deepOrange,
+                            //     Paint()
+                            //       ..strokeWidth = 4.0
+                            //       ..strokeCap = StrokeCap.round
+                            //       ..color = Colors.orange,
+                            //   ],
+                            //   priceGridLineColor: Colors.blue[200]!,
+                            //   priceLabelStyle: TextStyle(color: Colors.blue[200]),
+                            //   timeLabelStyle: TextStyle(color: Colors.blue[200]),
+                            //   selectionHighlightColor: Colors.red.withOpacity(0.2),
+                            //   overlayBackgroundColor: Colors.red[900]!.withOpacity(0.6),
+                            //   overlayTextStyle: TextStyle(color: Colors.red[100]),
+                            //   timeLabelHeight: 32,
+                            //   volumeHeightFactor: 0.2, // volume area is 20% of total height
+                            // ),
+                            /** Customize axis labels */
+                            // timeLabel: (timestamp, visibleDataCount) => "📅",
+                            // priceLabel: (price) => "${price.round()} 💎",
+                            /** Customize overlay (tap and hold to see it)
+                              ** Or return an empty object to disable overlay info. */
+                            // overlayInfo: (candle) => {
+                            //   "💎": "🤚    ",
+                            //   "Hi": "${candle.high?.toStringAsFixed(2)}",
+                            //   "Lo": "${candle.low?.toStringAsFixed(2)}",
+                            // },
+                            /** Callbacks */
+                            // onTap: (candle) => print("user tapped on $candle"),
+                            // onCandleResize: (width) => print("each candle is $width wide"),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 10.h),
                     // DataTable(
-                    //     showCheckboxColumn: false,
-                    //     border: TableBorder.all(
-                    //         color: Colors.black, style: BorderStyle.solid, width: 2),
-                    //     columns:
-                    //         // _selectedPeriodList.map((e) => const DataColumn(label: Text(""))).toList(),
-                    //         const [DataColumn(label: Text(""))],
-                    //     rows: _selectedPeriodList
-                    //         .map((e) => DataRow(cells: [
-                    //               DataCell(Text(e.toString(),
-                    //                   style: TextStyle(fontSize: 3.sp)))
-                    //             ]))
-                    //         .toList()),
+                    //   showCheckboxColumn: false,
+                    //   border: TableBorder.all(
+                    //       color: Colors.black,
+                    //       style: BorderStyle.solid,
+                    //       width: 2),
+                    //   columns: GlobalController.to.selectedPeriodList
+                    //       .mapIndexed((i, e) => DataColumn(
+                    //               label: Text(
+                    //             'Close ${(i + 1).toString()}',
+                    //             style: TextStyle(fontSize: 3.sp),
+                    //           )))
+                    //       .toList(),
+                    //   rows: [
+                    //     DataRow(
+                    //       cells: GlobalController.to.selectedPeriodList
+                    //           .map((e) => DataCell(Text(
+                    //                 e.toString(),
+                    //                 style: TextStyle(fontSize: 3.sp),
+                    //               )))
+                    //           .toList(),
+                    //     ),
+                    //   ],
+                    // ),
                     SizedBox(height: 10.h),
                     // DataTable(
-                    //     showCheckboxColumn: false,
-                    //     border: TableBorder.all(
-                    //         color: Colors.black, style: BorderStyle.solid, width: 2),
-                    //     columns: columns,
-                    //     rows: rows)
+                    //   showCheckboxColumn: false,
+                    //   border: TableBorder.all(
+                    //       color: Colors.black,
+                    //       style: BorderStyle.solid,
+                    //       width: 2),
+                    //   columns: GlobalController.to.selectedPeriodList
+                    //       .mapIndexed((i, e) => DataColumn(
+                    //               label: Text(
+                    //             'Close ${(i + 1).toString()}',
+                    //             style: TextStyle(fontSize: 3.sp),
+                    //           )))
+                    //       .toList(),
+                    //   rows: GlobalController.to.comparePeriodList
+                    //       .map((e) => DataRow(
+                    //           cells: e
+                    //               .map((e) => DataCell(Text(
+                    //                     e.toString(),
+                    //                     style: TextStyle(fontSize: 3.sp),
+                    //                   )))
+                    //               .toList()))
+                    //       .toList(),
+                    // ),
                   ],
                 ),
               );
@@ -260,8 +284,8 @@ class _MainScreenState extends State<MainScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 60.w,
-                      height: 60.h,
+                      width: 40.w,
+                      height: 40.h,
                       child: const CircularProgressIndicator(),
                     ),
                     Padding(
@@ -279,18 +303,18 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  _computeTrendLines(List<CandleData> candleData) async {
-    final ma7 = CandleData.computeMA(candleData, 7);
-    final ma30 = CandleData.computeMA(candleData, 30);
-    final ma90 = CandleData.computeMA(candleData, 90);
+  _computeTrendLines() {
+    final ma7 = CandleData.computeMA(GlobalController.to.listCandleData, 7);
+    final ma30 = CandleData.computeMA(GlobalController.to.listCandleData, 30);
+    final ma90 = CandleData.computeMA(GlobalController.to.listCandleData, 90);
 
-    for (int i = 0; i < candleData.length; i++) {
-      candleData[i].trends = [ma7[i], ma30[i], ma90[i]];
+    for (int i = 0; i < GlobalController.to.listCandleData.length; i++) {
+      GlobalController.to.listCandleData[i].trends = [ma7[i], ma30[i], ma90[i]];
     }
   }
 
-  _removeTrendLines(List<CandleData> candleData) async {
-    for (final data in candleData) {
+  _removeTrendLines() {
+    for (final data in GlobalController.to.listCandleData) {
       data.trends = [];
     }
   }

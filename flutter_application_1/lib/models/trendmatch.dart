@@ -1,12 +1,14 @@
 import 'package:interactive_chart/interactive_chart.dart';
 
+import '../controllers/controllers.dart';
+
 class TrendMatch {
-  Future<List<int>> countMatches(
-      Future<List<CandleData>> futureCandleData) async {
+  countMatches(Future<List<CandleData>> futureCandleData) async {
     List<CandleData> candleData = await futureCandleData;
 
     List<double> selectedPeriodList = [];
     List<double> comparePeriodList = [];
+    List<List<double>> comparePeriodListList = [];
 
     int trueCount = 0;
     int falseCount = 0;
@@ -22,6 +24,7 @@ class TrendMatch {
       selectedPeriodList.add(percentage);
     }
     // logger.d(selectedPeriodList.length);
+    GlobalController.to.selectedPeriodList.value = selectedPeriodList;
 
     // Loop all data
     for (int l = 0; l < candleData.length - selectedCount; l++) {
@@ -40,15 +43,17 @@ class TrendMatch {
       } else {
         falseCount += 1;
       }
-      comparePeriodList = [];
+      comparePeriodListList.add(comparePeriodList);
+      comparePeriodList.clear();
     }
+    GlobalController.to.comparePeriodList.value = comparePeriodListList;
 
     DateTime endTime = DateTime.now(); // Record the end time
     // Calculate the time difference
     Duration executionDuration = endTime.difference(startTime);
     int executionTime = executionDuration.inMilliseconds;
 
-    return [
+    GlobalController.to.trendMatchOutput.value = [
       trueCount,
       falseCount,
       executionTime,
