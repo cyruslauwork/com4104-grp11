@@ -44,7 +44,7 @@ class TrendMatch {
         falseCount += 1;
       }
       comparePeriodListList.add(comparePeriodList);
-      comparePeriodList.clear();
+      comparePeriodList = [];
     }
     GlobalController.to.comparePeriodList.value = comparePeriodListList;
 

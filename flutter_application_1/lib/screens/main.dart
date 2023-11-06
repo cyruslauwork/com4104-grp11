@@ -79,7 +79,9 @@ class _MainScreenState extends State<MainScreen> {
       body: SafeArea(
         minimum: const EdgeInsets.all(5.0),
         child: FutureBuilder<List<CandleData>>(
-          future: _futureListCandleData,
+          future: (GlobalController.to.listCandleData.length > 1
+              ? Future.value(GlobalController.to.listCandleData)
+              : _futureListCandleData),
           builder:
               (BuildContext context, AsyncSnapshot<List<CandleData>> snapshot) {
             if (snapshot.hasData) {
@@ -207,54 +209,43 @@ class _MainScreenState extends State<MainScreen> {
                       },
                     ),
                     SizedBox(height: 10.h),
-                    // DataTable(
-                    //   showCheckboxColumn: false,
-                    //   border: TableBorder.all(
-                    //       color: Colors.black,
-                    //       style: BorderStyle.solid,
-                    //       width: 2),
-                    //   columns: GlobalController.to.selectedPeriodList
-                    //       .mapIndexed((i, e) => DataColumn(
-                    //               label: Text(
-                    //             'Close ${(i + 1).toString()}',
-                    //             style: TextStyle(fontSize: 3.sp),
-                    //           )))
-                    //       .toList(),
-                    //   rows: [
-                    //     DataRow(
-                    //       cells: GlobalController.to.selectedPeriodList
-                    //           .map((e) => DataCell(Text(
-                    //                 e.toString(),
-                    //                 style: TextStyle(fontSize: 3.sp),
-                    //               )))
-                    //           .toList(),
-                    //     ),
-                    //   ],
-                    // ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        showCheckboxColumn: false,
+                        border: TableBorder.all(
+                            color: Colors.black,
+                            style: BorderStyle.solid,
+                            width: 2),
+                        columns: GlobalController.to.selectedPeriodList
+                            .mapIndexed((i, e) => DataColumn(
+                                    label: Text(
+                                  'Close ${(i + 1).toString()}',
+                                  style: TextStyle(fontSize: 3.sp),
+                                )))
+                            .toList(),
+                        rows: [
+                          DataRow(
+                            cells: GlobalController.to.selectedPeriodList
+                                .map((e) => DataCell(Text(
+                                      e.toString(),
+                                      style: TextStyle(fontSize: 3.sp),
+                                    )))
+                                .toList(),
+                          ),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 10.h),
-                    // DataTable(
-                    //   showCheckboxColumn: false,
-                    //   border: TableBorder.all(
-                    //       color: Colors.black,
-                    //       style: BorderStyle.solid,
-                    //       width: 2),
-                    //   columns: GlobalController.to.selectedPeriodList
-                    //       .mapIndexed((i, e) => DataColumn(
-                    //               label: Text(
-                    //             'Close ${(i + 1).toString()}',
-                    //             style: TextStyle(fontSize: 3.sp),
-                    //           )))
-                    //       .toList(),
-                    //   rows: GlobalController.to.comparePeriodList
-                    //       .map((e) => DataRow(
-                    //           cells: e
-                    //               .map((e) => DataCell(Text(
-                    //                     e.toString(),
-                    //                     style: TextStyle(fontSize: 3.sp),
-                    //                   )))
-                    //               .toList()))
-                    //       .toList(),
-                    // ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        GlobalController.to.comparePeriodList
+                            .map((e) => '$e\n')
+                            .toList()
+                            .toString(),
+                      ),
+                    ),
                   ],
                 ),
               );
