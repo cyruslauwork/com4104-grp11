@@ -9,10 +9,15 @@ class TrendMatch {
     List<double> selectedPeriodList = [];
     List<double> comparePeriodList = [];
     List<List<double>> comparePeriodListList = [];
+    List<List<double>> matchListList = [];
 
     int trueCount = 0;
     int falseCount = 0;
     int selectedCount = 5;
+
+    if (selectedCount <= 1) {
+      throw ArgumentError('Selected period must greater than 1 time unit.');
+    }
 
     DateTime startTime = DateTime.now(); // Record the start time
 
@@ -37,15 +42,22 @@ class TrendMatch {
       }
       // logger.d(comparePeriodList.length);
 
-      if (areDifferencesLessThanOrEqualTo30Percent(
-          selectedPeriodList, comparePeriodList)) {
+      (
+        bool,
+        List<double>
+      ) comparisonResult = areDifferencesLessThanOrEqualTo30Percent(
+          selectedPeriodList,
+          comparePeriodList); // Record data type in Dart is equivalent to Tuple in Java and Python
+      if (comparisonResult.$1) {
         trueCount += 1;
+        matchListList.add(comparisonResult.$2);
       } else {
         falseCount += 1;
       }
       comparePeriodListList.add(comparePeriodList);
       comparePeriodList = [];
     }
+    GlobalController.to.matchListList.value = matchListList;
     GlobalController.to.comparePeriodList.value = comparePeriodListList;
 
     DateTime endTime = DateTime.now(); // Record the end time
@@ -62,20 +74,20 @@ class TrendMatch {
     ];
   }
 
-  bool areDifferencesLessThanOrEqualTo30Percent(
-      List<double> list1, List<double> list2) {
-    if (list1.length != list2.length) {
-      throw ArgumentError("Both lists must have the same length.");
+  (bool, List<double>) areDifferencesLessThanOrEqualTo30Percent(
+      List<double> selList, List<double> comList) {
+    if (selList.length != comList.length) {
+      throw ArgumentError('Both lists must have the same length.');
     }
 
-    for (int i = 0; i < list1.length; i++) {
-      double difference = list1[i] - list2[i];
-      double percentageDifference = (difference / list1[i]) * 100;
+    for (int i = 0; i < selList.length; i++) {
+      double difference = selList[i] - comList[i];
+      double percentageDifference = (difference / selList[i]) * 100;
 
       if (percentageDifference.abs() > 30) {
-        return false; // Difference is larger than 30%
+        return (false, []); // Difference is larger than 30%
       }
     }
-    return true; // All differences are less than or equal to 30%
+    return (true, comList); // All differences are less than or equal to 30%
   }
 }

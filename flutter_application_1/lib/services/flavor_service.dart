@@ -20,13 +20,15 @@ class FlavorService extends GetxService {
   static FlavorService get to => Get.find();
 
   late final Flavor flavor;
+  late final APIProvider apiProvider;
   String version = "";
   String platform = "";
   String uuid = "";
   String fcmToken = "";
 
-  Future<FlavorService> init(Flavor flavor) async {
+  Future<FlavorService> init(Flavor flavor, APIProvider apiProvider) async {
     this.flavor = flavor;
+    this.apiProvider = apiProvider;
     platform = Platform.isAndroid ? 'android' : 'ios';
     return this;
   }
@@ -38,4 +40,9 @@ enum RouteName {
   const RouteName(this.path);
 
   final String path;
+}
+
+enum APIProvider {
+  yahoofinance,
+  polygon;
 }

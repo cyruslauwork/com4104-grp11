@@ -9,11 +9,11 @@ import 'app_root.dart';
 
 var logger = Logger();
 
-Future<void> bootstrap(Flavor flavor) async {
+Future<void> bootstrap(Flavor flavor, APIProvider apiProvider) async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    await initServices(flavor);
+    await initServices(flavor, apiProvider);
 
     /*
       Preferred device orientation(s)
@@ -26,11 +26,11 @@ Future<void> bootstrap(Flavor flavor) async {
   }, (error, stackTrace) {});
 }
 
-Future<void> initServices(Flavor flavor) async {
+Future<void> initServices(Flavor flavor, APIProvider apiProvider) async {
   logger.d('Starting services ...');
 
   /// Here is where you put get_storage, hive, shared_pref initialization.
   /// or moor connection, or whatever that's async.
   await Get.putAsync(() => PrefsService().init());
-  await Get.putAsync(() => FlavorService().init(flavor));
+  await Get.putAsync(() => FlavorService().init(flavor, apiProvider));
 }

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/services/flavor_service.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:collection/collection.dart';
@@ -25,19 +28,18 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   Future<List<CandleData>> get _futureListCandleData async {
-    Future<String> futureCsvData = Candle().getCSV();
-    Future<List<List<dynamic>>> futureListList =
-        Candle().csvToListList(futureCsvData);
     Future<List<CandleData>> futureListCandleData =
-        Candle().listToCandles(futureListList);
+        Candle().listListToCandles(Candle().checkAPIProvider());
     TrendMatch().countMatches(futureListCandleData);
-    GlobalController.to.listCandleData.value = await futureListCandleData;
     return futureListCandleData;
   }
 
   @override
   void initState() {
     super.initState();
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      GlobalController.to.elapsedTime++;
+    });
   }
 
   @override
@@ -50,6 +52,15 @@ class _MainScreenState extends State<MainScreen> {
             () => (GlobalController.to.listCandleData.length > 1
                 ? Row(
                     children: [
+                      (GlobalController.to.elapsedTime > 60
+                          ? IconButton(
+                              icon: const Icon(Icons.plus_one),
+                              onPressed: () => addJson(),
+                            )
+                          : Text(
+                              '${GlobalController.to.elapsedTime}',
+                              style: TextStyle(fontSize: 5.sp),
+                            )),
                       IconButton(
                         icon: Icon(GlobalController.to.darkMode.value
                             ? Icons.dark_mode
@@ -90,7 +101,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
                   children: [
-                    const Text('Hello World!'),
+                    const Text('Trend Match'),
                     Table(
                       border: TableBorder.all(
                           color: Colors.black,
@@ -114,8 +125,7 @@ class _MainScreenState extends State<MainScreen> {
                             Text('Sel Count', style: TextStyle(fontSize: 3.sp))
                           ]),
                           Column(children: [
-                            Text('CSV DL (ms)',
-                                style: TextStyle(fontSize: 3.sp))
+                            Text('DL (ms)', style: TextStyle(fontSize: 3.sp))
                           ])
                         ]),
                         TableRow(children: [
@@ -151,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
                           ]),
                           Column(children: [
                             Obx(() => Text(
-                                GlobalController.to.csvDownloadTime.toString(),
+                                GlobalController.to.downloadTime.toString(),
                                 style: TextStyle(fontSize: 3.sp)))
                           ]),
                         ]),
@@ -166,7 +176,9 @@ class _MainScreenState extends State<MainScreen> {
                           width: 393.w,
                           height: 200.h,
                           child: InteractiveChart(
-                            candles: snapshot.data!,
+                            candles: (snapshot.data!.length > 1000
+                                ? snapshot.data!.sublist(0, 999)
+                                : snapshot.data!),
                             /** Example styling */
                             // style: ChartStyle(
                             //   priceGainColor: Colors.teal[200]!,
@@ -209,42 +221,74 @@ class _MainScreenState extends State<MainScreen> {
                       },
                     ),
                     SizedBox(height: 10.h),
+                    Text(
+                      'Percentage differences between selected period',
+                      style: TextStyle(fontSize: 3.sp),
+                    ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        showCheckboxColumn: false,
-                        border: TableBorder.all(
-                            color: Colors.black,
-                            style: BorderStyle.solid,
-                            width: 2),
-                        columns: GlobalController.to.selectedPeriodList
-                            .mapIndexed((i, e) => DataColumn(
-                                    label: Text(
-                                  'Close ${(i + 1).toString()}',
-                                  style: TextStyle(fontSize: 3.sp),
-                                )))
-                            .toList(),
-                        rows: [
-                          DataRow(
-                            cells: GlobalController.to.selectedPeriodList
-                                .map((e) => DataCell(Text(
-                                      e.toString(),
-                                      style: TextStyle(fontSize: 3.sp),
-                                    )))
-                                .toList(),
-                          ),
-                        ],
+                      child: Obx(
+                        () => DataTable(
+                          showCheckboxColumn: false,
+                          border: TableBorder.all(
+                              color: Colors.black,
+                              style: BorderStyle.solid,
+                              width: 2),
+                          columns: GlobalController.to.selectedPeriodList
+                              .mapIndexed((i, e) => DataColumn(
+                                      label: Text(
+                                    'Close ${(i + 1).toString()}',
+                                    style: TextStyle(fontSize: 3.sp),
+                                  )))
+                              .toList(),
+                          rows: [
+                            DataRow(
+                              cells: GlobalController.to.selectedPeriodList
+                                  .map((e) => DataCell(Text(
+                                        e.toString(),
+                                        style: TextStyle(fontSize: 3.sp),
+                                      )))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.h),
+                    Text(
+                      'Historical match(es)',
+                      style: TextStyle(fontSize: 3.sp),
+                    ),
+                    (GlobalController.to.matchListList.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(
+                              () => Text(
+                                GlobalController.to.matchListList
+                                    .map((e) => '$e\n')
+                                    .toList()
+                                    .toString(),
+                                style: TextStyle(fontSize: 3.sp),
+                              ),
+                            ),
+                          )
+                        : Text('0', style: TextStyle(fontSize: 3.sp))),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Comparison data',
+                      style: TextStyle(fontSize: 3.sp),
+                    ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Text(
-                        GlobalController.to.comparePeriodList
-                            .map((e) => '$e\n')
-                            .toList()
-                            .toString(),
-                      ),
+                      child: Obx(() => Text(
+                            (GlobalController.to.comparePeriodList.length > 100
+                                ? '${GlobalController.to.comparePeriodList.map((e) => '$e\n').take(100).toList()}...'
+                                : GlobalController.to.comparePeriodList
+                                    .map((e) => '$e\n')
+                                    .toList()
+                                    .toString()),
+                            style: TextStyle(fontSize: 3.sp),
+                          )),
                     ),
                   ],
                 ),
@@ -307,6 +351,20 @@ class _MainScreenState extends State<MainScreen> {
   _removeTrendLines() {
     for (final data in GlobalController.to.listCandleData) {
       data.trends = [];
+    }
+  }
+
+  addJson() {
+    if (FlavorService.to.apiProvider == APIProvider.polygon) {
+      TrendMatch().countMatches(Candle().listListToCandles(
+          Candle().jsonToListList(Candle().getJSON(firstInit: false))));
+      GlobalController.to.elapsedTime.value = 0;
+    } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('You can only add JSON data if you\'re using JSON data.'),
+      ));
+    } else {
+      throw ArgumentError('Failed to check API provider.');
     }
   }
 }
