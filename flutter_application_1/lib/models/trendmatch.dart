@@ -1,9 +1,11 @@
 import 'package:interactive_chart/interactive_chart.dart';
 
 import '../controllers/controllers.dart';
+// import 'models.dart';
 
 class TrendMatch {
-  countMatches(Future<List<CandleData>> futureCandleData) async {
+  countMatches(Future<List<CandleData>> futureCandleData,
+      {required bool firstInit}) async {
     List<CandleData> candleData = await futureCandleData;
 
     List<double> selectedPeriodList = [];
@@ -21,18 +23,29 @@ class TrendMatch {
 
     DateTime startTime = DateTime.now(); // Record the start time
 
-    // Loop selected data
-    for (int i = selectedCount - 1; i > 0; i--) {
-      double percentage = (candleData[candleData.length - (i + 1)].close! -
-              candleData[candleData.length - i].close!) /
-          (candleData[candleData.length - i].close!);
-      selectedPeriodList.add(percentage);
+    if (firstInit) {
+      // Loop selected data
+      for (int i = selectedCount - 1; i > 0; i--) {
+        double percentage = (candleData[candleData.length - (i + 1)].close! -
+                candleData[candleData.length - i].close!) /
+            (candleData[candleData.length - i].close!);
+        selectedPeriodList.add(percentage);
+      }
+      // print('selected data: ${selectedPeriodList.length}');
+      GlobalController.to.selectedPeriodList.value = selectedPeriodList;
+    } else {
+      selectedPeriodList = GlobalController.to.selectedPeriodList;
     }
-    // logger.d(selectedPeriodList.length);
-    GlobalController.to.selectedPeriodList.value = selectedPeriodList;
 
     // Loop all data
-    for (int l = 0; l < candleData.length - selectedCount; l++) {
+    // print('candleData: ${candleData.length}');
+    for (int l = 0;
+        l <
+            (firstInit
+                ? candleData.length - selectedCount
+                : candleData.length -
+                    GlobalController.to.lastCandleDataLength.value);
+        l++) {
       // Minus selectedCount to avoid counting selected data as a same match
       for (int i = 0; i < selectedCount - 1; i++) {
         double percentage =
@@ -40,7 +53,7 @@ class TrendMatch {
                 (candleData[l + i].close!);
         comparePeriodList.add(percentage);
       }
-      // logger.d(comparePeriodList.length);
+      // print('all data: ${comparePeriodList.length}');
 
       (
         bool,
@@ -57,8 +70,18 @@ class TrendMatch {
       comparePeriodListList.add(comparePeriodList);
       comparePeriodList = [];
     }
-    GlobalController.to.matchListList.value = matchListList;
-    GlobalController.to.comparePeriodList.value = comparePeriodListList;
+    if (firstInit) {
+      GlobalController.to.matchListList.value = matchListList;
+      GlobalController.to.comparePeriodList.value = comparePeriodListList;
+    } else {
+      for (List<double> matchList in matchListList.reversed) {
+        GlobalController.to.matchListList.insert(0, matchList);
+      }
+      for (List<double> comparePeriodList in comparePeriodListList.reversed) {
+        GlobalController.to.comparePeriodList.insert(0, comparePeriodList);
+      }
+    }
+    GlobalController.to.lastCandleDataLength.value = candleData.length;
 
     DateTime endTime = DateTime.now(); // Record the end time
     // Calculate the time difference
@@ -66,8 +89,8 @@ class TrendMatch {
     int executionTime = executionDuration.inMilliseconds;
 
     GlobalController.to.trendMatchOutput.value = [
-      trueCount,
-      falseCount,
+      trueCount + GlobalController.to.trendMatchOutput[0],
+      falseCount + GlobalController.to.trendMatchOutput[1],
       executionTime,
       candleData.length,
       selectedCount,
@@ -77,6 +100,7 @@ class TrendMatch {
   (bool, List<double>) areDifferencesLessThanOrEqualTo30Percent(
       List<double> selList, List<double> comList) {
     if (selList.length != comList.length) {
+      // print('${selList.length} != ${comList.length}');
       throw ArgumentError('Both lists must have the same length.');
     }
 

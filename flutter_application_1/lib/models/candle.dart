@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:csv/csv.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
@@ -20,7 +22,7 @@ class Candle {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    GlobalController().downloadTime.value = downloadTime;
+    GlobalController.to.downloadTime.value = downloadTime;
 
     if (response.statusCode == 200) {
       return response.body;
@@ -36,20 +38,30 @@ class Candle {
     List<Map<String, dynamic>> json = [];
     DateTime currentDate = DateTime.now();
 
+    int apiCallsPerRequest = 5;
+
     if (!firstInit) {
       json = GlobalController.to.lastJson;
-      currentDate = GlobalController.to.lastJsonDateFrom.value;
+      currentDate = GlobalController.to.lastJsonDateTo.value;
     }
 
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < apiCallsPerRequest; i++) {
       final String dateFrom = DateFormat('yyyy-MM-dd')
           .format(currentDate.subtract(const Duration(days: 7)));
       final String dateTo = DateFormat('yyyy-MM-dd').format(currentDate);
       final response = await HTTPService().fetchJSON(dateFrom, dateTo);
       if (response.statusCode == 200) {
-        for (var map in jsonDecode(response.body)['results']) {
-          if (map is Map<String, dynamic>) {
-            json.add(map);
+        if (firstInit) {
+          for (var map in jsonDecode(response.body)['results']) {
+            if (map is Map<String, dynamic>) {
+              json.add(map);
+            }
+          }
+        } else {
+          for (var map in jsonDecode(response.body)['results'].reversed) {
+            if (map is Map<String, dynamic>) {
+              json.insert(0, map);
+            }
           }
         }
       } else {
@@ -58,17 +70,26 @@ class Candle {
       }
       currentDate = currentDate.subtract(const Duration(days: 7));
     }
-    GlobalController.to.lastJson = json;
-    GlobalController.to.lastJsonDateFrom.value =
-        currentDate.subtract(const Duration(days: 7));
-
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    GlobalController().downloadTime.value = downloadTime;
+    GlobalController.to.downloadTime.value = downloadTime;
+
+    GlobalController.to.lastJson = json;
+    GlobalController.to.lastJsonDateTo.value = currentDate;
 
     return json;
+  }
+
+  Future<List<List<dynamic>>> checkAPIProvider({required bool firstInit}) {
+    if (FlavorService.to.srcFileType == SrcFileType.csv) {
+      return Candle().csvToListList(Candle().getCSV());
+    } else if (FlavorService.to.srcFileType == SrcFileType.json) {
+      return Candle().jsonToListList(Candle().getJSON(firstInit: firstInit));
+    } else {
+      throw ArgumentError('Failed to check API provider.');
+    }
   }
 
   Future<List<List<dynamic>>> csvToListList(Future<String> futureCsv) async {
@@ -84,8 +105,8 @@ class Candle {
   Future<List<List<dynamic>>> jsonToListList(
       Future<List<Map<String, dynamic>>> futureJson) async {
     List<Map<String, dynamic>> json = await futureJson;
-
     List<List<dynamic>> rowsAsListOfValues = [];
+
     for (Map<String, dynamic> map in json) {
       List<dynamic> values = map.values.toList();
       rowsAsListOfValues.add(values);
@@ -99,6 +120,7 @@ class Candle {
       Future<List<List<dynamic>>> futureListList) async {
     List<List<dynamic>> listList = await futureListList;
     List<CandleData> listCandleData;
+
     if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
       listList.removeAt(0);
       listCandleData = listList
@@ -128,16 +150,6 @@ class Candle {
       return listCandleData;
     } else {
       throw ArgumentError('Failed to convert list to candles.');
-    }
-  }
-
-  Future<List<List<dynamic>>> checkAPIProvider() {
-    if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
-      return Candle().csvToListList(Candle().getCSV());
-    } else if (FlavorService.to.apiProvider == APIProvider.polygon) {
-      return Candle().jsonToListList(Candle().getJSON(firstInit: true));
-    } else {
-      throw ArgumentError('Failed to check API provider.');
     }
   }
 }

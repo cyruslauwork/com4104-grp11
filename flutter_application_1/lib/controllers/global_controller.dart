@@ -25,9 +25,10 @@ class GlobalController extends GetxController {
   RxList<List<double>> matchListList = [
     [0.0]
   ].obs;
-  RxList<int> trendMatchOutput = [0].obs;
+  RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
 
   RxInt elapsedTime = 0.obs;
-  Rx<DateTime> lastJsonDateFrom = DateTime(2023).obs;
+  Rx<DateTime> lastJsonDateTo = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
+  RxInt lastCandleDataLength = 0.obs;
 }

@@ -29,17 +29,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   Future<List<CandleData>> get _futureListCandleData async {
     Future<List<CandleData>> futureListCandleData =
-        Candle().listListToCandles(Candle().checkAPIProvider());
-    TrendMatch().countMatches(futureListCandleData);
+        Candle().listListToCandles(Candle().checkAPIProvider(firstInit: true));
+    TrendMatch().countMatches(futureListCandleData, firstInit: true);
     return futureListCandleData;
   }
 
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      GlobalController.to.elapsedTime++;
-    });
   }
 
   @override
@@ -96,12 +93,18 @@ class _MainScreenState extends State<MainScreen> {
           builder:
               (BuildContext context, AsyncSnapshot<List<CandleData>> snapshot) {
             if (snapshot.hasData) {
+              Timer.periodic(const Duration(seconds: 1), (timer) {
+                GlobalController.to.elapsedTime++;
+              });
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
                   mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
                   children: [
-                    const Text('Trend Match'),
+                    Text(
+                      'Trend Match',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
                     Table(
                       border: TableBorder.all(
                           color: Colors.black,
@@ -177,7 +180,9 @@ class _MainScreenState extends State<MainScreen> {
                           height: 200.h,
                           child: InteractiveChart(
                             candles: (snapshot.data!.length > 1000
-                                ? snapshot.data!.sublist(0, 999)
+                                ? snapshot.data!.sublist(
+                                    snapshot.data!.length - 999,
+                                    snapshot.data!.length)
                                 : snapshot.data!),
                             /** Example styling */
                             // style: ChartStyle(
@@ -223,7 +228,7 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(height: 10.h),
                     Text(
                       'Percentage differences between selected period',
-                      style: TextStyle(fontSize: 3.sp),
+                      style: TextStyle(fontSize: 5.sp),
                     ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -257,7 +262,7 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(height: 10.h),
                     Text(
                       'Historical match(es)',
-                      style: TextStyle(fontSize: 3.sp),
+                      style: TextStyle(fontSize: 5.sp),
                     ),
                     (GlobalController.to.matchListList.isNotEmpty
                         ? SingleChildScrollView(
@@ -276,7 +281,7 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(height: 10.h),
                     Text(
                       'Comparison data',
-                      style: TextStyle(fontSize: 3.sp),
+                      style: TextStyle(fontSize: 5.sp),
                     ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -356,8 +361,10 @@ class _MainScreenState extends State<MainScreen> {
 
   addJson() {
     if (FlavorService.to.apiProvider == APIProvider.polygon) {
-      TrendMatch().countMatches(Candle().listListToCandles(
-          Candle().jsonToListList(Candle().getJSON(firstInit: false))));
+      TrendMatch().countMatches(
+          Candle()
+              .listListToCandles(Candle().checkAPIProvider(firstInit: false)),
+          firstInit: false);
       GlobalController.to.elapsedTime.value = 0;
     } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
