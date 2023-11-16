@@ -4,9 +4,10 @@ class HTTPService {
   Future<http.Response> fetchCSV() async {
     int startTimestamp = 0;
     // DateTime(2023, 10, 1, 0, 0).millisecondsSinceEpoch ~/1000; // DateTime(2017, 9, 7, 17, 30); 7th of September 2017, 5:30pm
-    int endTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    int endTimestamp = 1699690757;
+    // DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final url = Uri.parse(
-        'https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=$startTimestamp&period2=$endTimestamp&interval=1d');
+        'https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=$startTimestamp&period2=$endTimestamp&interval=1d&events=history&includeAdjustedClose=true');
     /* 
     Possible inputs for &interval=: 1m, 5m, 15m, 30m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
     

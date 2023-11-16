@@ -108,7 +108,7 @@ class TrendMatch {
       double difference = selList[i] - comList[i];
       double percentageDifference = (difference / selList[i]) * 100;
 
-      if (percentageDifference.abs() > 30) {
+      if (percentageDifference.abs() > 100) {
         return (false, []); // Difference is larger than 30%
       }
     }
