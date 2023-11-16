@@ -287,7 +287,7 @@ class _MainScreenState extends State<MainScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Obx(() => Text(
                             (GlobalController.to.comparePeriodList.length > 100
-                                ? '${GlobalController.to.comparePeriodList.map((e) => '$e\n').take(100).toList()}...'
+                                ? '${GlobalController.to.comparePeriodList.map((e) => '$e\n').take(100).toList()}...${GlobalController.to.comparePeriodList.length - 100} rows left'
                                 : GlobalController.to.comparePeriodList
                                     .map((e) => '$e\n')
                                     .toList()
