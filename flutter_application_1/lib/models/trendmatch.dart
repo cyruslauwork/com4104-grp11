@@ -25,10 +25,10 @@ class TrendMatch {
 
     if (firstInit) {
       // Loop selected data
-      for (int i = selectedCount - 1; i > 0; i--) {
-        double percentage = (candleData[candleData.length - i].close! -
-                candleData[candleData.length - (i + 1)].close!) /
-            (candleData[candleData.length - (i + 1)].close!);
+      for (int i = selectedCount; i > 1; i--) {
+        double percentage = (candleData[candleData.length - (i - 1)].close! -
+                candleData[candleData.length - i].close!) /
+            (candleData[candleData.length - i].close!);
         selectedPeriodList.add(percentage);
       }
       // print('selected data: ${selectedPeriodList.length}');
