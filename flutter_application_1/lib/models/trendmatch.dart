@@ -58,7 +58,7 @@ class TrendMatch {
       (
         bool,
         List<double>
-      ) comparisonResult = areDifferencesLessThanOrEqualTo30Percent(
+      ) comparisonResult = areDifferencesLessThanOrEqualToCertainPercent(
           selectedPeriodList,
           comparePeriodList); // Record data type in Dart is equivalent to Tuple in Java and Python
       if (comparisonResult.$1) {
@@ -97,7 +97,7 @@ class TrendMatch {
     ];
   }
 
-  (bool, List<double>) areDifferencesLessThanOrEqualTo30Percent(
+  (bool, List<double>) areDifferencesLessThanOrEqualToCertainPercent(
       List<double> selList, List<double> comList) {
     if (selList.length != comList.length) {
       // print('${selList.length} != ${comList.length}');
@@ -108,10 +108,10 @@ class TrendMatch {
       double difference = selList[i] - comList[i];
       double percentageDifference = (difference / selList[i]) * 100;
 
-      if (percentageDifference.abs() > 100) {
-        return (false, []); // Difference is larger than 30%
+      if (percentageDifference.abs() >= 100) {
+        return (false, []); // Difference is larger than or equal to certain %
       }
     }
-    return (true, comList); // All differences are less than or equal to 30%
+    return (true, comList); // All differences are less than certain %
   }
 }
