@@ -4,7 +4,7 @@ import 'dart:io';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
-  bootstrap(Flavor.dev, APIProvider.polygon);
+  bootstrap(Flavor.dev, APIProvider.yahoofinance);
 }
 
 class MyHttpOverrides extends HttpOverrides {
