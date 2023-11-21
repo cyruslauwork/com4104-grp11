@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_application_1/controllers/controllers.dart';
 import '../../utils/utils.dart';
 
 class MyLineChart extends StatelessWidget {
@@ -20,19 +21,28 @@ class MyLineChart extends StatelessWidget {
   }
 }
 
+LineBarsData() {
+  GlobalController.to.matchClosePRow.forEach((element) {});
+}
+
 LineChartData getDefaultLineChartData() {
   return LineChartData(
     borderData: FlBorderData(show: false),
     lineBarsData: [
       // The red line
       LineChartBarData(
-        spots: const [
-          FlSpot(1, 3.8),
-          FlSpot(3, 1.9),
-          FlSpot(6, 5),
-          FlSpot(10, 3.3),
-          FlSpot(13, 4.5),
-        ],
+        spots:
+            // const [
+            //   FlSpot(1, 3.8),
+            //   FlSpot(3, 1.9),
+            //   FlSpot(6, 5),
+            //   FlSpot(10, 3.3),
+            //   FlSpot(13, 4.5),
+            // ]
+            GlobalController.to.matchClosePRow
+                .map((row) => FlSpot(
+                    row.toDouble(), GlobalController.to.listList[row][4]))
+                .toList(),
         isCurved: true,
         barWidth: 3,
         color: Colors.red,

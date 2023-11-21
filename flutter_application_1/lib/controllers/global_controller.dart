@@ -17,6 +17,7 @@ class GlobalController extends GetxController {
   RxList<CandleData> listCandleData = [
     CandleData(timestamp: 0000000000 * 1000, open: 0, close: 0, volume: 0)
   ].obs;
+  RxList<List<dynamic>> listList = [[]].obs;
 
   RxList<double> selectedPeriodList = [0.0].obs;
   RxList<List<double>> comparePeriodList = [
