@@ -12,6 +12,7 @@ class TrendMatch {
     List<double> comparePeriodList = [];
     List<List<double>> comparePeriodListList = [];
     List<List<double>> matchListList = [];
+    List<double> matchClosePRow = [];
 
     int trueCount = 0;
     int falseCount = 0;
@@ -34,12 +35,22 @@ class TrendMatch {
       }
       // print('selected data: ${selectedPeriodList.length}');
       GlobalController.to.selectedPeriodList.value = selectedPeriodList;
+      // difference between start and user selected date --> l
+      // user selected range
+      // --> 整daterange field
+      // for (int i = 0; i < selectedCount - 1; i++) {
+      //   double percentage =
+      //       (candleData[l + (i + 1)].close! - candleData[l + i].close!) /
+      //           (candleData[l + i].close!);
+      //   selectedPeriodList.add(percentage);
+      // }
     } else {
       selectedPeriodList = GlobalController.to.selectedPeriodList;
     }
 
     // Loop all data
     // print('candleData: ${candleData.length}');
+    GlobalController.to.matchClosePRow.removeAt(0);
     for (int l = 0;
         l <
             (firstInit
@@ -65,6 +76,7 @@ class TrendMatch {
           comparePeriodList); // Record data type in Dart is equivalent to Tuple in Java and Python
       if (comparisonResult.$1) {
         trueCount += 1;
+        GlobalController.to.matchClosePRow.add(l);
         matchListList.add(comparisonResult.$2);
       } else {
         falseCount += 1;

@@ -264,6 +264,22 @@ class _MainScreenState extends State<MainScreen> {
                       'Historical match(es)',
                       style: TextStyle(fontSize: 5.sp),
                     ),
+                    (GlobalController.to.matchClosePRow.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(
+                              () => Text(
+                                GlobalController.to.matchClosePRow.toString(),
+                                style: TextStyle(fontSize: 3.sp),
+                              ),
+                            ),
+                          )
+                        : Text('0', style: TextStyle(fontSize: 3.sp))),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Historical match(es)',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
                     (GlobalController.to.matchListList.isNotEmpty
                         ? SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
