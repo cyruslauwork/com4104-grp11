@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/charts/mylinechart.dart';
 import 'package:flutter_application_1/services/flavor_service.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
@@ -275,6 +276,7 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                           )
                         : Text('0', style: TextStyle(fontSize: 3.sp))),
+                    MyLineChart(),
                     SizedBox(height: 10.h),
                     Text(
                       'Historical match(es)',

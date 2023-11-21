@@ -12,7 +12,6 @@ class TrendMatch {
     List<double> comparePeriodList = [];
     List<List<double>> comparePeriodListList = [];
     List<List<double>> matchListList = [];
-    List<double> matchClosePRow = [];
 
     int trueCount = 0;
     int falseCount = 0;
