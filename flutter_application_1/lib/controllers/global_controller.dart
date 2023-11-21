@@ -26,6 +26,7 @@ class GlobalController extends GetxController {
     [0.0]
   ].obs;
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
+  RxList<int> matchClosePRow = [0].obs;
 
   RxInt elapsedTime = 0.obs;
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
