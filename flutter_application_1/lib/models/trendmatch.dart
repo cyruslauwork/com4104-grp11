@@ -23,6 +23,7 @@ class TrendMatch {
 
     DateTime startTime = DateTime.now(); // Record the start time
 
+    // firstInit is false if and only if added new JSON data
     if (firstInit) {
       // Loop selected data
       for (int i = selectedCount; i > 1; i--) {
@@ -44,7 +45,8 @@ class TrendMatch {
             (firstInit
                 ? candleData.length - selectedCount
                 : candleData.length -
-                    GlobalController.to.lastCandleDataLength.value);
+                    GlobalController.to.lastCandleDataLength
+                        .value); // firstInit is false if and only if added new JSON data
         l++) {
       // Minus selectedCount to avoid counting selected data as a same match
       for (int i = 0; i < selectedCount - 1; i++) {
@@ -70,13 +72,17 @@ class TrendMatch {
       comparePeriodListList.add(comparePeriodList);
       comparePeriodList = [];
     }
+
+    // firstInit is false if and only if added new JSON data
     if (firstInit) {
       GlobalController.to.matchListList.value = matchListList;
       GlobalController.to.comparePeriodList.value = comparePeriodListList;
     } else {
+      // Insert each row of new JSON data into the original list
       for (List<double> matchList in matchListList.reversed) {
         GlobalController.to.matchListList.insert(0, matchList);
       }
+      // Insert each row of new JSON data into the original list
       for (List<double> comparePeriodList in comparePeriodListList.reversed) {
         GlobalController.to.comparePeriodList.insert(0, comparePeriodList);
       }

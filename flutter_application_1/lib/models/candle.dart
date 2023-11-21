@@ -40,17 +40,22 @@ class Candle {
 
     int apiCallsPerRequest = 5;
 
+    // firstInit is false if and only if added new JSON data
     if (!firstInit) {
       json = GlobalController.to.lastJson;
-      currentDate = GlobalController.to.lastJsonDateTo.value;
+      currentDate = GlobalController.to.lastJsonEndDate.value;
     }
 
     for (int i = 0; i < apiCallsPerRequest; i++) {
-      final String dateFrom = DateFormat('yyyy-MM-dd')
-          .format(currentDate.subtract(const Duration(days: 7)));
-      final String dateTo = DateFormat('yyyy-MM-dd').format(currentDate);
-      final response = await HTTPService().fetchJSON(dateFrom, dateTo);
+      final String startDate = DateFormat('yyyy-MM-dd').format(
+          currentDate.subtract(const Duration(
+              days:
+                  7))); // Each call has a maximum of 5,000 rows, which is approximately 7 days of data
+      final String endDate = DateFormat('yyyy-MM-dd').format(currentDate);
+      final response = await HTTPService().fetchJSON(startDate, endDate);
+
       if (response.statusCode == 200) {
+        // firstInit is false if and only if added new JSON data
         if (firstInit) {
           for (var map in jsonDecode(response.body)['results']) {
             if (map is Map<String, dynamic>) {
@@ -68,16 +73,19 @@ class Candle {
         throw ArgumentError(
             'Failed to fetch JSON data in loop ${i.toString()}: ${response.statusCode}');
       }
+      // Subtract 7 from the current date to get the next end date
       currentDate = currentDate.subtract(const Duration(days: 7));
     }
+
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
     GlobalController.to.downloadTime.value = downloadTime;
 
-    GlobalController.to.lastJson = json;
-    GlobalController.to.lastJsonDateTo.value = currentDate;
+    GlobalController.to.lastJson = json; // Record the current JSON
+    GlobalController.to.lastJsonEndDate.value =
+        currentDate; // Record the last JSON end date
 
     return json;
   }
