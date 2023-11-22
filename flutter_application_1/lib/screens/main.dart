@@ -277,11 +277,14 @@ class _MainScreenState extends State<MainScreen> {
                           )
                         : Text('0', style: TextStyle(fontSize: 3.sp))),
                     MyLineChart(),
-                    SizedBox(height: 10.h),
                     Text(
-                      'Historical match(es)',
+                      'Normalized',
                       style: TextStyle(fontSize: 5.sp),
                     ),
+                    MyLineChart(
+                      normalized: true,
+                    ),
+                    SizedBox(height: 10.h),
                     (GlobalController.to.matchListList.isNotEmpty
                         ? SingleChildScrollView(
                             scrollDirection: Axis.horizontal,

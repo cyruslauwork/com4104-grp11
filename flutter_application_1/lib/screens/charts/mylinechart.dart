@@ -1,17 +1,19 @@
-import 'dart:ffi';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-// import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_application_1/controllers/controllers.dart';
+import 'dart:math';
+
+import '../../controllers/controllers.dart';
 import '../../utils/utils.dart';
 
 class MyLineChart extends StatelessWidget {
   final LineChartData lineChartData;
+  final bool normalized;
 
-  MyLineChart({Key? key, LineChartData? lineChartData})
-      : lineChartData = lineChartData ?? getDefaultLineChartData(),
+  MyLineChart({Key? key, LineChartData? lineChartData, bool? normalized})
+      : lineChartData =
+            lineChartData ?? getDefaultLineChartData(normalized ?? false),
+        normalized = normalized ?? false,
         super(key: key);
 
   @override
@@ -24,23 +26,65 @@ class MyLineChart extends StatelessWidget {
   }
 }
 
-List<FlSpot> getlineBarsData(int index) {
+List<FlSpot> getlineBarsData(int index, bool normalized) {
   List<FlSpot> flsportList = [];
-  for (double i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
-    flsportList.add(FlSpot(
-        i,
-        GlobalController
-            .to.listList[GlobalController.to.matchRows[index] + i.toInt()][4]));
+
+// Whether to normalize
+  if (normalized) {
+    List<double> closePrices = [];
+
+    for (int l = 0; l < GlobalController.to.matchRows.length; l++) {
+      for (int i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
+        closePrices.add(GlobalController.to.listList[// The CSV/JSON data
+            GlobalController.to.matchRows[l] +
+                i // Loop all closing prices in the matched trend
+            ][4]); // The 4th row of the list is the closing price
+      }
+    }
+
+    final lower = closePrices.reduce(min);
+    final upper = closePrices.reduce(max);
+
+    for (double i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
+      double closePrice = GlobalController.to.listList[// The CSV/JSON data
+              GlobalController.to.matchRows[
+                      index] // Get the matched trend row from this index
+                  +
+                  i.toInt()] // Loop all closing prices in the matched trend
+          [4]; // The 4th row of the list is the closing price
+      if (closePrice < 0) {
+        closePrice = -(closePrice / lower);
+      } else {
+        closePrice = closePrice / upper;
+      }
+
+      flsportList.add(FlSpot(
+          i, // Equal to selectedPeriodCount, starting from 0
+          closePrice));
+    }
+  } else {
+    for (double i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
+      flsportList.add(FlSpot(
+          i, // Equal to selectedPeriodCount, starting from 0
+          GlobalController.to.listList[// The CSV/JSON data
+                  GlobalController.to.matchRows[
+                          index] // Get the matched trend row from this index
+                      +
+                      i.toInt()] // Loop all closing prices in the matched trend
+              [4] // The 4th row of the list is the closing price
+          ));
+    }
   }
+
   return flsportList;
 }
 
-LineChartData getDefaultLineChartData() {
+LineChartData getDefaultLineChartData(bool normalized) {
   return LineChartData(
     borderData: FlBorderData(show: false),
     lineBarsData: GlobalController.to.matchRows
         .mapIndexed((index, row) => LineChartBarData(
-            spots: getlineBarsData(index),
+            spots: getlineBarsData(index, normalized),
             isCurved: true,
             barWidth: 1,
             color: Colors.grey))
