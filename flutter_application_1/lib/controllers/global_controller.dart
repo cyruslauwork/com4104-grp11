@@ -20,6 +20,7 @@ class GlobalController extends GetxController {
   RxList<List<dynamic>> listList = [[]].obs;
 
   RxList<double> selectedPeriodList = [0.0].obs;
+  RxInt selectedPeriodCount = 5.obs;
   RxList<List<double>> comparePeriodList = [
     [0.0]
   ].obs;
@@ -27,7 +28,7 @@ class GlobalController extends GetxController {
     [0.0]
   ].obs;
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
-  RxList<int> matchClosePRow = [0].obs;
+  RxList<int> matchRows = [0].obs;
 
   RxInt elapsedTime = 0.obs;
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;

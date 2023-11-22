@@ -265,12 +265,12 @@ class _MainScreenState extends State<MainScreen> {
                       'Historical match(es)',
                       style: TextStyle(fontSize: 5.sp),
                     ),
-                    (GlobalController.to.matchClosePRow.isNotEmpty
+                    (GlobalController.to.matchRows.isNotEmpty
                         ? SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(
                               () => Text(
-                                GlobalController.to.matchClosePRow.toString(),
+                                GlobalController.to.matchRows.toString(),
                                 style: TextStyle(fontSize: 3.sp),
                               ),
                             ),

@@ -15,7 +15,7 @@ class TrendMatch {
 
     int trueCount = 0;
     int falseCount = 0;
-    int selectedCount = 5;
+    int selectedCount = GlobalController.to.selectedPeriodCount.value;
 
     if (selectedCount <= 1) {
       throw ArgumentError('Selected period must greater than 1 time unit.');
@@ -49,7 +49,7 @@ class TrendMatch {
 
     // Loop all data
     // print('candleData: ${candleData.length}');
-    GlobalController.to.matchClosePRow.removeAt(0);
+    GlobalController.to.matchRows.removeAt(0);
     for (int l = 0;
         l <
             (firstInit
@@ -75,7 +75,7 @@ class TrendMatch {
           comparePeriodList); // Record data type in Dart is equivalent to Tuple in Java and Python
       if (comparisonResult.$1) {
         trueCount += 1;
-        GlobalController.to.matchClosePRow.add(l);
+        GlobalController.to.matchRows.add(l);
         matchListList.add(comparisonResult.$2);
       } else {
         falseCount += 1;
