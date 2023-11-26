@@ -31,7 +31,7 @@ class Candle {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getJSON({required bool firstInit}) async {
+  Future<List<Map<String, dynamic>>> getJSON({required bool init}) async {
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
 
@@ -40,8 +40,8 @@ class Candle {
 
     int apiCallsPerRequest = 5;
 
-    // firstInit is false if and only if added new JSON data
-    if (!firstInit) {
+    // init is false if and only if added new JSON data
+    if (!init) {
       json = GlobalController.to.lastJson;
       currentDate = GlobalController.to.lastJsonEndDate.value;
     }
@@ -55,8 +55,8 @@ class Candle {
       final response = await HTTPService().fetchJSON(startDate, endDate);
 
       if (response.statusCode == 200) {
-        // firstInit is false if and only if added new JSON data
-        if (firstInit) {
+        // init is false if and only if added new JSON data
+        if (init) {
           for (var map in jsonDecode(response.body)['results']) {
             if (map is Map<String, dynamic>) {
               json.add(map);
@@ -90,11 +90,11 @@ class Candle {
     return json;
   }
 
-  Future<List<List<dynamic>>> checkAPIProvider({required bool firstInit}) {
+  Future<List<List<dynamic>>> checkAPIProvider({required bool init}) {
     if (FlavorService.to.srcFileType == SrcFileType.csv) {
       return Candle().csvToListList(Candle().getCSV());
     } else if (FlavorService.to.srcFileType == SrcFileType.json) {
-      return Candle().jsonToListList(Candle().getJSON(firstInit: firstInit));
+      return Candle().jsonToListList(Candle().getJSON(init: init));
     } else {
       throw ArgumentError('Failed to check API provider.');
     }

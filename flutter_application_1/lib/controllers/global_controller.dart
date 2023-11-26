@@ -19,14 +19,31 @@ class GlobalController extends GetxController {
   ].obs;
   RxList<List<dynamic>> listList = [[]].obs;
 
-  RxList<double> selectedPeriodList = [0.0].obs;
-  RxInt selectedPeriodCount = 5.obs;
-  RxList<List<double>> comparePeriodList = [
+  RxList<double> selectedPeriodPercentDifferencesList =
+      [0.0, 0.0, 0.0, 0.0, 0.0].obs; // The root selected period here
+  RxList<double> selectedPeriodActualDifferencesList = [0.0].obs;
+  RxList<double> selectedPeriodActualPricesList = [0.0].obs;
+
+  RxList<List<double>> comparePeriodPercentDifferencesListList = [
     [0.0]
   ].obs;
-  RxList<List<double>> matchListList = [
+  RxList<List<double>> comparePeriodActualDifferencesListList = [
     [0.0]
   ].obs;
+  RxList<List<double>> comparePeriodActualPricesListList = [
+    [0.0]
+  ].obs;
+
+  RxList<List<double>> matchPercentDifferencesListList = [
+    [0.0]
+  ].obs;
+  RxList<List<double>> matchActualDifferencesListList = [
+    [0.0]
+  ].obs;
+  RxList<List<double>> matchActualPricesListList = [
+    [0.0]
+  ].obs;
+
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
   RxList<int> matchRows = [0].obs;
 

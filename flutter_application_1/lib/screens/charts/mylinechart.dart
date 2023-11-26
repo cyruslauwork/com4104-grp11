@@ -34,7 +34,9 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
     List<double> closePrices = [];
 
     for (int l = 0; l < GlobalController.to.matchRows.length; l++) {
-      for (int i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
+      for (int i = 0;
+          i < GlobalController.to.selectedPeriodPercentDifferencesList.length;
+          i++) {
         closePrices.add(GlobalController.to.listList[// The CSV/JSON data
             GlobalController.to.matchRows[l] +
                 i // Loop all closing prices in the matched trend
@@ -45,7 +47,9 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
     final lower = closePrices.reduce(min);
     final upper = closePrices.reduce(max);
 
-    for (double i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
+    for (double i = 0;
+        i < GlobalController.to.selectedPeriodPercentDifferencesList.length + 1;
+        i++) {
       double closePrice = GlobalController.to.listList[// The CSV/JSON data
               GlobalController.to.matchRows[
                       index] // Get the matched trend row from this index
@@ -63,7 +67,9 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
           closePrice));
     }
   } else {
-    for (double i = 0; i < GlobalController.to.selectedPeriodCount.value; i++) {
+    for (double i = 0;
+        i < GlobalController.to.selectedPeriodPercentDifferencesList.length + 1;
+        i++) {
       flsportList.add(FlSpot(
           i, // Equal to selectedPeriodCount, starting from 0
           GlobalController.to.listList[// The CSV/JSON data
@@ -88,7 +94,7 @@ LineChartData getDefaultLineChartData(bool normalized) {
             isCurved: true,
             barWidth: 1,
             color: Colors.grey))
-        .take(5) // Add this line to limit the items to the first 5
+        // .take(5) // Add this line to limit the items to the first 5
         .toList(),
     // [
     //   // The red line

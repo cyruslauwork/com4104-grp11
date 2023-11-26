@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/charts/mylinechart.dart';
-import 'package:flutter_application_1/services/flavor_service.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:collection/collection.dart';
@@ -10,6 +8,8 @@ import 'package:collection/collection.dart';
 import '../controllers/controllers.dart';
 import '../models/models.dart';
 import '../utils/utils.dart';
+import '../screens/charts/charts.dart';
+import '../services/flavor_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -30,8 +30,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   Future<List<CandleData>> get _futureListCandleData async {
     Future<List<CandleData>> futureListCandleData =
-        Candle().listListToCandles(Candle().checkAPIProvider(firstInit: true));
-    TrendMatch().countMatches(futureListCandleData, firstInit: true);
+        Candle().listListToCandles(Candle().checkAPIProvider(init: true));
+    TrendMatch().countMatches(futureListCandleData, init: true);
     return futureListCandleData;
   }
 
@@ -171,6 +171,11 @@ class _MainScreenState extends State<MainScreen> {
                         ]),
                       ],
                     ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Max 1000-Row Candlestick Chart',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
                     Obx(
                       () {
                         GlobalController.to.showAverage.value
@@ -240,16 +245,18 @@ class _MainScreenState extends State<MainScreen> {
                               color: Colors.black,
                               style: BorderStyle.solid,
                               width: 2),
-                          columns: GlobalController.to.selectedPeriodList
+                          columns: GlobalController
+                              .to.selectedPeriodPercentDifferencesList
                               .mapIndexed((i, e) => DataColumn(
                                       label: Text(
-                                    'Close ${(i + 1).toString()}',
+                                    'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
                                     style: TextStyle(fontSize: 3.sp),
                                   )))
                               .toList(),
                           rows: [
                             DataRow(
-                              cells: GlobalController.to.selectedPeriodList
+                              cells: GlobalController
+                                  .to.selectedPeriodPercentDifferencesList
                                   .map((e) => DataCell(Text(
                                         e.toString(),
                                         style: TextStyle(fontSize: 3.sp),
@@ -262,7 +269,79 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     SizedBox(height: 10.h),
                     Text(
-                      'Historical match(es)',
+                      'Actual differences between selected period',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(
+                        () => DataTable(
+                          showCheckboxColumn: false,
+                          border: TableBorder.all(
+                              color: Colors.black,
+                              style: BorderStyle.solid,
+                              width: 2),
+                          columns: GlobalController
+                              .to.selectedPeriodActualDifferencesList
+                              .mapIndexed((i, e) => DataColumn(
+                                      label: Text(
+                                    'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                    style: TextStyle(fontSize: 3.sp),
+                                  )))
+                              .toList(),
+                          rows: [
+                            DataRow(
+                              cells: GlobalController
+                                  .to.selectedPeriodActualDifferencesList
+                                  .map((e) => DataCell(Text(
+                                        e.toString(),
+                                        style: TextStyle(fontSize: 3.sp),
+                                      )))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Selected period Actual Prices',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(
+                        () => DataTable(
+                          showCheckboxColumn: false,
+                          border: TableBorder.all(
+                              color: Colors.black,
+                              style: BorderStyle.solid,
+                              width: 2),
+                          columns:
+                              GlobalController.to.selectedPeriodActualPricesList
+                                  .mapIndexed((i, e) => DataColumn(
+                                          label: Text(
+                                        'Close Price ${(i + 1).toString()}',
+                                        style: TextStyle(fontSize: 3.sp),
+                                      )))
+                                  .toList(),
+                          rows: [
+                            DataRow(
+                              cells: GlobalController
+                                  .to.selectedPeriodActualPricesList
+                                  .map((e) => DataCell(Text(
+                                        e.toString(),
+                                        style: TextStyle(fontSize: 3.sp),
+                                      )))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Historical Matched Trend(s)',
                       style: TextStyle(fontSize: 5.sp),
                     ),
                     (GlobalController.to.matchRows.isNotEmpty
@@ -284,16 +363,23 @@ class _MainScreenState extends State<MainScreen> {
                     MyLineChart(
                       normalized: true,
                     ),
+                    Text(
+                      'Adjusted all first prices to be the same as the first selected price',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    AdjustedLineChart(),
                     SizedBox(height: 10.h),
-                    (GlobalController.to.matchListList.isNotEmpty
+                    Text(
+                      'Matched Trend(s) Percentage Differences',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    (GlobalController
+                            .to.matchPercentDifferencesListList.isNotEmpty
                         ? SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(
                               () => Text(
-                                GlobalController.to.matchListList
-                                    .map((e) => '$e\n')
-                                    .toList()
-                                    .toString(),
+                                '${GlobalController.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchPercentDifferencesListList.length > 100 ? GlobalController.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
                                 style: TextStyle(fontSize: 3.sp),
                               ),
                             ),
@@ -301,18 +387,70 @@ class _MainScreenState extends State<MainScreen> {
                         : Text('0', style: TextStyle(fontSize: 3.sp))),
                     SizedBox(height: 10.h),
                     Text(
-                      'Comparison data',
+                      'Matched Trend(s) Actual Differences',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    (GlobalController
+                            .to.matchActualDifferencesListList.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(
+                              () => Text(
+                                '${GlobalController.to.matchActualDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualDifferencesListList.length > 100 ? GlobalController.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
+                                style: TextStyle(fontSize: 3.sp),
+                              ),
+                            ),
+                          )
+                        : Text('0', style: TextStyle(fontSize: 3.sp))),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Matched Trend(s) Actual Prices',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    (GlobalController.to.matchActualPricesListList.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(
+                              () => Text(
+                                '${GlobalController.to.matchActualPricesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualPricesListList.length > 100 ? GlobalController.to.matchActualPricesListList.length - 100 : 0)} rows left',
+                                style: TextStyle(fontSize: 3.sp),
+                              ),
+                            ),
+                          )
+                        : Text('0', style: TextStyle(fontSize: 3.sp))),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Comparison Trends Percentage Differences',
                       style: TextStyle(fontSize: 5.sp),
                     ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Obx(() => Text(
-                            (GlobalController.to.comparePeriodList.length > 100
-                                ? '${GlobalController.to.comparePeriodList.map((e) => '$e\n').take(100).toList()}...${GlobalController.to.comparePeriodList.length - 100} rows left'
-                                : GlobalController.to.comparePeriodList
-                                    .map((e) => '$e\n')
-                                    .toList()
-                                    .toString()),
+                            '${GlobalController.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
+                            style: TextStyle(fontSize: 3.sp),
+                          )),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Comparison Trends Actual Differences',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(() => Text(
+                            '${GlobalController.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualDifferencesListList.length - 100} rows left',
+                            style: TextStyle(fontSize: 3.sp),
+                          )),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Comparison Trends Actual Prices',
+                      style: TextStyle(fontSize: 5.sp),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Obx(() => Text(
+                            '${GlobalController.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualPricesListList.length - 100} rows left',
                             style: TextStyle(fontSize: 3.sp),
                           )),
                     ),
@@ -383,9 +521,8 @@ class _MainScreenState extends State<MainScreen> {
   addJson() {
     if (FlavorService.to.apiProvider == APIProvider.polygon) {
       TrendMatch().countMatches(
-          Candle()
-              .listListToCandles(Candle().checkAPIProvider(firstInit: false)),
-          firstInit: false);
+          Candle().listListToCandles(Candle().checkAPIProvider(init: false)),
+          init: false);
       GlobalController.to.elapsedTime.value = 0;
     } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
