@@ -356,6 +356,7 @@ class _MainScreenState extends State<MainScreen> {
                           )
                         : Text('0', style: TextStyle(fontSize: 3.sp))),
                     MyLineChart(),
+                    SizedBox(height: 10.h),
                     Text(
                       'Normalized',
                       style: TextStyle(fontSize: 5.sp),
@@ -363,6 +364,7 @@ class _MainScreenState extends State<MainScreen> {
                     MyLineChart(
                       normalized: true,
                     ),
+                    SizedBox(height: 10.h),
                     Text(
                       'Adjusted all first prices to be the same as the first selected price',
                       style: TextStyle(fontSize: 5.sp),

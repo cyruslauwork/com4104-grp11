@@ -24,28 +24,29 @@ class AdjustedLineChart extends StatelessWidget {
   static List<FlSpot> getlineBarsData(int index) {
     List<FlSpot> flspotList = [];
 
-    double firstSelectedClosePrice = GlobalController.to.listList[
-        GlobalController.to.listList.length -
-            GlobalController.to.selectedPeriodPercentDifferencesList.length -
-            1][4];
+    double lastSelectedClosePrice = GlobalController
+        .to.listList[GlobalController.to.listList.length - 1][4];
 
-    double firstActualDifference = GlobalController.to.listList[GlobalController
-                .to.listList.length -
-            GlobalController.to.selectedPeriodPercentDifferencesList.length -
-            1][4] -
-        GlobalController.to.listList[GlobalController.to.matchRows[index]][4];
+    double lastActualDifference = GlobalController
+            .to.listList[GlobalController.to.listList.length - 1][4] -
+        GlobalController.to.listList[GlobalController.to.matchRows[index] +
+            GlobalController.to.selectedPeriodActualDifferencesList.length][4];
 
     for (double i = 0;
-        i < GlobalController.to.selectedPeriodPercentDifferencesList.length + 1;
+        i <
+            GlobalController.to.selectedPeriodPercentDifferencesList.length *
+                    2 +
+                2;
         i++) {
-      if (i == 0) {
-        flspotList.add(FlSpot(i, firstSelectedClosePrice));
+      if (i ==
+          GlobalController.to.selectedPeriodPercentDifferencesList.length) {
+        flspotList.add(FlSpot(i, lastSelectedClosePrice));
       } else {
         double adjustedMatchedTrendClosePrice = GlobalController.to
                     .listList[GlobalController.to.matchRows[index] + i.toInt()]
                 [4] // Close price of matched trend
             +
-            firstActualDifference;
+            lastActualDifference;
 
         flspotList.add(FlSpot(i, adjustedMatchedTrendClosePrice));
       }

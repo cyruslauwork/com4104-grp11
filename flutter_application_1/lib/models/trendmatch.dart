@@ -105,7 +105,8 @@ class TrendMatch {
 
         comparePeriodActualDifferencesList
             .add(candleData[l + (i + 1)].close! - candleData[l + i].close!);
-
+      }
+      for (int i = 0; i < selectedCount; i++) {
         comparePeriodActualPricesList.add(candleData[l + i].close!);
       }
       // print('all data: ${comparePeriodList.length}');
@@ -126,6 +127,8 @@ class TrendMatch {
           double actual =
               candleData[l + (i + 1)].close! - candleData[l + i].close!;
           matchActualDifferencesList.add(actual);
+        }
+        for (int i = 0; i < comparisonResult.$2.length + 1; i++) {
           matchActualPricesList.add(candleData[l + i].close!);
         }
         matchActualDifferencesListList.add(matchActualDifferencesList);
