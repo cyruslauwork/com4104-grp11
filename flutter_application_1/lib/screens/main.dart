@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
         title: Text('Main Screen'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.search),
             onPressed:(){
               Navigator.push(
                 context,
