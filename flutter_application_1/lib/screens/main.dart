@@ -10,9 +10,11 @@ import '../models/models.dart';
 import '../utils/utils.dart';
 import '../screens/charts/charts.dart';
 import '../services/flavor_service.dart';
+import '../screens/NewPage.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({Key? key}) : super(key: key);
+  //const MainScreen({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -45,7 +47,17 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text('Main Screen'),
         actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed:(){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => NewPage()),
+              );
+            },
+          ),
           Obx(
             () => (GlobalController.to.listCandleData.length > 1
                 ? Row(
@@ -533,5 +545,22 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       throw ArgumentError('Failed to check API provider.');
     }
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: MainScreen(),
+    );
   }
 }
