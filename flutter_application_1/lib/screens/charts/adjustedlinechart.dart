@@ -28,7 +28,7 @@ class AdjustedLineChart extends StatelessWidget {
         .to.listList[GlobalController.to.listList.length - 1][4];
 
     double lastActualDifference = GlobalController
-            .to.listList[GlobalController.to.listList.length - 1][4] -
+            .to.listList[GlobalController.to.listList.length - 1][4] /
         GlobalController.to.listList[GlobalController.to.matchRows[index] +
             GlobalController.to.selectedPeriodActualDifferencesList.length][4];
 
@@ -45,7 +45,7 @@ class AdjustedLineChart extends StatelessWidget {
         double adjustedMatchedTrendClosePrice = GlobalController.to
                     .listList[GlobalController.to.matchRows[index] + i.toInt()]
                 [4] // Close price of matched trend
-            +
+            *
             lastActualDifference;
 
         flspotList.add(FlSpot(i, adjustedMatchedTrendClosePrice));

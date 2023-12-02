@@ -4,7 +4,9 @@ class HTTPService {
   Future<http.Response> fetchCSV() async {
     int startTimestamp = 0;
     // DateTime(2023, 10, 1, 0, 0).millisecondsSinceEpoch ~/1000; // DateTime(2017, 9, 7, 17, 30); 7th of September 2017, 5:30pm
-    int endTimestamp = 1699690757;
+    int endTimestamp =
+        // 1696108581;
+        1699690757;
     // DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final url = Uri.parse(
         'https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=$startTimestamp&period2=$endTimestamp&interval=1d&events=history&includeAdjustedClose=true');
