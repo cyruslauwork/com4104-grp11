@@ -10,7 +10,7 @@ import '../models/models.dart';
 import '../utils/utils.dart';
 import '../screens/charts/charts.dart';
 import '../services/flavor_service.dart';
-import '../screens/NewPage.dart';
+import '../screens/newpage.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -51,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.search),
-            onPressed:(){
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NewPage()),
