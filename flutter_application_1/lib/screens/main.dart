@@ -30,6 +30,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  bool _isLoading = true; // Track whether data is loading or not
   Future<List<CandleData>> get _futureListCandleData async {
     Future<List<CandleData>> futureListCandleData =
         Candle().listListToCandles(Candle().checkAPIProvider(init: true));
@@ -40,6 +41,17 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    _loadData().then((_) {
+      setState(() {
+        _isLoading = false; // Set loading state to false after data is loaded
+      });
+    });
+  }
+
+  Future<void> _loadData() async {
+    // Simulate data loading delay
+    await Future.delayed(Duration(seconds: 3));
+    // Load data here
   }
 
   @override
@@ -97,7 +109,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      body: SafeArea(
+      body: _isLoading 
+        ? SplashScreen()
+        : SafeArea(
         minimum: const EdgeInsets.all(5.0),
         child: FutureBuilder<List<CandleData>>(
           future: (GlobalController.to.listCandleData.length > 1
@@ -561,6 +575,33 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MainScreen(),
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
+              fit: BoxFit.cover,
+            ),
+            SizedBox(height: 16), // Adjust the spacing between the image and text
+            Text(
+              'Loading...',
+              style: TextStyle(
+                fontSize: 24,
+                //fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

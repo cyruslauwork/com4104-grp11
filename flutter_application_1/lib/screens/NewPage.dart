@@ -7,7 +7,12 @@ class NewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search'),
+        //title: Text('Search'),
+        title: TextField(
+          decoration: InputDecoration(
+            hintText: 'Search here...',
+          ),
+        ),
       ),
       body: Center(
         child: Text(
