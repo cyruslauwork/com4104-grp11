@@ -398,7 +398,7 @@ class _MainScreenState extends State<MainScreen> {
                           // ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Adjusted all first prices to be the same as the first selected price',
+                            'Adjusted all last prices to be the same as the last selected price',
                             style: TextStyle(fontSize: 5.sp),
                           ),
                           AdjustedLineChart(),
