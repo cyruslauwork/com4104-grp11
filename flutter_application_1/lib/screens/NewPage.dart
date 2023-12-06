@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'package:get/get.dart';
 
-
 class NewPage extends StatefulWidget {
-   NewPage({Key? key}) : super(key: key);
+  NewPage({Key? key}) : super(key: key);
   //DateTime? start;
   //DateTime? end;
 /*class _NewPageState extends State<NewPage>{
@@ -13,7 +12,7 @@ class NewPage extends StatefulWidget {
     end: DateTime(2022, 12, 24),
   );*/
 
-    @override
+  @override
   _NewPageState createState() => _NewPageState();
 }
 
@@ -27,7 +26,7 @@ class _NewPageState extends State<NewPage> {
   void dispose() {
     _dateRangeController.dispose();
     super.dispose();
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,37 +45,36 @@ class _NewPageState extends State<NewPage> {
           style: TextStyle(fontSize: 20),
         ),
       ),*/
-       body:Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-         child: Column(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: Column(
           children: <Widget>[
-            Padding (
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: _varienceController,
-              maxLength: 3, 
-              decoration: const InputDecoration(labelText: 'Enter Varience Vaule(%)',
-                border: OutlineInputBorder()),
+              child: TextField(
+                controller: _varienceController,
+                maxLength: 3,
+                decoration: const InputDecoration(
+                    labelText: 'Enter Varience Value(%)',
+                    border: OutlineInputBorder()),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ], // Only numbers can be entered
+                  FilteringTextInputFormatter.digitsOnly
+                ], // Only numbers can be entered
+              ),
             ),
-          ),
-            
-           Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: TextField(
-              controller: _stockNameController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter Stock Name/Number',
-            ),
-            ),
+              child: TextField(
+                controller: _stockNameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter Stock Name/Number',
+                ),
+              ),
             ),
 
-
-           /* Column(
+            /* Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
@@ -94,7 +92,7 @@ class _NewPageState extends State<NewPage> {
             ),
         ],
       ),*/
-             
+
             /*Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -129,39 +127,36 @@ class _NewPageState extends State<NewPage> {
               ),
             ),*/
             Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-             child:TextFormField(
-              controller: _dateRangeController,
-              decoration: InputDecoration(
-                labelText: 'Select Date Range',
-                suffixIcon: Icon(Icons.calendar_today),
-                border: OutlineInputBorder(),
-              ),
-              readOnly: true,
-              onTap: () async {
-                final range = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(1990),
-                  lastDate: DateTime.now(), //restrict user to choose future date
-                );
-
-                if (range != null) {
-                  setState(() {
-                    selectedDateRange = range;
-                    _dateRangeController.text =
-                        '${range.start.day}/${range.start.month}/${range.start.year} - ${range.end.day}/${range.end.month}/${range.end.year}';
-                  }
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: TextFormField(
+                controller: _dateRangeController,
+                decoration: InputDecoration(
+                  labelText: 'Select Date Range',
+                  suffixIcon: Icon(Icons.calendar_today),
+                  border: OutlineInputBorder(),
+                ),
+                readOnly: true,
+                onTap: () async {
+                  final range = await showDateRangePicker(
+                    context: context,
+                    firstDate: DateTime(1990),
+                    lastDate:
+                        DateTime.now(), //restrict user to choose future date
                   );
-                }
-              },
+
+                  if (range != null) {
+                    setState(() {
+                      selectedDateRange = range;
+                      _dateRangeController.text =
+                          '${range.start.day}/${range.start.month}/${range.start.year} - ${range.end.day}/${range.end.month}/${range.end.year}';
+                    });
+                  }
+                },
+              ),
             ),
-            ),
-
-
-         ],
-         ),
-
-       ),        
+          ],
+        ),
+      ),
     );
   }
 }
