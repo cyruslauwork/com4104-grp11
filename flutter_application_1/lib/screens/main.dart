@@ -10,7 +10,7 @@ import '../models/models.dart';
 import '../utils/utils.dart';
 import '../screens/charts/charts.dart';
 import '../services/flavor_service.dart';
-import '../screens/NewPage.dart';
+import '../screens/newpage.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.search),
-            onPressed:(){
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => NewPage()),
@@ -109,424 +109,431 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-      body: _isLoading 
-        ? SplashScreen()
-        : SafeArea(
-        minimum: const EdgeInsets.all(5.0),
-        child: FutureBuilder<List<CandleData>>(
-          future: (GlobalController.to.listCandleData.length > 1
-              ? Future.value(GlobalController.to.listCandleData)
-              : _futureListCandleData),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<CandleData>> snapshot) {
-            if (snapshot.hasData) {
-              Timer.periodic(const Duration(seconds: 1), (timer) {
-                GlobalController.to.elapsedTime++;
-              });
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
-                  children: [
-                    Text(
-                      'Trend Match',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    Table(
-                      border: TableBorder.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 2),
-                      children: [
-                        TableRow(children: [
-                          Column(children: [
-                            Text('True', style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text('False', style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text('Exe (ms)', style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text('Rows', style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text('Sel Count', style: TextStyle(fontSize: 3.sp))
-                          ]),
-                          Column(children: [
-                            Text('DL (ms)', style: TextStyle(fontSize: 3.sp))
-                          ])
-                        ]),
-                        TableRow(children: [
-                          Column(children: [
-                            Obx(() => Text(
-                                GlobalController.to.trendMatchOutput[0]
-                                    .toString(),
-                                style: TextStyle(fontSize: 3.sp)))
-                          ]),
-                          Column(children: [
-                            Obx(() => Text(
-                                GlobalController.to.trendMatchOutput[1]
-                                    .toString(),
-                                style: TextStyle(fontSize: 3.sp)))
-                          ]),
-                          Column(children: [
-                            Obx(() => Text(
-                                GlobalController.to.trendMatchOutput[2]
-                                    .toString(),
-                                style: TextStyle(fontSize: 3.sp)))
-                          ]),
-                          Column(children: [
-                            Obx(() => Text(
-                                GlobalController.to.trendMatchOutput[3]
-                                    .toString(),
-                                style: TextStyle(fontSize: 3.sp)))
-                          ]),
-                          Column(children: [
-                            Obx(() => Text(
-                                GlobalController.to.trendMatchOutput[4]
-                                    .toString(),
-                                style: TextStyle(fontSize: 3.sp)))
-                          ]),
-                          Column(children: [
-                            Obx(() => Text(
-                                GlobalController.to.downloadTime.toString(),
-                                style: TextStyle(fontSize: 3.sp)))
-                          ]),
-                        ]),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Max 1000-Row Candlestick Chart',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    Obx(
-                      () {
-                        GlobalController.to.showAverage.value
-                            ? _computeTrendLines()
-                            : _removeTrendLines();
-                        return SizedBox(
-                          width: 393.w,
-                          height: 200.h,
-                          child: InteractiveChart(
-                            candles: (snapshot.data!.length > 1000
-                                ? snapshot.data!.sublist(
-                                    snapshot.data!.length - 999,
-                                    snapshot.data!.length)
-                                : snapshot.data!),
-                            /** Example styling */
-                            // style: ChartStyle(
-                            //   priceGainColor: Colors.teal[200]!,
-                            //   priceLossColor: Colors.blueGrey,
-                            //   volumeColor: Colors.teal.withOpacity(0.8),
-                            //   trendLineStyles: [
-                            //     Paint()
-                            //       ..strokeWidth = 2.0
-                            //       ..strokeCap = StrokeCap.round
-                            //       ..color = Colors.deepOrange,
-                            //     Paint()
-                            //       ..strokeWidth = 4.0
-                            //       ..strokeCap = StrokeCap.round
-                            //       ..color = Colors.orange,
-                            //   ],
-                            //   priceGridLineColor: Colors.blue[200]!,
-                            //   priceLabelStyle: TextStyle(color: Colors.blue[200]),
-                            //   timeLabelStyle: TextStyle(color: Colors.blue[200]),
-                            //   selectionHighlightColor: Colors.red.withOpacity(0.2),
-                            //   overlayBackgroundColor: Colors.red[900]!.withOpacity(0.6),
-                            //   overlayTextStyle: TextStyle(color: Colors.red[100]),
-                            //   timeLabelHeight: 32,
-                            //   volumeHeightFactor: 0.2, // volume area is 20% of total height
-                            // ),
-                            /** Customize axis labels */
-                            // timeLabel: (timestamp, visibleDataCount) => "📅",
-                            // priceLabel: (price) => "${price.round()} 💎",
-                            /** Customize overlay (tap and hold to see it)
-                              ** Or return an empty object to disable overlay info. */
-                            // overlayInfo: (candle) => {
-                            //   "💎": "🤚    ",
-                            //   "Hi": "${candle.high?.toStringAsFixed(2)}",
-                            //   "Lo": "${candle.low?.toStringAsFixed(2)}",
-                            // },
-                            /** Callbacks */
-                            // onTap: (candle) => print("user tapped on $candle"),
-                            // onCandleResize: (width) => print("each candle is $width wide"),
+      body: _isLoading
+          ? SplashScreen()
+          : SafeArea(
+              minimum: const EdgeInsets.all(5.0),
+              child: FutureBuilder<List<CandleData>>(
+                future: (GlobalController.to.listCandleData.length > 1
+                    ? Future.value(GlobalController.to.listCandleData)
+                    : _futureListCandleData),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<CandleData>> snapshot) {
+                  if (snapshot.hasData) {
+                    Timer.periodic(const Duration(seconds: 1), (timer) {
+                      GlobalController.to.elapsedTime++;
+                    });
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisSize:
+                            MainAxisSize.min, // Set mainAxisSize to min
+                        children: [
+                          Text(
+                            'Trend Match',
+                            style: TextStyle(fontSize: 5.sp),
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Percentage differences between selected period',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(
-                        () => DataTable(
-                          showCheckboxColumn: false,
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              style: BorderStyle.solid,
-                              width: 2),
-                          columns: GlobalController
-                              .to.selectedPeriodPercentDifferencesList
-                              .mapIndexed((i, e) => DataColumn(
-                                      label: Text(
-                                    'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                                    style: TextStyle(fontSize: 3.sp),
-                                  )))
-                              .toList(),
-                          rows: [
-                            DataRow(
-                              cells: GlobalController
-                                  .to.selectedPeriodPercentDifferencesList
-                                  .map((e) => DataCell(Text(
-                                        e.toString(),
-                                        style: TextStyle(fontSize: 3.sp),
-                                      )))
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Actual differences between selected period',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(
-                        () => DataTable(
-                          showCheckboxColumn: false,
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              style: BorderStyle.solid,
-                              width: 2),
-                          columns: GlobalController
-                              .to.selectedPeriodActualDifferencesList
-                              .mapIndexed((i, e) => DataColumn(
-                                      label: Text(
-                                    'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                                    style: TextStyle(fontSize: 3.sp),
-                                  )))
-                              .toList(),
-                          rows: [
-                            DataRow(
-                              cells: GlobalController
-                                  .to.selectedPeriodActualDifferencesList
-                                  .map((e) => DataCell(Text(
-                                        e.toString(),
-                                        style: TextStyle(fontSize: 3.sp),
-                                      )))
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Selected period Actual Prices',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(
-                        () => DataTable(
-                          showCheckboxColumn: false,
-                          border: TableBorder.all(
-                              color: Colors.black,
-                              style: BorderStyle.solid,
-                              width: 2),
-                          columns:
-                              GlobalController.to.selectedPeriodActualPricesList
-                                  .mapIndexed((i, e) => DataColumn(
-                                          label: Text(
-                                        'Close Price ${(i + 1).toString()}',
-                                        style: TextStyle(fontSize: 3.sp),
-                                      )))
-                                  .toList(),
-                          rows: [
-                            DataRow(
-                              cells: GlobalController
-                                  .to.selectedPeriodActualPricesList
-                                  .map((e) => DataCell(Text(
-                                        e.toString(),
-                                        style: TextStyle(fontSize: 3.sp),
-                                      )))
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Historical Matched Trend(s)',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    (GlobalController.to.matchRows.isNotEmpty
-                        ? SingleChildScrollView(
+                          Table(
+                            border: TableBorder.all(
+                                color: Colors.black,
+                                style: BorderStyle.solid,
+                                width: 2),
+                            children: [
+                              TableRow(children: [
+                                Column(children: [
+                                  Text('True', style: TextStyle(fontSize: 3.sp))
+                                ]),
+                                Column(children: [
+                                  Text('False',
+                                      style: TextStyle(fontSize: 3.sp))
+                                ]),
+                                Column(children: [
+                                  Text('Exe (ms)',
+                                      style: TextStyle(fontSize: 3.sp))
+                                ]),
+                                Column(children: [
+                                  Text('Rows', style: TextStyle(fontSize: 3.sp))
+                                ]),
+                                Column(children: [
+                                  Text('Sel Count',
+                                      style: TextStyle(fontSize: 3.sp))
+                                ]),
+                                Column(children: [
+                                  Text('DL (ms)',
+                                      style: TextStyle(fontSize: 3.sp))
+                                ])
+                              ]),
+                              TableRow(children: [
+                                Column(children: [
+                                  Obx(() => Text(
+                                      GlobalController.to.trendMatchOutput[0]
+                                          .toString(),
+                                      style: TextStyle(fontSize: 3.sp)))
+                                ]),
+                                Column(children: [
+                                  Obx(() => Text(
+                                      GlobalController.to.trendMatchOutput[1]
+                                          .toString(),
+                                      style: TextStyle(fontSize: 3.sp)))
+                                ]),
+                                Column(children: [
+                                  Obx(() => Text(
+                                      GlobalController.to.trendMatchOutput[2]
+                                          .toString(),
+                                      style: TextStyle(fontSize: 3.sp)))
+                                ]),
+                                Column(children: [
+                                  Obx(() => Text(
+                                      GlobalController.to.trendMatchOutput[3]
+                                          .toString(),
+                                      style: TextStyle(fontSize: 3.sp)))
+                                ]),
+                                Column(children: [
+                                  Obx(() => Text(
+                                      GlobalController.to.trendMatchOutput[4]
+                                          .toString(),
+                                      style: TextStyle(fontSize: 3.sp)))
+                                ]),
+                                Column(children: [
+                                  Obx(() => Text(
+                                      GlobalController.to.downloadTime
+                                          .toString(),
+                                      style: TextStyle(fontSize: 3.sp)))
+                                ]),
+                              ]),
+                            ],
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Max 1000-Row Candlestick Chart',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          Obx(
+                            () {
+                              GlobalController.to.showAverage.value
+                                  ? _computeTrendLines()
+                                  : _removeTrendLines();
+                              return SizedBox(
+                                width: 393.w,
+                                height: 200.h,
+                                child: InteractiveChart(
+                                  candles: (snapshot.data!.length > 1000
+                                      ? snapshot.data!.sublist(
+                                          snapshot.data!.length - 999,
+                                          snapshot.data!.length)
+                                      : snapshot.data!),
+                                  /** Example styling */
+                                  // style: ChartStyle(
+                                  //   priceGainColor: Colors.teal[200]!,
+                                  //   priceLossColor: Colors.blueGrey,
+                                  //   volumeColor: Colors.teal.withOpacity(0.8),
+                                  //   trendLineStyles: [
+                                  //     Paint()
+                                  //       ..strokeWidth = 2.0
+                                  //       ..strokeCap = StrokeCap.round
+                                  //       ..color = Colors.deepOrange,
+                                  //     Paint()
+                                  //       ..strokeWidth = 4.0
+                                  //       ..strokeCap = StrokeCap.round
+                                  //       ..color = Colors.orange,
+                                  //   ],
+                                  //   priceGridLineColor: Colors.blue[200]!,
+                                  //   priceLabelStyle: TextStyle(color: Colors.blue[200]),
+                                  //   timeLabelStyle: TextStyle(color: Colors.blue[200]),
+                                  //   selectionHighlightColor: Colors.red.withOpacity(0.2),
+                                  //   overlayBackgroundColor: Colors.red[900]!.withOpacity(0.6),
+                                  //   overlayTextStyle: TextStyle(color: Colors.red[100]),
+                                  //   timeLabelHeight: 32,
+                                  //   volumeHeightFactor: 0.2, // volume area is 20% of total height
+                                  // ),
+                                  /** Customize axis labels */
+                                  // timeLabel: (timestamp, visibleDataCount) => "📅",
+                                  // priceLabel: (price) => "${price.round()} 💎",
+                                  /** Customize overlay (tap and hold to see it)
+                              ** Or return an empty object to disable overlay info. */
+                                  // overlayInfo: (candle) => {
+                                  //   "💎": "🤚    ",
+                                  //   "Hi": "${candle.high?.toStringAsFixed(2)}",
+                                  //   "Lo": "${candle.low?.toStringAsFixed(2)}",
+                                  // },
+                                  /** Callbacks */
+                                  // onTap: (candle) => print("user tapped on $candle"),
+                                  // onCandleResize: (width) => print("each candle is $width wide"),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Percentage differences between selected period',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(
-                              () => Text(
-                                GlobalController.to.matchRows.toString(),
-                                style: TextStyle(fontSize: 3.sp),
+                              () => DataTable(
+                                showCheckboxColumn: false,
+                                border: TableBorder.all(
+                                    color: Colors.black,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                columns: GlobalController
+                                    .to.selectedPeriodPercentDifferencesList
+                                    .mapIndexed((i, e) => DataColumn(
+                                            label: Text(
+                                          'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                          style: TextStyle(fontSize: 3.sp),
+                                        )))
+                                    .toList(),
+                                rows: [
+                                  DataRow(
+                                    cells: GlobalController
+                                        .to.selectedPeriodPercentDifferencesList
+                                        .map((e) => DataCell(Text(
+                                              e.toString(),
+                                              style: TextStyle(fontSize: 3.sp),
+                                            )))
+                                        .toList(),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        : Text('0', style: TextStyle(fontSize: 3.sp))),
-                    MyLineChart(),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Normalized',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    MyLineChart(
-                      normalized: true,
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Adjusted all first prices to be the same as the first selected price',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    AdjustedLineChart(),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Matched Trend(s) Percentage Differences',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    (GlobalController
-                            .to.matchPercentDifferencesListList.isNotEmpty
-                        ? SingleChildScrollView(
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Actual differences between selected period',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(
-                              () => Text(
-                                '${GlobalController.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchPercentDifferencesListList.length > 100 ? GlobalController.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
-                                style: TextStyle(fontSize: 3.sp),
+                              () => DataTable(
+                                showCheckboxColumn: false,
+                                border: TableBorder.all(
+                                    color: Colors.black,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                columns: GlobalController
+                                    .to.selectedPeriodActualDifferencesList
+                                    .mapIndexed((i, e) => DataColumn(
+                                            label: Text(
+                                          'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                          style: TextStyle(fontSize: 3.sp),
+                                        )))
+                                    .toList(),
+                                rows: [
+                                  DataRow(
+                                    cells: GlobalController
+                                        .to.selectedPeriodActualDifferencesList
+                                        .map((e) => DataCell(Text(
+                                              e.toString(),
+                                              style: TextStyle(fontSize: 3.sp),
+                                            )))
+                                        .toList(),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        : Text('0', style: TextStyle(fontSize: 3.sp))),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Matched Trend(s) Actual Differences',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    (GlobalController
-                            .to.matchActualDifferencesListList.isNotEmpty
-                        ? SingleChildScrollView(
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Selected period Actual Prices',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(
-                              () => Text(
-                                '${GlobalController.to.matchActualDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualDifferencesListList.length > 100 ? GlobalController.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
-                                style: TextStyle(fontSize: 3.sp),
+                              () => DataTable(
+                                showCheckboxColumn: false,
+                                border: TableBorder.all(
+                                    color: Colors.black,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                columns: GlobalController
+                                    .to.selectedPeriodActualPricesList
+                                    .mapIndexed((i, e) => DataColumn(
+                                            label: Text(
+                                          'Close Price ${(i + 1).toString()}',
+                                          style: TextStyle(fontSize: 3.sp),
+                                        )))
+                                    .toList(),
+                                rows: [
+                                  DataRow(
+                                    cells: GlobalController
+                                        .to.selectedPeriodActualPricesList
+                                        .map((e) => DataCell(Text(
+                                              e.toString(),
+                                              style: TextStyle(fontSize: 3.sp),
+                                            )))
+                                        .toList(),
+                                  ),
+                                ],
                               ),
                             ),
-                          )
-                        : Text('0', style: TextStyle(fontSize: 3.sp))),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Matched Trend(s) Actual Prices',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    (GlobalController.to.matchActualPricesListList.isNotEmpty
-                        ? SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Obx(
-                              () => Text(
-                                '${GlobalController.to.matchActualPricesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualPricesListList.length > 100 ? GlobalController.to.matchActualPricesListList.length - 100 : 0)} rows left',
-                                style: TextStyle(fontSize: 3.sp),
-                              ),
-                            ),
-                          )
-                        : Text('0', style: TextStyle(fontSize: 3.sp))),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Comparison Trends Percentage Differences',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(() => Text(
-                            '${GlobalController.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
-                            style: TextStyle(fontSize: 3.sp),
-                          )),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Comparison Trends Actual Differences',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(() => Text(
-                            '${GlobalController.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualDifferencesListList.length - 100} rows left',
-                            style: TextStyle(fontSize: 3.sp),
-                          )),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Comparison Trends Actual Prices',
-                      style: TextStyle(fontSize: 5.sp),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Obx(() => Text(
-                            '${GlobalController.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualPricesListList.length - 100} rows left',
-                            style: TextStyle(fontSize: 3.sp),
-                          )),
-                    ),
-                  ],
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 60.w,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.h),
-                      child: Text(
-                        'Error: ${snapshot.error}',
-                        style: TextStyle(fontSize: 10.sp),
+                          ),
+                          // SizedBox(height: 10.h),
+                          // Text(
+                          //   'Historical Matched Trend(s)',
+                          //   style: TextStyle(fontSize: 5.sp),
+                          // ),
+                          // (GlobalController.to.matchRows.isNotEmpty
+                          //     ? SingleChildScrollView(
+                          //         scrollDirection: Axis.horizontal,
+                          //         child: Obx(
+                          //           () => Text(
+                          //             GlobalController.to.matchRows.toString(),
+                          //             style: TextStyle(fontSize: 3.sp),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     : Text('0', style: TextStyle(fontSize: 3.sp))),
+                          // MyLineChart(),
+                          // SizedBox(height: 10.h),
+                          // Text(
+                          //   'Normalized',
+                          //   style: TextStyle(fontSize: 5.sp),
+                          // ),
+                          // MyLineChart(
+                          //   normalized: true,
+                          // ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Adjusted all first prices to be the same as the first selected price',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          AdjustedLineChart(),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Matched Trend(s) Percentage Differences',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          (GlobalController
+                                  .to.matchPercentDifferencesListList.isNotEmpty
+                              ? SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Obx(
+                                    () => Text(
+                                      '${GlobalController.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchPercentDifferencesListList.length > 100 ? GlobalController.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
+                                      style: TextStyle(fontSize: 3.sp),
+                                    ),
+                                  ),
+                                )
+                              : Text('0', style: TextStyle(fontSize: 3.sp))),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Matched Trend(s) Actual Differences',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          (GlobalController
+                                  .to.matchActualDifferencesListList.isNotEmpty
+                              ? SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Obx(
+                                    () => Text(
+                                      '${GlobalController.to.matchActualDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualDifferencesListList.length > 100 ? GlobalController.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
+                                      style: TextStyle(fontSize: 3.sp),
+                                    ),
+                                  ),
+                                )
+                              : Text('0', style: TextStyle(fontSize: 3.sp))),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Matched Trend(s) Actual Prices',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          (GlobalController
+                                  .to.matchActualPricesListList.isNotEmpty
+                              ? SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Obx(
+                                    () => Text(
+                                      '${GlobalController.to.matchActualPricesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualPricesListList.length > 100 ? GlobalController.to.matchActualPricesListList.length - 100 : 0)} rows left',
+                                      style: TextStyle(fontSize: 3.sp),
+                                    ),
+                                  ),
+                                )
+                              : Text('0', style: TextStyle(fontSize: 3.sp))),
+                          // SizedBox(height: 10.h),
+                          // Text(
+                          //   'Comparison Trends Percentage Differences',
+                          //   style: TextStyle(fontSize: 5.sp),
+                          // ),
+                          // SingleChildScrollView(
+                          //   scrollDirection: Axis.horizontal,
+                          //   child: Obx(() => Text(
+                          //         '${GlobalController.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
+                          //         style: TextStyle(fontSize: 3.sp),
+                          //       )),
+                          // ),
+                          // SizedBox(height: 10.h),
+                          // Text(
+                          //   'Comparison Trends Actual Differences',
+                          //   style: TextStyle(fontSize: 5.sp),
+                          // ),
+                          // SingleChildScrollView(
+                          //   scrollDirection: Axis.horizontal,
+                          //   child: Obx(() => Text(
+                          //         '${GlobalController.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualDifferencesListList.length - 100} rows left',
+                          //         style: TextStyle(fontSize: 3.sp),
+                          //       )),
+                          // ),
+                          // SizedBox(height: 10.h),
+                          // Text(
+                          //   'Comparison Trends Actual Prices',
+                          //   style: TextStyle(fontSize: 5.sp),
+                          // ),
+                          // SingleChildScrollView(
+                          //   scrollDirection: Axis.horizontal,
+                          //   child: Obx(() => Text(
+                          //         '${GlobalController.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualPricesListList.length - 100} rows left',
+                          //         style: TextStyle(fontSize: 3.sp),
+                          //       )),
+                          // ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 40.w,
-                      height: 40.h,
-                      child: const CircularProgressIndicator(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.h),
-                      child: Text('Awaiting result...',
-                          style: TextStyle(fontSize: 10.sp)),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                            size: 60.w,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.h),
+                            child: Text(
+                              'Error: ${snapshot.error}',
+                              style: TextStyle(fontSize: 10.sp),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 40.w,
+                            height: 40.h,
+                            child: const CircularProgressIndicator(),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.h),
+                            child: Text('Awaiting result...',
+                                style: TextStyle(fontSize: 10.sp)),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
     );
   }
 
@@ -591,7 +598,8 @@ class SplashScreen extends StatelessWidget {
               'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 16), // Adjust the spacing between the image and text
+            SizedBox(
+                height: 16), // Adjust the spacing between the image and text
             Text(
               'Loading...',
               style: TextStyle(
