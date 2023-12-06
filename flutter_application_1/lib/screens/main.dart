@@ -59,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Main Screen'),
+        title: Text('Stock Insight'),
         actions: [
           IconButton(
             icon: Icon(Icons.search),
