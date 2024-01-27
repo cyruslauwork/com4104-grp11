@@ -453,42 +453,42 @@ class _MainScreenState extends State<MainScreen> {
                                   ),
                                 )
                               : Text('0', style: TextStyle(fontSize: 3.sp))),
-                          // SizedBox(height: 10.h),
-                          // Text(
-                          //   'Comparison Trends Percentage Differences',
-                          //   style: TextStyle(fontSize: 5.sp),
-                          // ),
-                          // SingleChildScrollView(
-                          //   scrollDirection: Axis.horizontal,
-                          //   child: Obx(() => Text(
-                          //         '${GlobalController.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
-                          //         style: TextStyle(fontSize: 3.sp),
-                          //       )),
-                          // ),
-                          // SizedBox(height: 10.h),
-                          // Text(
-                          //   'Comparison Trends Actual Differences',
-                          //   style: TextStyle(fontSize: 5.sp),
-                          // ),
-                          // SingleChildScrollView(
-                          //   scrollDirection: Axis.horizontal,
-                          //   child: Obx(() => Text(
-                          //         '${GlobalController.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualDifferencesListList.length - 100} rows left',
-                          //         style: TextStyle(fontSize: 3.sp),
-                          //       )),
-                          // ),
-                          // SizedBox(height: 10.h),
-                          // Text(
-                          //   'Comparison Trends Actual Prices',
-                          //   style: TextStyle(fontSize: 5.sp),
-                          // ),
-                          // SingleChildScrollView(
-                          //   scrollDirection: Axis.horizontal,
-                          //   child: Obx(() => Text(
-                          //         '${GlobalController.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualPricesListList.length - 100} rows left',
-                          //         style: TextStyle(fontSize: 3.sp),
-                          //       )),
-                          // ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Comparison Trends Percentage Differences',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(() => Text(
+                                  '${GlobalController.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
+                                  style: TextStyle(fontSize: 3.sp),
+                                )),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Comparison Trends Actual Differences',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(() => Text(
+                                  '${GlobalController.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualDifferencesListList.length - 100} rows left',
+                                  style: TextStyle(fontSize: 3.sp),
+                                )),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Comparison Trends Actual Prices',
+                            style: TextStyle(fontSize: 5.sp),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Obx(() => Text(
+                                  '${GlobalController.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualPricesListList.length - 100} rows left',
+                                  style: TextStyle(fontSize: 3.sp),
+                                )),
+                          ),
                         ],
                       ),
                     );

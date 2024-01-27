@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import '../../controllers/controllers.dart';
 import '../../utils/utils.dart';
+import '../../services/services.dart';
 
 class AdjustedLineChart extends StatelessWidget {
   final LineChartData lineChartData;
@@ -14,6 +15,9 @@ class AdjustedLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    for (int i = 0; i < GlobalController.to.matchRows.length; i++) {
+      getMatchedTrend(i);
+    }
     return SizedBox(
       width: 393.w,
       height: 200.h,
