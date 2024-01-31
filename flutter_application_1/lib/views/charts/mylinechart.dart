@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
-import '../../controllers/controllers.dart';
+import '../../presenters/presenters.dart';
 import '../../utils/utils.dart';
 
 class MyLineChart extends StatelessWidget {
@@ -33,12 +33,12 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
   if (normalized) {
     List<double> closePrices = [];
 
-    for (int l = 0; l < GlobalController.to.matchRows.length; l++) {
+    for (int l = 0; l < MainPresenter.to.matchRows.length; l++) {
       for (int i = 0;
-          i < GlobalController.to.selectedPeriodPercentDifferencesList.length;
+          i < MainPresenter.to.selectedPeriodPercentDifferencesList.length;
           i++) {
-        closePrices.add(GlobalController.to.listList[// The CSV/JSON data
-            GlobalController.to.matchRows[l] +
+        closePrices.add(MainPresenter.to.listList[// The CSV/JSON data
+            MainPresenter.to.matchRows[l] +
                 i // Loop all closing prices in the matched trend
             ][4]); // The 4th row of the list is the closing price
       }
@@ -48,10 +48,10 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
     final upper = closePrices.reduce(max);
 
     for (double i = 0;
-        i < GlobalController.to.selectedPeriodPercentDifferencesList.length + 1;
+        i < MainPresenter.to.selectedPeriodPercentDifferencesList.length + 1;
         i++) {
-      double closePrice = GlobalController.to.listList[// The CSV/JSON data
-              GlobalController.to.matchRows[
+      double closePrice = MainPresenter.to.listList[// The CSV/JSON data
+              MainPresenter.to.matchRows[
                       index] // Get the matched trend row from this index
                   +
                   i.toInt()] // Loop all closing prices in the matched trend
@@ -68,12 +68,12 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
     }
   } else {
     for (double i = 0;
-        i < GlobalController.to.selectedPeriodPercentDifferencesList.length + 1;
+        i < MainPresenter.to.selectedPeriodPercentDifferencesList.length + 1;
         i++) {
       flsportList.add(FlSpot(
           i, // Equal to selectedPeriodCount, starting from 0
-          GlobalController.to.listList[// The CSV/JSON data
-                  GlobalController.to.matchRows[
+          MainPresenter.to.listList[// The CSV/JSON data
+                  MainPresenter.to.matchRows[
                           index] // Get the matched trend row from this index
                       +
                       i.toInt()] // Loop all closing prices in the matched trend
@@ -88,7 +88,7 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
 LineChartData getDefaultLineChartData(bool normalized) {
   return LineChartData(
     borderData: FlBorderData(show: false),
-    lineBarsData: GlobalController.to.matchRows
+    lineBarsData: MainPresenter.to.matchRows
         .mapIndexed((index, row) => LineChartBarData(
             spots: getlineBarsData(index, normalized),
             isCurved: true,

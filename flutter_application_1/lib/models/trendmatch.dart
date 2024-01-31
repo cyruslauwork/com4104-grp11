@@ -1,6 +1,6 @@
 import 'package:interactive_chart/interactive_chart.dart';
 
-import '../controllers/controllers.dart';
+import '../presenters/presenters.dart';
 // import 'models.dart';
 
 class TrendMatch {
@@ -31,7 +31,7 @@ class TrendMatch {
     int trueCount = 0;
     int falseCount = 0;
     int selectedCount =
-        GlobalController.to.selectedPeriodPercentDifferencesList.length;
+        MainPresenter.to.selectedPeriodPercentDifferencesList.length;
 
     if (selectedCount <= 1) {
       throw ArgumentError('Selected period must greater than 1 time unit.');
@@ -41,10 +41,10 @@ class TrendMatch {
 
     // init is false if and only if added new JSON data
     if (init) {
-      GlobalController.to.matchRows.removeAt(0);
-      GlobalController.to.matchPercentDifferencesListList.removeAt(0);
-      GlobalController.to.matchActualDifferencesListList.removeAt(0);
-      GlobalController.to.matchActualPricesListList.removeAt(0);
+      MainPresenter.to.matchRows.removeAt(0);
+      MainPresenter.to.matchPercentDifferencesListList.removeAt(0);
+      MainPresenter.to.matchActualDifferencesListList.removeAt(0);
+      MainPresenter.to.matchActualPricesListList.removeAt(0);
 
       // Loop selected data
       for (int i = selectedCount; i > 1; i--) {
@@ -62,11 +62,11 @@ class TrendMatch {
             .add(candleData[candleData.length - i].close!);
       }
       // print('selected data: ${selectedPeriodList.length}');
-      GlobalController.to.selectedPeriodPercentDifferencesList.value =
+      MainPresenter.to.selectedPeriodPercentDifferencesList.value =
           selectedPeriodPercentageDifferencesList;
-      GlobalController.to.selectedPeriodActualDifferencesList.value =
+      MainPresenter.to.selectedPeriodActualDifferencesList.value =
           selectedPeriodActualDifferencesList;
-      GlobalController.to.selectedPeriodActualPricesList.value =
+      MainPresenter.to.selectedPeriodActualPricesList.value =
           selectedPeriodActualPricesList;
       // difference between start and user selected date --> l
       // user selected range
@@ -79,11 +79,11 @@ class TrendMatch {
       // }
     } else {
       selectedPeriodPercentageDifferencesList =
-          GlobalController.to.selectedPeriodPercentDifferencesList;
+          MainPresenter.to.selectedPeriodPercentDifferencesList;
       selectedPeriodActualDifferencesList =
-          GlobalController.to.selectedPeriodActualDifferencesList;
+          MainPresenter.to.selectedPeriodActualDifferencesList;
       selectedPeriodActualPricesList =
-          GlobalController.to.selectedPeriodActualPricesList;
+          MainPresenter.to.selectedPeriodActualPricesList;
     }
 
     // Loop all data
@@ -93,7 +93,7 @@ class TrendMatch {
             (init
                 ? candleData.length - selectedCount
                 : candleData.length -
-                    GlobalController.to.lastCandleDataLength
+                    MainPresenter.to.lastCandleDataLength
                         .value); // init is false if and only if added new JSON data
         l++) {
       // Minus selectedCount to avoid counting selected data as a same match
@@ -121,7 +121,7 @@ class TrendMatch {
         trueCount += 1;
 
         // matchPercentDifferencesList = comparePeriodPercentageDifferencesList;
-        GlobalController.to.matchRows.add(l);
+        MainPresenter.to.matchRows.add(l);
         matchPercentDifferencesListList.add(comparisonResult.$2);
         for (int i = 0; i < comparisonResult.$2.length; i++) {
           double actual =
@@ -151,67 +151,67 @@ class TrendMatch {
 
     // init is false if and only if added new JSON data
     if (init) {
-      GlobalController.to.comparePeriodPercentDifferencesListList.value =
+      MainPresenter.to.comparePeriodPercentDifferencesListList.value =
           comparePeriodPercentageDifferencesListList;
-      GlobalController.to.comparePeriodActualDifferencesListList.value =
+      MainPresenter.to.comparePeriodActualDifferencesListList.value =
           comparePeriodActualDifferencesListList;
-      GlobalController.to.comparePeriodActualPricesListList.value =
+      MainPresenter.to.comparePeriodActualPricesListList.value =
           comparePeriodActualPricesListList;
 
-      GlobalController.to.matchPercentDifferencesListList.value =
+      MainPresenter.to.matchPercentDifferencesListList.value =
           matchPercentDifferencesListList;
-      GlobalController.to.matchActualDifferencesListList.value =
+      MainPresenter.to.matchActualDifferencesListList.value =
           matchActualDifferencesListList;
-      GlobalController.to.matchActualPricesListList.value =
+      MainPresenter.to.matchActualPricesListList.value =
           matchActualPricesListList;
     } else {
       // Insert each row of new JSON data into the original list
       for (List<double> comparePeriodPercentageList
           in comparePeriodPercentageDifferencesListList.reversed) {
-        GlobalController.to.comparePeriodPercentDifferencesListList
+        MainPresenter.to.comparePeriodPercentDifferencesListList
             .insert(0, comparePeriodPercentageList);
       }
       // Insert each row of new JSON data into the original list
       for (List<double> comparePeriodActualDifferencesList
           in comparePeriodActualDifferencesListList.reversed) {
-        GlobalController.to.comparePeriodActualDifferencesListList
+        MainPresenter.to.comparePeriodActualDifferencesListList
             .insert(0, comparePeriodActualDifferencesList);
       }
       // Insert each row of new JSON data into the original list
       for (List<double> comparePeriodActualPriceList
           in comparePeriodActualPricesListList.reversed) {
-        GlobalController.to.comparePeriodActualPricesListList
+        MainPresenter.to.comparePeriodActualPricesListList
             .insert(0, comparePeriodActualPriceList);
       }
       // Insert each row of new JSON data into the original list
       for (List<double> matchPercentDifferencesList
           in matchPercentDifferencesListList.reversed) {
-        GlobalController.to.matchPercentDifferencesListList
+        MainPresenter.to.matchPercentDifferencesListList
             .insert(0, matchPercentDifferencesList);
       }
       // Insert each row of new JSON data into the original list
       for (List<double> matchActualDifferencesList
           in matchActualDifferencesListList.reversed) {
-        GlobalController.to.matchActualDifferencesListList
+        MainPresenter.to.matchActualDifferencesListList
             .insert(0, matchActualDifferencesList);
       }
       // Insert each row of new JSON data into the original list
       for (List<double> matchActualPricesList
           in matchActualPricesListList.reversed) {
-        GlobalController.to.matchActualPricesListList
+        MainPresenter.to.matchActualPricesListList
             .insert(0, matchActualPricesList);
       }
     }
-    GlobalController.to.lastCandleDataLength.value = candleData.length;
+    MainPresenter.to.lastCandleDataLength.value = candleData.length;
 
     DateTime endTime = DateTime.now(); // Record the end time
     // Calculate the time difference
     Duration executionDuration = endTime.difference(startTime);
     int executionTime = executionDuration.inMilliseconds;
 
-    GlobalController.to.trendMatchOutput.value = [
-      trueCount + GlobalController.to.trendMatchOutput[0],
-      falseCount + GlobalController.to.trendMatchOutput[1],
+    MainPresenter.to.trendMatchOutput.value = [
+      trueCount + MainPresenter.to.trendMatchOutput[0],
+      falseCount + MainPresenter.to.trendMatchOutput[1],
       executionTime,
       candleData.length,
       selectedCount,

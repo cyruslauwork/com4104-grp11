@@ -5,15 +5,14 @@ import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:collection/collection.dart';
 
-import '../controllers/controllers.dart';
+import '../presenters/presenters.dart';
 import '../models/models.dart';
 import '../utils/utils.dart';
-import '../screens/charts/charts.dart';
+import '../views/views.dart';
 import '../services/flavor_service.dart';
-import '../screens/newpage.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+class MainView extends StatefulWidget {
+  const MainView({Key? key}) : super(key: key);
   //const MainScreen({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -26,17 +25,11 @@ class MainScreen extends StatefulWidget {
   // always marked "final".
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainView> createState() => _MainViewState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainViewState extends State<MainView> {
   bool _isLoading = true; // Track whether data is loading or not
-  Future<List<CandleData>> get _futureListCandleData async {
-    Future<List<CandleData>> futureListCandleData =
-        Candle().listListToCandles(Candle().checkAPIProvider(init: true));
-    TrendMatch().countMatches(futureListCandleData, init: true);
-    return futureListCandleData;
-  }
 
   @override
   void initState() {
@@ -50,7 +43,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _loadData() async {
     // Simulate data loading delay
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     // Load data here
   }
 
@@ -59,44 +52,44 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Stock Insight'),
+        title: const Text('Stock Insight'),
         actions: [
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => NewPage()),
+                MaterialPageRoute(builder: (context) => const SearchView()),
               );
             },
           ),
           Obx(
-            () => (GlobalController.to.listCandleData.length > 1
+            () => (MainPresenter.to.listCandleData.length > 1
                 ? Row(
                     children: [
-                      (GlobalController.to.elapsedTime > 60
+                      (MainPresenter.to.elapsedTime > 60
                           ? IconButton(
                               icon: const Icon(Icons.plus_one),
                               onPressed: () => addJson(),
                             )
                           : Text(
-                              '${GlobalController.to.elapsedTime}',
+                              '${MainPresenter.to.elapsedTime}',
                               style: TextStyle(fontSize: 5.sp),
                             )),
                       IconButton(
-                        icon: Icon(GlobalController.to.darkMode.value
+                        icon: Icon(MainPresenter.to.darkMode.value
                             ? Icons.dark_mode
                             : Icons.light_mode),
-                        onPressed: () => GlobalController.to.darkMode.value =
-                            !GlobalController.to.darkMode.value,
+                        onPressed: () => MainPresenter.to.darkMode.value =
+                            !MainPresenter.to.darkMode.value,
                       ),
                       // IconButton(
-                      //   icon: Icon(GlobalController.to.showAverage.value
+                      //   icon: Icon(Global.to.showAverage.value
                       //       ? Icons.show_chart
                       //       : Icons.bar_chart_outlined),
                       //   onPressed: () {
-                      //     GlobalController.to.showAverage.value =
-                      //         !GlobalController.to.showAverage.value;
+                      //     Global.to.showAverage.value =
+                      //         !Global.to.showAverage.value;
                       //   },
                       // )
                     ],
@@ -110,18 +103,18 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
       body: _isLoading
-          ? SplashScreen()
+          ? const SplashScreen()
           : SafeArea(
               minimum: const EdgeInsets.all(5.0),
               child: FutureBuilder<List<CandleData>>(
-                future: (GlobalController.to.listCandleData.length > 1
-                    ? Future.value(GlobalController.to.listCandleData)
-                    : _futureListCandleData),
+                future: (MainPresenter.to.listCandleData.length > 1
+                    ? Future.value(MainPresenter.to.listCandleData)
+                    : MainPresenter.to.futureListCandleData),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<CandleData>> snapshot) {
                   if (snapshot.hasData) {
                     Timer.periodic(const Duration(seconds: 1), (timer) {
-                      GlobalController.to.elapsedTime++;
+                      MainPresenter.to.elapsedTime++;
                     });
                     return SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -166,38 +159,37 @@ class _MainScreenState extends State<MainScreen> {
                               TableRow(children: [
                                 Column(children: [
                                   Obx(() => Text(
-                                      GlobalController.to.trendMatchOutput[0]
+                                      MainPresenter.to.trendMatchOutput[0]
                                           .toString(),
                                       style: TextStyle(fontSize: 3.sp)))
                                 ]),
                                 Column(children: [
                                   Obx(() => Text(
-                                      GlobalController.to.trendMatchOutput[1]
+                                      MainPresenter.to.trendMatchOutput[1]
                                           .toString(),
                                       style: TextStyle(fontSize: 3.sp)))
                                 ]),
                                 Column(children: [
                                   Obx(() => Text(
-                                      GlobalController.to.trendMatchOutput[2]
+                                      MainPresenter.to.trendMatchOutput[2]
                                           .toString(),
                                       style: TextStyle(fontSize: 3.sp)))
                                 ]),
                                 Column(children: [
                                   Obx(() => Text(
-                                      GlobalController.to.trendMatchOutput[3]
+                                      MainPresenter.to.trendMatchOutput[3]
                                           .toString(),
                                       style: TextStyle(fontSize: 3.sp)))
                                 ]),
                                 Column(children: [
                                   Obx(() => Text(
-                                      GlobalController.to.trendMatchOutput[4]
+                                      MainPresenter.to.trendMatchOutput[4]
                                           .toString(),
                                       style: TextStyle(fontSize: 3.sp)))
                                 ]),
                                 Column(children: [
                                   Obx(() => Text(
-                                      GlobalController.to.downloadTime
-                                          .toString(),
+                                      MainPresenter.to.downloadTime.toString(),
                                       style: TextStyle(fontSize: 3.sp)))
                                 ]),
                               ]),
@@ -210,7 +202,7 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           Obx(
                             () {
-                              GlobalController.to.showAverage.value
+                              MainPresenter.to.showAverage.value
                                   ? _computeTrendLines()
                                   : _removeTrendLines();
                               return SizedBox(
@@ -277,7 +269,7 @@ class _MainScreenState extends State<MainScreen> {
                                     color: Colors.black,
                                     style: BorderStyle.solid,
                                     width: 2),
-                                columns: GlobalController
+                                columns: MainPresenter
                                     .to.selectedPeriodPercentDifferencesList
                                     .mapIndexed((i, e) => DataColumn(
                                             label: Text(
@@ -287,7 +279,7 @@ class _MainScreenState extends State<MainScreen> {
                                     .toList(),
                                 rows: [
                                   DataRow(
-                                    cells: GlobalController
+                                    cells: MainPresenter
                                         .to.selectedPeriodPercentDifferencesList
                                         .map((e) => DataCell(Text(
                                               e.toString(),
@@ -313,7 +305,7 @@ class _MainScreenState extends State<MainScreen> {
                                     color: Colors.black,
                                     style: BorderStyle.solid,
                                     width: 2),
-                                columns: GlobalController
+                                columns: MainPresenter
                                     .to.selectedPeriodActualDifferencesList
                                     .mapIndexed((i, e) => DataColumn(
                                             label: Text(
@@ -323,7 +315,7 @@ class _MainScreenState extends State<MainScreen> {
                                     .toList(),
                                 rows: [
                                   DataRow(
-                                    cells: GlobalController
+                                    cells: MainPresenter
                                         .to.selectedPeriodActualDifferencesList
                                         .map((e) => DataCell(Text(
                                               e.toString(),
@@ -349,7 +341,7 @@ class _MainScreenState extends State<MainScreen> {
                                     color: Colors.black,
                                     style: BorderStyle.solid,
                                     width: 2),
-                                columns: GlobalController
+                                columns: MainPresenter
                                     .to.selectedPeriodActualPricesList
                                     .mapIndexed((i, e) => DataColumn(
                                             label: Text(
@@ -359,7 +351,7 @@ class _MainScreenState extends State<MainScreen> {
                                     .toList(),
                                 rows: [
                                   DataRow(
-                                    cells: GlobalController
+                                    cells: MainPresenter
                                         .to.selectedPeriodActualPricesList
                                         .map((e) => DataCell(Text(
                                               e.toString(),
@@ -376,12 +368,12 @@ class _MainScreenState extends State<MainScreen> {
                           //   'Historical Matched Trend(s)',
                           //   style: TextStyle(fontSize: 5.sp),
                           // ),
-                          // (GlobalController.to.matchRows.isNotEmpty
+                          // (Global.to.matchRows.isNotEmpty
                           //     ? SingleChildScrollView(
                           //         scrollDirection: Axis.horizontal,
                           //         child: Obx(
                           //           () => Text(
-                          //             GlobalController.to.matchRows.toString(),
+                          //             Global.to.matchRows.toString(),
                           //             style: TextStyle(fontSize: 3.sp),
                           //           ),
                           //         ),
@@ -407,13 +399,13 @@ class _MainScreenState extends State<MainScreen> {
                             'Matched Trend(s) Percentage Differences',
                             style: TextStyle(fontSize: 5.sp),
                           ),
-                          (GlobalController
+                          (MainPresenter
                                   .to.matchPercentDifferencesListList.isNotEmpty
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Obx(
                                     () => Text(
-                                      '${GlobalController.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchPercentDifferencesListList.length > 100 ? GlobalController.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
+                                      '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 100 ? MainPresenter.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
                                       style: TextStyle(fontSize: 3.sp),
                                     ),
                                   ),
@@ -424,13 +416,13 @@ class _MainScreenState extends State<MainScreen> {
                             'Matched Trend(s) Actual Differences',
                             style: TextStyle(fontSize: 5.sp),
                           ),
-                          (GlobalController
+                          (MainPresenter
                                   .to.matchActualDifferencesListList.isNotEmpty
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Obx(
                                     () => Text(
-                                      '${GlobalController.to.matchActualDifferencesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualDifferencesListList.length > 100 ? GlobalController.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
+                                      '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 100 ? MainPresenter.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
                                       style: TextStyle(fontSize: 3.sp),
                                     ),
                                   ),
@@ -441,13 +433,12 @@ class _MainScreenState extends State<MainScreen> {
                             'Matched Trend(s) Actual Prices',
                             style: TextStyle(fontSize: 5.sp),
                           ),
-                          (GlobalController
-                                  .to.matchActualPricesListList.isNotEmpty
+                          (MainPresenter.to.matchActualPricesListList.isNotEmpty
                               ? SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Obx(
                                     () => Text(
-                                      '${GlobalController.to.matchActualPricesListList.mapIndexed((i, e) => '${GlobalController.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(GlobalController.to.matchActualPricesListList.length > 100 ? GlobalController.to.matchActualPricesListList.length - 100 : 0)} rows left',
+                                      '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 100 ? MainPresenter.to.matchActualPricesListList.length - 100 : 0)} rows left',
                                       style: TextStyle(fontSize: 3.sp),
                                     ),
                                   ),
@@ -461,7 +452,7 @@ class _MainScreenState extends State<MainScreen> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(() => Text(
-                                  '${GlobalController.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
+                                  '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
                                   style: TextStyle(fontSize: 3.sp),
                                 )),
                           ),
@@ -473,7 +464,7 @@ class _MainScreenState extends State<MainScreen> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(() => Text(
-                                  '${GlobalController.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualDifferencesListList.length - 100} rows left',
+                                  '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 100} rows left',
                                   style: TextStyle(fontSize: 3.sp),
                                 )),
                           ),
@@ -485,7 +476,7 @@ class _MainScreenState extends State<MainScreen> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Obx(() => Text(
-                                  '${GlobalController.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${GlobalController.to.comparePeriodActualPricesListList.length - 100} rows left',
+                                  '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 100} rows left',
                                   style: TextStyle(fontSize: 3.sp),
                                 )),
                           ),
@@ -538,17 +529,17 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _computeTrendLines() {
-    final ma7 = CandleData.computeMA(GlobalController.to.listCandleData, 7);
-    final ma30 = CandleData.computeMA(GlobalController.to.listCandleData, 30);
-    final ma90 = CandleData.computeMA(GlobalController.to.listCandleData, 90);
+    final ma7 = CandleData.computeMA(MainPresenter.to.listCandleData, 7);
+    final ma30 = CandleData.computeMA(MainPresenter.to.listCandleData, 30);
+    final ma90 = CandleData.computeMA(MainPresenter.to.listCandleData, 90);
 
-    for (int i = 0; i < GlobalController.to.listCandleData.length; i++) {
-      GlobalController.to.listCandleData[i].trends = [ma7[i], ma30[i], ma90[i]];
+    for (int i = 0; i < MainPresenter.to.listCandleData.length; i++) {
+      MainPresenter.to.listCandleData[i].trends = [ma7[i], ma30[i], ma90[i]];
     }
   }
 
   _removeTrendLines() {
-    for (final data in GlobalController.to.listCandleData) {
+    for (final data in MainPresenter.to.listCandleData) {
       data.trends = [];
     }
   }
@@ -558,7 +549,7 @@ class _MainScreenState extends State<MainScreen> {
       TrendMatch().countMatches(
           Candle().listListToCandles(Candle().checkAPIProvider(init: false)),
           init: false);
-      GlobalController.to.elapsedTime.value = 0;
+      MainPresenter.to.elapsedTime.value = 0;
     } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('You can only add JSON data if you\'re using JSON data.'),
@@ -570,10 +561,12 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -581,12 +574,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(),
+      home: const MainView(),
     );
   }
 }
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -598,9 +593,9 @@ class SplashScreen extends StatelessWidget {
               'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
               fit: BoxFit.cover,
             ),
-            SizedBox(
+            const SizedBox(
                 height: 16), // Adjust the spacing between the image and text
-            Text(
+            const Text(
               'Loading...',
               style: TextStyle(
                 fontSize: 24,

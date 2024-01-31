@@ -7,7 +7,7 @@ import 'package:interactive_chart/interactive_chart.dart';
 import 'dart:convert';
 
 import '../services/services.dart';
-import '../controllers/controllers.dart';
+import '../presenters/presenters.dart';
 
 var logger = Logger();
 
@@ -22,7 +22,7 @@ class Candle {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    GlobalController.to.downloadTime.value = downloadTime;
+    MainPresenter.to.downloadTime.value = downloadTime;
 
     if (response.statusCode == 200) {
       return response.body;
@@ -42,8 +42,8 @@ class Candle {
 
     // init is false if and only if added new JSON data
     if (!init) {
-      json = GlobalController.to.lastJson;
-      currentDate = GlobalController.to.lastJsonEndDate.value;
+      json = MainPresenter.to.lastJson;
+      currentDate = MainPresenter.to.lastJsonEndDate.value;
     }
 
     for (int i = 0; i < apiCallsPerRequest; i++) {
@@ -81,10 +81,10 @@ class Candle {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    GlobalController.to.downloadTime.value = downloadTime;
+    MainPresenter.to.downloadTime.value = downloadTime;
 
-    GlobalController.to.lastJson = json; // Record the current JSON
-    GlobalController.to.lastJsonEndDate.value =
+    MainPresenter.to.lastJson = json; // Record the current JSON
+    MainPresenter.to.lastJsonEndDate.value =
         currentDate; // Record the last JSON end date
 
     return json;
@@ -127,7 +127,7 @@ class Candle {
   Future<List<CandleData>> listListToCandles(
       Future<List<List<dynamic>>> futureListList) async {
     List<List<dynamic>> listList = await futureListList;
-    GlobalController.to.listList.value = listList;
+    MainPresenter.to.listList.value = listList;
     List<CandleData> listCandleData;
 
     if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
@@ -142,7 +142,7 @@ class Candle {
                 volume: row[6].toDouble(),
               ))
           .toList();
-      GlobalController.to.listCandleData.value = listCandleData;
+      MainPresenter.to.listCandleData.value = listCandleData;
       return listCandleData;
     } else if (FlavorService.to.apiProvider == APIProvider.polygon) {
       listCandleData = listList
@@ -155,7 +155,7 @@ class Candle {
                 volume: double.parse(row[0].toString()),
               ))
           .toList();
-      GlobalController.to.listCandleData.value = listCandleData;
+      MainPresenter.to.listCandleData.value = listCandleData;
       return listCandleData;
     } else {
       throw ArgumentError('Failed to convert list to candles.');

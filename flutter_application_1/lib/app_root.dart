@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
 import 'services/services.dart';
-import 'screens/main.dart';
-import 'controllers/controllers.dart';
+import 'views/main.dart';
+import 'presenters/presenters.dart';
 
 var logger = Logger();
 
@@ -38,7 +38,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       logger.d("resumed: $state");
-      GlobalController.to.reload;
+      MainPresenter.to.reload;
     }
   }
 
@@ -94,7 +94,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
           // This works for code too, not just values: Most code changes can be
           // tested with just a hot reload.
           useMaterial3: true,
-          brightness: GlobalController.to.darkMode.value
+          brightness: MainPresenter.to.darkMode.value
               ? Brightness.dark
               : Brightness.light,
         ),
@@ -104,7 +104,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
           //     name: RouteName.pageNotFound.path,
           //     page: () => const PageNotFoundScreen()),
           GetPage(
-              name: RouteName.mainScreen.path, page: () => const MainScreen()),
+              name: RouteName.mainScreen.path, page: () => const MainView()),
           // GetPage(
           //   name: RouteName.mainScreen.path,
           //   page: () => const MainScreen(),

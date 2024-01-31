@@ -1,14 +1,9 @@
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
+import '../models/models.dart';
 
-class GlobalController extends GetxController {
-  static GlobalController get to => Get.put(GlobalController());
-
-  void reload() {
-    Get.delete<GlobalController>();
-    Get.put(GlobalController());
-    super.onInit();
-  }
+class MainPresenter extends GetxController {
+  static MainPresenter get to => Get.put(MainPresenter());
 
   RxBool darkMode = true.obs;
   RxBool showAverage = true.obs;
@@ -51,4 +46,17 @@ class GlobalController extends GetxController {
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
   RxInt lastCandleDataLength = 0.obs;
+
+  void reload() {
+    Get.delete<MainPresenter>();
+    Get.put(MainPresenter());
+    super.onInit();
+  }
+
+  Future<List<CandleData>> get futureListCandleData async {
+    Future<List<CandleData>> futureListCandleData =
+        Candle().listListToCandles(Candle().checkAPIProvider(init: true));
+    TrendMatch().countMatches(futureListCandleData, init: true);
+    return futureListCandleData;
+  }
 }

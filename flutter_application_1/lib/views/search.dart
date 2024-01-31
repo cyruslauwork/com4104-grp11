@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:get/get.dart';
 
-class NewPage extends StatefulWidget {
-  NewPage({Key? key}) : super(key: key);
+class SearchView extends StatefulWidget {
+  const SearchView({Key? key}) : super(key: key);
   //DateTime? start;
   //DateTime? end;
 /*class _NewPageState extends State<NewPage>{
@@ -13,14 +12,14 @@ class NewPage extends StatefulWidget {
   );*/
 
   @override
-  _NewPageState createState() => _NewPageState();
+  State<SearchView> createState() => _SearchViewState();
 }
 
-class _NewPageState extends State<NewPage> {
+class _SearchViewState extends State<SearchView> {
   DateTimeRange? selectedDateRange;
-  TextEditingController _dateRangeController = TextEditingController();
-  TextEditingController _varienceController = TextEditingController();
-  TextEditingController _stockNameController = TextEditingController();
+  final TextEditingController _dateRangeController = TextEditingController();
+  final TextEditingController _varienceController = TextEditingController();
+  final TextEditingController _stockNameController = TextEditingController();
 
   @override
   void dispose() {
@@ -32,7 +31,7 @@ class _NewPageState extends State<NewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search'),
+        title: const Text('Search'),
         /*title: TextField(
           decoration: InputDecoration(
             hintText: 'Search here...',
@@ -50,7 +49,7 @@ class _NewPageState extends State<NewPage> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextField(
                 controller: _varienceController,
                 maxLength: 3,
@@ -64,10 +63,10 @@ class _NewPageState extends State<NewPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextField(
                 controller: _stockNameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Enter Stock Name/Number',
                 ),
@@ -127,10 +126,10 @@ class _NewPageState extends State<NewPage> {
               ),
             ),*/
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
                 controller: _dateRangeController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Select Date Range',
                   suffixIcon: Icon(Icons.calendar_today),
                   border: OutlineInputBorder(),

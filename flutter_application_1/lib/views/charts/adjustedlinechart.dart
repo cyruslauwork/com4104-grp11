@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../../controllers/controllers.dart';
+import '../../presenters/presenters.dart';
 import '../../utils/utils.dart';
 import '../../services/services.dart';
 
@@ -15,7 +15,7 @@ class AdjustedLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    for (int i = 0; i < GlobalController.to.matchRows.length; i++) {
+    for (int i = 0; i < MainPresenter.to.matchRows.length; i++) {
       getMatchedTrend(i);
     }
     return SizedBox(
@@ -28,26 +28,24 @@ class AdjustedLineChart extends StatelessWidget {
   static List<FlSpot> getlineBarsData(int index) {
     List<FlSpot> flspotList = [];
 
-    double lastSelectedClosePrice = GlobalController
-        .to.listList[GlobalController.to.listList.length - 1][4];
+    double lastSelectedClosePrice =
+        MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4];
 
-    double lastActualDifference = GlobalController
-            .to.listList[GlobalController.to.listList.length - 1][4] /
-        GlobalController.to.listList[GlobalController.to.matchRows[index] +
-            GlobalController.to.selectedPeriodActualDifferencesList.length][4];
+    double lastActualDifference =
+        MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4] /
+            MainPresenter.to.listList[MainPresenter.to.matchRows[index] +
+                MainPresenter.to.selectedPeriodActualDifferencesList.length][4];
 
     for (double i = 0;
         i <
-            GlobalController.to.selectedPeriodPercentDifferencesList.length *
-                    2 +
+            MainPresenter.to.selectedPeriodPercentDifferencesList.length * 2 +
                 2;
         i++) {
-      if (i ==
-          GlobalController.to.selectedPeriodPercentDifferencesList.length) {
+      if (i == MainPresenter.to.selectedPeriodPercentDifferencesList.length) {
         flspotList.add(FlSpot(i, lastSelectedClosePrice));
       } else {
-        double adjustedMatchedTrendClosePrice = GlobalController.to
-                    .listList[GlobalController.to.matchRows[index] + i.toInt()]
+        double adjustedMatchedTrendClosePrice = MainPresenter
+                    .to.listList[MainPresenter.to.matchRows[index] + i.toInt()]
                 [4] // Close price of matched trend
             *
             lastActualDifference;
@@ -63,12 +61,12 @@ class AdjustedLineChart extends StatelessWidget {
     List<FlSpot> flspotList = [];
 
     for (int i = 0;
-        i < GlobalController.to.selectedPeriodPercentDifferencesList.length + 1;
+        i < MainPresenter.to.selectedPeriodPercentDifferencesList.length + 1;
         i++) {
       flspotList.add(FlSpot(
           i.toDouble(),
-          GlobalController.to.listList[GlobalController.to.listList.length -
-              GlobalController.to.selectedPeriodPercentDifferencesList.length +
+          MainPresenter.to.listList[MainPresenter.to.listList.length -
+              MainPresenter.to.selectedPeriodPercentDifferencesList.length +
               i -
               1][4]));
     }
@@ -79,7 +77,7 @@ class AdjustedLineChart extends StatelessWidget {
   static LineChartData getDefaultLineChartData() {
     return LineChartData(
       borderData: FlBorderData(show: false),
-      lineBarsData: GlobalController.to.matchRows
+      lineBarsData: MainPresenter.to.matchRows
           .mapIndexed((index, row) => LineChartBarData(
               spots: getlineBarsData(index),
               isCurved: true,
