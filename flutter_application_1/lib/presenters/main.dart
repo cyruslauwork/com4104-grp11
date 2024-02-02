@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import '../models/models.dart';
+import '../services/services.dart';
 
 class MainPresenter extends GetxController {
   static MainPresenter get to => Get.put(MainPresenter());
@@ -9,10 +10,10 @@ class MainPresenter extends GetxController {
   RxBool showAverage = true.obs;
 
   RxInt downloadTime = 0.obs;
+  RxList<List<dynamic>> listList = [[]].obs;
   RxList<CandleData> listCandleData = [
     CandleData(timestamp: 0000000000 * 1000, open: 0, close: 0, volume: 0)
   ].obs;
-  RxList<List<dynamic>> listList = [[]].obs;
 
   RxList<double> selectedPeriodPercentDifferencesList =
       [0.0, 0.0, 0.0, 0.0, 0.0].obs; // The root selected period here
@@ -58,5 +59,18 @@ class MainPresenter extends GetxController {
         Candle().listListToCandles(Candle().checkAPIProvider(init: true));
     TrendMatch().countMatches(futureListCandleData, init: true);
     return futureListCandleData;
+  }
+
+  void addJson(Function showSnackBar) {
+    if (FlavorService.to.apiProvider == APIProvider.polygon) {
+      TrendMatch().countMatches(
+          Candle().listListToCandles(Candle().checkAPIProvider(init: false)),
+          init: false);
+      MainPresenter.to.elapsedTime.value = 0;
+    } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
+      showSnackBar('You can only add JSON data if you\'re using JSON data.');
+    } else {
+      throw ArgumentError('Failed to check API provider.');
+    }
   }
 }

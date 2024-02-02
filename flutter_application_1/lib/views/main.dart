@@ -6,10 +6,8 @@ import 'package:interactive_chart/interactive_chart.dart';
 import 'package:collection/collection.dart';
 
 import '../presenters/presenters.dart';
-import '../models/models.dart';
 import '../utils/utils.dart';
 import '../views/views.dart';
-import '../services/flavor_service.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -47,6 +45,12 @@ class _MainViewState extends State<MainView> {
     // Load data here
   }
 
+  void showSnackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +74,8 @@ class _MainViewState extends State<MainView> {
                       (MainPresenter.to.elapsedTime > 60
                           ? IconButton(
                               icon: const Icon(Icons.plus_one),
-                              onPressed: () => addJson(),
+                              onPressed: () =>
+                                  MainPresenter.to.addJson(showSnackBar),
                             )
                           : Text(
                               '${MainPresenter.to.elapsedTime}',
@@ -541,21 +546,6 @@ class _MainViewState extends State<MainView> {
   _removeTrendLines() {
     for (final data in MainPresenter.to.listCandleData) {
       data.trends = [];
-    }
-  }
-
-  addJson() {
-    if (FlavorService.to.apiProvider == APIProvider.polygon) {
-      TrendMatch().countMatches(
-          Candle().listListToCandles(Candle().checkAPIProvider(init: false)),
-          init: false);
-      MainPresenter.to.elapsedTime.value = 0;
-    } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('You can only add JSON data if you\'re using JSON data.'),
-      ));
-    } else {
-      throw ArgumentError('Failed to check API provider.');
     }
   }
 }

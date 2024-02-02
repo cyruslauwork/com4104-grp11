@@ -16,7 +16,7 @@ class AdjustedLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     for (int i = 0; i < MainPresenter.to.matchRows.length; i++) {
-      getMatchedTrend(i);
+      getMatchedTrendLastClosePriceAndSubsequentTrend(i);
     }
     return SizedBox(
       width: 393.w,
@@ -27,21 +27,19 @@ class AdjustedLineChart extends StatelessWidget {
 
   static List<FlSpot> getlineBarsData(int index) {
     List<FlSpot> flspotList = [];
+    double selectedLength =
+        MainPresenter.to.selectedPeriodPercentDifferencesList.length.toDouble();
 
     double lastSelectedClosePrice =
         MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4];
 
     double lastActualDifference =
         MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4] /
-            MainPresenter.to.listList[MainPresenter.to.matchRows[index] +
-                MainPresenter.to.selectedPeriodActualDifferencesList.length][4];
+            MainPresenter.to.listList[
+                MainPresenter.to.matchRows[index] + selectedLength.toInt()][4];
 
-    for (double i = 0;
-        i <
-            MainPresenter.to.selectedPeriodPercentDifferencesList.length * 2 +
-                2;
-        i++) {
-      if (i == MainPresenter.to.selectedPeriodPercentDifferencesList.length) {
+    for (double i = 0; i < selectedLength * 2 + 2; i++) {
+      if (i == selectedLength) {
         flspotList.add(FlSpot(i, lastSelectedClosePrice));
       } else {
         double adjustedMatchedTrendClosePrice = MainPresenter
