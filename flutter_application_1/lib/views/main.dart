@@ -41,7 +41,7 @@ class _MainViewState extends State<MainView> {
 
   Future<void> _loadData() async {
     // Simulate data loading delay
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     // Load data here
   }
 
@@ -384,13 +384,13 @@ class _MainViewState extends State<MainView> {
                           //         ),
                           //       )
                           //     : Text('0', style: TextStyle(fontSize: 3.sp))),
-                          // MyLineChart(),
+                          // SimpleLineChart(),
                           // SizedBox(height: 10.h),
                           // Text(
                           //   'Normalized',
                           //   style: TextStyle(fontSize: 5.sp),
                           // ),
-                          // MyLineChart(
+                          // SimpleLineChart(
                           //   normalized: true,
                           // ),
                           SizedBox(height: 10.h),
@@ -534,12 +534,12 @@ class _MainViewState extends State<MainView> {
   }
 
   _computeTrendLines() {
-    final ma7 = CandleData.computeMA(MainPresenter.to.listCandleData, 7);
-    final ma30 = CandleData.computeMA(MainPresenter.to.listCandleData, 30);
-    final ma90 = CandleData.computeMA(MainPresenter.to.listCandleData, 90);
+    final ma5 = CandleData.computeMA(MainPresenter.to.listCandleData, 5);
+    final ma10 = CandleData.computeMA(MainPresenter.to.listCandleData, 10);
+    final ma20 = CandleData.computeMA(MainPresenter.to.listCandleData, 20);
 
     for (int i = 0; i < MainPresenter.to.listCandleData.length; i++) {
-      MainPresenter.to.listCandleData[i].trends = [ma7[i], ma30[i], ma90[i]];
+      MainPresenter.to.listCandleData[i].trends = [ma5[i], ma10[i], ma20[i]];
     }
   }
 
@@ -547,25 +547,6 @@ class _MainViewState extends State<MainView> {
     for (final data in MainPresenter.to.listCandleData) {
       data.trends = [];
     }
-  }
-}
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MainView(),
-    );
   }
 }
 
@@ -582,16 +563,7 @@ class SplashScreen extends StatelessWidget {
             Image.network(
               'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
               fit: BoxFit.cover,
-            ),
-            const SizedBox(
-                height: 16), // Adjust the spacing between the image and text
-            const Text(
-              'Loading...',
-              style: TextStyle(
-                fontSize: 24,
-                //fontWeight: FontWeight.bold,
-              ),
-            ),
+            )
           ],
         ),
       ),

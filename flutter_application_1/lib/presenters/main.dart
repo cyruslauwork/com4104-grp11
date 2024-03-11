@@ -4,7 +4,14 @@ import '../models/models.dart';
 import '../services/services.dart';
 
 class MainPresenter extends GetxController {
-  static MainPresenter get to => Get.put(MainPresenter());
+  // Singleton implementation
+  static MainPresenter? _instance;
+  factory MainPresenter() {
+    _instance ??= MainPresenter._();
+    return _instance!;
+  }
+  MainPresenter._();
+  static MainPresenter get to => Get.find();
 
   RxBool darkMode = true.obs;
   RxBool showAverage = true.obs;
@@ -55,8 +62,8 @@ class MainPresenter extends GetxController {
   }
 
   Future<List<CandleData>> get futureListCandleData async {
-    Future<List<CandleData>> futureListCandleData =
-        Candle().listListToCandles(Candle().checkAPIProvider(init: true));
+    Future<List<CandleData>> futureListCandleData = CandleAdapter()
+        .listListToCandles(Candle().checkAPIProvider(init: true));
     TrendMatch().countMatches(futureListCandleData, init: true);
     return futureListCandleData;
   }
@@ -64,7 +71,8 @@ class MainPresenter extends GetxController {
   void addJson(Function showSnackBar) {
     if (FlavorService.to.apiProvider == APIProvider.polygon) {
       TrendMatch().countMatches(
-          Candle().listListToCandles(Candle().checkAPIProvider(init: false)),
+          CandleAdapter()
+              .listListToCandles(Candle().checkAPIProvider(init: false)),
           init: false);
       MainPresenter.to.elapsedTime.value = 0;
     } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {

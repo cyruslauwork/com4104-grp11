@@ -1,2 +1,2 @@
-export 'mylinechart.dart';
+export 'simplelinechart.dart';
 export 'adjustedlinechart.dart';

@@ -4,6 +4,11 @@ import '../presenters/presenters.dart';
 // import 'models.dart';
 
 class TrendMatch {
+  // Singleton implementation
+  static final TrendMatch _instance = TrendMatch._();
+  factory TrendMatch() => _instance;
+  TrendMatch._();
+
   countMatches(Future<List<CandleData>> futureCandleData,
       {required bool init}) async {
     List<CandleData> candleData = await futureCandleData;
@@ -91,7 +96,7 @@ class TrendMatch {
     for (int l = 0;
         l <
             (init
-                ? candleData.length - selectedCount
+                ? candleData.length - selectedCount * 2
                 : candleData.length -
                     MainPresenter.to.lastCandleDataLength
                         .value); // init is false if and only if added new JSON data

@@ -22,6 +22,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    Get.put(MainPresenter());
 
     // WidgetsBinding.instance.addObserver(this);
     //...

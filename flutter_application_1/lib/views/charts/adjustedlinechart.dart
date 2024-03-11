@@ -16,7 +16,7 @@ class AdjustedLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     for (int i = 0; i < MainPresenter.to.matchRows.length; i++) {
-      getMatchedTrendLastClosePriceAndSubsequentTrend(i);
+      CloudService().getMatchedTrendLastClosePriceAndSubsequentTrend(i);
     }
     return SizedBox(
       width: 393.w,

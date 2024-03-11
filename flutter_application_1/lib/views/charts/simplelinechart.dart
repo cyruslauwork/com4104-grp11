@@ -6,11 +6,11 @@ import 'dart:math';
 import '../../presenters/presenters.dart';
 import '../../utils/utils.dart';
 
-class MyLineChart extends StatelessWidget {
+class SimpleLineChart extends StatelessWidget {
   final LineChartData lineChartData;
   final bool normalized;
 
-  MyLineChart({Key? key, LineChartData? lineChartData, bool? normalized})
+  SimpleLineChart({Key? key, LineChartData? lineChartData, bool? normalized})
       : lineChartData =
             lineChartData ?? getDefaultLineChartData(normalized ?? false),
         normalized = normalized ?? false,

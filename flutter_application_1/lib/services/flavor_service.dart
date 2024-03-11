@@ -17,6 +17,13 @@ enum Flavor {
 }
 
 class FlavorService extends GetxService {
+  // Singleton implementation
+  static FlavorService? _instance;
+  factory FlavorService() {
+    _instance ??= FlavorService._();
+    return _instance!;
+  }
+  FlavorService._();
   static FlavorService get to => Get.find();
 
   late final Flavor flavor;
