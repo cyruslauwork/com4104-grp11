@@ -15,6 +15,7 @@ class MainPresenter extends GetxController {
 
   RxBool darkMode = true.obs;
   RxBool showAverage = true.obs;
+  RxBool devMode = false.obs;
 
   RxInt downloadTime = 0.obs;
   RxList<List<dynamic>> listList = [[]].obs;
