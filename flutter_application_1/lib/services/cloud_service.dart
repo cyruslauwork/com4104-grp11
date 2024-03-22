@@ -45,6 +45,7 @@ class CloudService {
 
     Map<String, dynamic> jsonResponse = await HTTPService().fetchJson(
         'http://35.221.170.30/?func=subTrendToCsvAndPng&?sub_trend=$urlEncodedTrends');
+    print('ok');
     SubsequentAnalysis().parseJson(jsonResponse);
   }
 }

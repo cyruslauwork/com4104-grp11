@@ -21,7 +21,7 @@ class AdjustedLineChart extends StatelessWidget {
       lastClosePriceAndSubsequentTrends.add(
           CloudService().getMatchedTrendLastClosePriceAndSubsequentTrend(i));
     }
-    CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
+    // CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
 
     return SizedBox(
       width: 393.w,

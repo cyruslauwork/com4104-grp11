@@ -436,23 +436,28 @@ class _MainViewState extends State<MainView> {
                                   SizedBox(height: 10.h),
                                 ])
                               : const SizedBox.shrink())),
-                          Text(
-                            'Selected trend with matched trends',
-                            style: TextStyle(fontSize: 5.sp),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Selected trend with matched trends',
+                                style: TextStyle(fontSize: 5.sp),
+                              ),
+                              Text(
+                                '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
+                                style: TextStyle(fontSize: 3.sp),
+                              ),
+                              Text(
+                                'and subsequent trends',
+                                style: TextStyle(fontSize: 5.sp),
+                              ),
+                              Text(
+                                '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
+                                style: TextStyle(fontSize: 3.sp),
+                              ),
+                              AdjustedLineChart(),
+                            ],
                           ),
-                          Text(
-                            '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-                            style: TextStyle(fontSize: 3.sp),
-                          ),
-                          Text(
-                            'and subsequent trends',
-                            style: TextStyle(fontSize: 5.sp),
-                          ),
-                          Text(
-                            '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-                            style: TextStyle(fontSize: 3.sp),
-                          ),
-                          AdjustedLineChart(),
                           SizedBox(height: 10.h),
                           Obx(
                             () => (MainPresenter.to.devMode.value
