@@ -1,14 +1,11 @@
 import 'dart:async';
 
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
 import 'dart:convert';
 
 import '../services/services.dart';
 import '../presenters/presenters.dart';
 import 'candle_adapter.dart';
-
-var logger = Logger();
 
 class Candle {
   // Singleton implementation
@@ -20,7 +17,7 @@ class Candle {
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
 
-    final response = await HTTPService().fetchCSV(callbackTime);
+    final response = await HTTPService().fetchCandleCSV(callbackTime);
 
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
@@ -62,7 +59,7 @@ class Candle {
               days:
                   7))); // Each call has a maximum of 5,000 rows, which is approximately 7 days of data
       final String endDate = DateFormat('yyyy-MM-dd').format(currentDate);
-      final response = await HTTPService().fetchJSON(startDate, endDate);
+      final response = await HTTPService().fetchCandleJSON(startDate, endDate);
 
       if (response.statusCode == 200) {
         // init is false if and only if added new JSON data

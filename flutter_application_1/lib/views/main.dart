@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,14 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   bool _isLoading = true; // Track whether data is loading or not
 
+  late File img1File;
+  late File img2File;
+  late File img3File;
+  late File img4File;
+  late File img5File;
+  late File img6File;
+  late File img7File;
+
   @override
   void initState() {
     super.initState();
@@ -37,18 +46,6 @@ class _MainViewState extends State<MainView> {
         _isLoading = false; // Set loading state to false after data is loaded
       });
     });
-  }
-
-  Future<void> _loadData() async {
-    // Simulate data loading delay
-    await Future.delayed(const Duration(seconds: 2));
-    // Load data here
-  }
-
-  void showSnackBar(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(text),
-    ));
   }
 
   @override
@@ -550,6 +547,40 @@ class _MainViewState extends State<MainView> {
                                   ])
                                 : const SizedBox.shrink()),
                           ),
+                          (MainPresenter.to.subsequentAnalysis.value
+                              ? Obx(() {
+                                  void bytesToFile() {
+                                    img1File = _getFile(
+                                        'img1.png', MainPresenter.to.img1Bytes);
+                                    img2File = _getFile(
+                                        'img2.png', MainPresenter.to.img2Bytes);
+                                    img3File = _getFile(
+                                        'img3.png', MainPresenter.to.img3Bytes);
+                                    img4File = _getFile(
+                                        'img4.png', MainPresenter.to.img4Bytes);
+                                    img5File = _getFile(
+                                        'img5.png', MainPresenter.to.img5Bytes);
+                                    img6File = _getFile(
+                                        'img6.png', MainPresenter.to.img6Bytes);
+                                    img7File = _getFile(
+                                        'img7.png', MainPresenter.to.img7Bytes);
+                                  }
+
+                                  bytesToFile();
+
+                                  return Column(
+                                    children: [
+                                      Image.file(img1File),
+                                      Image.file(img2File),
+                                      Image.file(img3File),
+                                      Image.file(img4File),
+                                      Image.file(img5File),
+                                      Image.file(img6File),
+                                      Image.file(img7File),
+                                    ],
+                                  );
+                                })
+                              : const SizedBox.shrink()),
                         ],
                       ),
                     );
@@ -598,6 +629,18 @@ class _MainViewState extends State<MainView> {
     );
   }
 
+  Future<void> _loadData() async {
+    // Simulate data loading delay
+    await Future.delayed(const Duration(seconds: 2));
+    // Load data here
+  }
+
+  void showSnackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+    ));
+  }
+
   _computeTrendLines() {
     final ma5 = CandleData.computeMA(MainPresenter.to.listCandleData, 5);
     final ma10 = CandleData.computeMA(MainPresenter.to.listCandleData, 10);
@@ -612,6 +655,10 @@ class _MainViewState extends State<MainView> {
     for (final data in MainPresenter.to.listCandleData) {
       data.trends = [];
     }
+  }
+
+  File _getFile(String fileName, List<int> bytes) {
+    return File(fileName)..writeAsBytesSync(bytes);
   }
 }
 

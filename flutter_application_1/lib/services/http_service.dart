@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class HTTPService {
   // Singleton implementation
@@ -6,7 +7,7 @@ class HTTPService {
   factory HTTPService() => _instance;
   HTTPService._();
 
-  Future<http.Response> fetchCSV(int callbackTime) async {
+  Future<http.Response> fetchCandleCSV(int callbackTime) async {
     /* 
     US exchanges – such as the NYSE or NASDAQ – which are open Monday through Friday from 9:30 am to 4:00 pm Eastern Daylight Time (GMT-04:00) i.e. 14:30 to 21:00 (UTC).
     Eastern Standard Time (Winter Time) or EST: It is 5 hours behind the Greenwich Mean Time/Coordinated Universal Time or UTC-5. 
@@ -71,7 +72,7 @@ class HTTPService {
     return http.get(url, headers: headers);
   }
 
-  Future<http.Response> fetchJSON(String dateFrom, String dateTo) async {
+  Future<http.Response> fetchCandleJSON(String dateFrom, String dateTo) async {
     final url = Uri.parse(
         'https://api.polygon.io/v2/aggs/ticker/SPY/range/1/minute/$dateFrom/$dateTo?sort=asc&apiKey=euww4YBOgQXqtrfpubOCAYnlQJrOY22N');
 
@@ -84,6 +85,20 @@ class HTTPService {
 
     // Send the HTTP GET request with the updated URL and headers
     return http.get(url, headers: headers);
+  }
+
+  Future<Map<String, dynamic>> fetchJson(String url) async {
+    // Make an HTTP GET request to retrieve the JSON response
+    var thisUrl = Uri.parse(url);
+    var response = await http.get(thisUrl);
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      var jsonResponse = jsonDecode(response.body);
+      return jsonResponse; // Return the parsed JSON
+    } else {
+      return {'Error': '${response.statusCode}'};
+    }
   }
 }
 

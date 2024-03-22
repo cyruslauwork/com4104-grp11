@@ -56,6 +56,15 @@ class MainPresenter extends GetxController {
   List<Map<String, dynamic>> lastJson = [];
   RxInt lastCandleDataLength = 0.obs;
 
+  RxBool subsequentAnalysis = false.obs;
+  RxList<int> img1Bytes = [0].obs;
+  RxList<int> img2Bytes = [0].obs;
+  RxList<int> img3Bytes = [0].obs;
+  RxList<int> img4Bytes = [0].obs;
+  RxList<int> img5Bytes = [0].obs;
+  RxList<int> img6Bytes = [0].obs;
+  RxList<int> img7Bytes = [0].obs;
+
   void reload() {
     Get.delete<MainPresenter>();
     Get.put(MainPresenter());

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+
 import 'package:fl_chart/fl_chart.dart';
 
 import '../../presenters/presenters.dart';
@@ -8,6 +9,7 @@ import '../../services/services.dart';
 
 class AdjustedLineChart extends StatelessWidget {
   final LineChartData lineChartData;
+  static List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
   AdjustedLineChart({Key? key, LineChartData? lineChartData})
       : lineChartData = lineChartData ?? getDefaultLineChartData(),
@@ -16,8 +18,11 @@ class AdjustedLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     for (int i = 0; i < MainPresenter.to.matchRows.length; i++) {
-      CloudService().getMatchedTrendLastClosePriceAndSubsequentTrend(i);
+      lastClosePriceAndSubsequentTrends.add(
+          CloudService().getMatchedTrendLastClosePriceAndSubsequentTrend(i));
     }
+    CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
+
     return SizedBox(
       width: 393.w,
       height: 200.h,

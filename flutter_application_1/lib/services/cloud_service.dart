@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import '../presenters/presenters.dart';
+import '../services/services.dart';
+import '../models/models.dart';
 
 class CloudService {
   // Singleton implementation
@@ -6,8 +10,8 @@ class CloudService {
   factory CloudService() => _instance;
   CloudService._();
 
-  getMatchedTrendLastClosePriceAndSubsequentTrend(int index) {
-    List<double> matchedTrend = [];
+  List<double> getMatchedTrendLastClosePriceAndSubsequentTrend(int index) {
+    List<double> lastClosePriceAndSubsequentTrend = [];
     double selectedLength =
         MainPresenter.to.selectedPeriodPercentDifferencesList.length.toDouble();
 
@@ -16,7 +20,7 @@ class CloudService {
             MainPresenter.to.listList[
                 MainPresenter.to.matchRows[index] + selectedLength.toInt()][4];
 
-    matchedTrend.add(MainPresenter
+    lastClosePriceAndSubsequentTrend.add(MainPresenter
         .to.selectedPeriodActualPricesList[selectedLength.toInt() - 1]);
 
     for (double i = selectedLength + 1; i < selectedLength * 2 + 2; i++) {
@@ -26,10 +30,21 @@ class CloudService {
           *
           lastActualDifference;
 
-      matchedTrend.add(adjustedMatchedTrendClosePrice);
+      lastClosePriceAndSubsequentTrend.add(adjustedMatchedTrendClosePrice);
     }
 
     // ignore: avoid_print
-    print(matchedTrend);
+    // print(lastClosePriceAndSubsequentTrend);
+    return lastClosePriceAndSubsequentTrend;
+  }
+
+  void getCsvAndPng(
+      List<List<double>> lastClosePriceAndSubsequentTrends) async {
+    String encodedTrends = jsonEncode(lastClosePriceAndSubsequentTrends);
+    String urlEncodedTrends = Uri.encodeComponent(encodedTrends);
+
+    Map<String, dynamic> jsonResponse = await HTTPService().fetchJson(
+        'http://35.221.170.30/?func=subTrendToCsvAndPng&?sub_trend=$urlEncodedTrends');
+    SubsequentAnalysis().parseJson(jsonResponse);
   }
 }
