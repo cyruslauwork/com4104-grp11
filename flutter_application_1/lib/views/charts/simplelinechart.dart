@@ -12,7 +12,7 @@ class SimpleLineChart extends StatelessWidget {
 
   SimpleLineChart({Key? key, LineChartData? lineChartData, bool? normalized})
       : lineChartData =
-            lineChartData ?? getDefaultLineChartData(normalized ?? false),
+            lineChartData ?? getDefaultSimpleLineChartData(normalized ?? false),
         normalized = normalized ?? false,
         super(key: key);
 
@@ -26,7 +26,7 @@ class SimpleLineChart extends StatelessWidget {
   }
 }
 
-List<FlSpot> getlineBarsData(int index, bool normalized) {
+List<FlSpot> getSimplelineBarsData(int index, bool normalized) {
   List<FlSpot> flsportList = [];
 
 // Whether to normalize
@@ -85,12 +85,12 @@ List<FlSpot> getlineBarsData(int index, bool normalized) {
   return flsportList;
 }
 
-LineChartData getDefaultLineChartData(bool normalized) {
+LineChartData getDefaultSimpleLineChartData(bool normalized) {
   return LineChartData(
     borderData: FlBorderData(show: false),
     lineBarsData: MainPresenter.to.matchRows
         .mapIndexed((index, row) => LineChartBarData(
-            spots: getlineBarsData(index, normalized),
+            spots: getSimplelineBarsData(index, normalized),
             isCurved: true,
             barWidth: 1,
             color: Colors.grey))

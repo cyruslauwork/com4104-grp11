@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/services/services.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:collection/collection.dart';
@@ -29,14 +30,6 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   bool _isLoading = true; // Track whether data is loading or not
-
-  late File img1File;
-  late File img2File;
-  late File img3File;
-  late File img4File;
-  late File img5File;
-  late File img6File;
-  late File img7File;
 
   @override
   void initState() {
@@ -71,8 +64,8 @@ class _MainViewState extends State<MainView> {
                       (MainPresenter.to.elapsedTime > 60
                           ? IconButton(
                               icon: const Icon(Icons.plus_one),
-                              onPressed: () =>
-                                  MainPresenter.to.addJson(showSnackBar),
+                              onPressed: () => MainPresenter.to
+                                  .showSnackBar(snackBar, Func.addJson),
                             )
                           : SizedBox(
                               width: 7.w,
@@ -410,7 +403,7 @@ class _MainViewState extends State<MainView> {
                                   ),
                                   SizedBox(height: 10.h),
                                   Text(
-                                    'Historical Matched Trend(s)',
+                                    'Matched Historical Trend Row(s)',
                                     style: TextStyle(fontSize: 5.sp),
                                   ),
                                   (MainPresenter.to.matchRows.isNotEmpty
@@ -424,10 +417,15 @@ class _MainViewState extends State<MainView> {
                                         )
                                       : Text('0',
                                           style: TextStyle(fontSize: 3.sp))),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Matched Historical Trend(s)',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
                                   SimpleLineChart(),
                                   SizedBox(height: 10.h),
                                   Text(
-                                    'Normalized',
+                                    'Normalized Matched Historical Trend(s)',
                                     style: TextStyle(fontSize: 5.sp),
                                   ),
                                   SimpleLineChart(
@@ -440,7 +438,7 @@ class _MainViewState extends State<MainView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Selected trend with matched trends',
+                                'Selected trend with matched historical trends',
                                 style: TextStyle(fontSize: 5.sp),
                               ),
                               Text(
@@ -448,7 +446,7 @@ class _MainViewState extends State<MainView> {
                                 style: TextStyle(fontSize: 3.sp),
                               ),
                               Text(
-                                'and subsequent trends',
+                                'and their subsequent trends',
                                 style: TextStyle(fontSize: 5.sp),
                               ),
                               Text(
@@ -459,133 +457,117 @@ class _MainViewState extends State<MainView> {
                             ],
                           ),
                           SizedBox(height: 10.h),
-                          Obx(
-                            () => (MainPresenter.to.devMode.value
-                                ? Column(children: [
-                                    Text(
-                                      'Matched Trend(s) Percentage Differences',
-                                      style: TextStyle(fontSize: 5.sp),
+                          Obx(() => (MainPresenter.to.devMode.value
+                              ? Column(children: [
+                                  Text(
+                                    'Matched Historical Trend(s) Percentage Differences',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  (MainPresenter
+                                          .to
+                                          .matchPercentDifferencesListList
+                                          .isNotEmpty
+                                      ? SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Text(
+                                            '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 100 ? MainPresenter.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
+                                            style: TextStyle(fontSize: 3.sp),
+                                          ),
+                                        )
+                                      : Text('0',
+                                          style: TextStyle(fontSize: 3.sp))),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Matched Historical Trend(s) Actual Differences',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  (MainPresenter
+                                          .to
+                                          .matchActualDifferencesListList
+                                          .isNotEmpty
+                                      ? SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Text(
+                                            '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 100 ? MainPresenter.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
+                                            style: TextStyle(fontSize: 3.sp),
+                                          ),
+                                        )
+                                      : Text('0',
+                                          style: TextStyle(fontSize: 3.sp))),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Matched Historical Trend(s) Actual Prices',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  (MainPresenter.to.matchActualPricesListList
+                                          .isNotEmpty
+                                      ? SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Text(
+                                            '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 100 ? MainPresenter.to.matchActualPricesListList.length - 100 : 0)} rows left',
+                                            style: TextStyle(fontSize: 3.sp),
+                                          ),
+                                        )
+                                      : Text('0',
+                                          style: TextStyle(fontSize: 3.sp))),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Comparison Historical Trends Percentage Differences',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
+                                      style: TextStyle(fontSize: 3.sp),
                                     ),
-                                    (MainPresenter
-                                            .to
-                                            .matchPercentDifferencesListList
-                                            .isNotEmpty
-                                        ? SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Text(
-                                              '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 100 ? MainPresenter.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
-                                              style: TextStyle(fontSize: 3.sp),
-                                            ),
-                                          )
-                                        : Text('0',
-                                            style: TextStyle(fontSize: 3.sp))),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      'Matched Trend(s) Actual Differences',
-                                      style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Comparison Historical Trends Actual Differences',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 100} rows left',
+                                      style: TextStyle(fontSize: 3.sp),
                                     ),
-                                    (MainPresenter
-                                            .to
-                                            .matchActualDifferencesListList
-                                            .isNotEmpty
-                                        ? SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Text(
-                                              '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 100 ? MainPresenter.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
-                                              style: TextStyle(fontSize: 3.sp),
-                                            ),
-                                          )
-                                        : Text('0',
-                                            style: TextStyle(fontSize: 3.sp))),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      'Matched Trend(s) Actual Prices',
-                                      style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  Text(
+                                    'Comparison Historical Trends Actual Prices',
+                                    style: TextStyle(fontSize: 5.sp),
+                                  ),
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 100} rows left',
+                                      style: TextStyle(fontSize: 3.sp),
                                     ),
-                                    (MainPresenter.to.matchActualPricesListList
-                                            .isNotEmpty
-                                        ? SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Text(
-                                              '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 100 ? MainPresenter.to.matchActualPricesListList.length - 100 : 0)} rows left',
-                                              style: TextStyle(fontSize: 3.sp),
-                                            ),
-                                          )
-                                        : Text('0',
-                                            style: TextStyle(fontSize: 3.sp))),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      'Comparison Trends Percentage Differences',
-                                      style: TextStyle(fontSize: 5.sp),
-                                    ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
-                                        style: TextStyle(fontSize: 3.sp),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      'Comparison Trends Actual Differences',
-                                      style: TextStyle(fontSize: 5.sp),
-                                    ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 100} rows left',
-                                        style: TextStyle(fontSize: 3.sp),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Text(
-                                      'Comparison Trends Actual Prices',
-                                      style: TextStyle(fontSize: 5.sp),
-                                    ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Text(
-                                        '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 100} rows left',
-                                        style: TextStyle(fontSize: 3.sp),
-                                      ),
-                                    ),
-                                  ])
-                                : const SizedBox.shrink()),
-                          ),
-                          (MainPresenter.to.subsequentAnalysis.value
-                              ? Obx(() {
-                                  void bytesToFile() {
-                                    img1File = _getFile(
-                                        'img1.png', MainPresenter.to.img1Bytes);
-                                    img2File = _getFile(
-                                        'img2.png', MainPresenter.to.img2Bytes);
-                                    img3File = _getFile(
-                                        'img3.png', MainPresenter.to.img3Bytes);
-                                    img4File = _getFile(
-                                        'img4.png', MainPresenter.to.img4Bytes);
-                                    img5File = _getFile(
-                                        'img5.png', MainPresenter.to.img5Bytes);
-                                    img6File = _getFile(
-                                        'img6.png', MainPresenter.to.img6Bytes);
-                                    img7File = _getFile(
-                                        'img7.png', MainPresenter.to.img7Bytes);
-                                  }
-
-                                  bytesToFile();
-
-                                  return Column(
-                                    children: [
-                                      Image.file(img1File),
-                                      Image.file(img2File),
-                                      Image.file(img3File),
-                                      Image.file(img4File),
-                                      Image.file(img5File),
-                                      Image.file(img6File),
-                                      Image.file(img7File),
-                                    ],
-                                  );
-                                })
-                              : const SizedBox.shrink()),
+                                  ),
+                                ])
+                              : const SizedBox.shrink())),
+                          Obx(() => (MainPresenter.to.subsequentAnalysis.value
+                              ? Column(
+                                  children: [
+                                    Image.memory(
+                                        MainPresenter.to.img1Bytes.value),
+                                    Image.memory(
+                                        MainPresenter.to.img2Bytes.value),
+                                    Image.memory(
+                                        MainPresenter.to.img3Bytes.value),
+                                    Image.memory(
+                                        MainPresenter.to.img4Bytes.value),
+                                    Image.memory(
+                                        MainPresenter.to.img5Bytes.value),
+                                    Image.memory(
+                                        MainPresenter.to.img6Bytes.value),
+                                    Image.memory(
+                                        MainPresenter.to.img7Bytes.value),
+                                  ],
+                                )
+                              : const SizedBox.shrink())),
                         ],
                       ),
                     );
@@ -640,7 +622,7 @@ class _MainViewState extends State<MainView> {
     // Load data here
   }
 
-  void showSnackBar(String text) {
+  void snackBar(String text) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(text),
     ));
@@ -660,10 +642,6 @@ class _MainViewState extends State<MainView> {
     for (final data in MainPresenter.to.listCandleData) {
       data.trends = [];
     }
-  }
-
-  File _getFile(String fileName, List<int> bytes) {
-    return File(fileName)..writeAsBytesSync(bytes);
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:interactive_chart/interactive_chart.dart';
 
 import '../presenters/presenters.dart';
-// import 'models.dart';
 
 class TrendMatch {
   // Singleton implementation
@@ -223,6 +222,25 @@ class TrendMatch {
     ];
   }
 
+  // (bool, List<double>) areDifferencesLessThanOrEqualToCertainPercent(
+  //     List<double> selList, List<double> comList) {
+  //   if (selList.length != comList.length) {
+  //     // print('${selList.length} != ${comList.length}');
+  //     throw ArgumentError('Both lists must have the same length.');
+  //   }
+
+  //   for (int i = 0; i < selList.length; i++) {
+  //     double difference = (comList[i] - selList[i]).abs();
+  //     double percentageDifferenceAllowance = (selList[i] * 1).abs();
+
+  //     if (difference >= percentageDifferenceAllowance) {
+  //       return (false, []); // Difference is larger than or equal to certain %
+  //     }
+  //   }
+
+  //   return (true, comList); // All differences are less than certain %
+  // }
+
   (bool, List<double>) areDifferencesLessThanOrEqualToCertainPercent(
       List<double> selList, List<double> comList) {
     if (selList.length != comList.length) {
@@ -231,13 +249,14 @@ class TrendMatch {
     }
 
     for (int i = 0; i < selList.length; i++) {
-      double difference = selList[i] - comList[i];
+      double difference = comList[i] - selList[i];
       double percentageDifference = (difference / selList[i]) * 100;
 
       if (percentageDifference.abs() >= 100) {
         return (false, []); // Difference is larger than or equal to certain %
       }
     }
+
     return (true, comList); // All differences are less than certain %
   }
 }

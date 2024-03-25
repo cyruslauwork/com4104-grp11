@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import '../models/models.dart';
@@ -57,13 +59,13 @@ class MainPresenter extends GetxController {
   RxInt lastCandleDataLength = 0.obs;
 
   RxBool subsequentAnalysis = false.obs;
-  RxList<int> img1Bytes = [0].obs;
-  RxList<int> img2Bytes = [0].obs;
-  RxList<int> img3Bytes = [0].obs;
-  RxList<int> img4Bytes = [0].obs;
-  RxList<int> img5Bytes = [0].obs;
-  RxList<int> img6Bytes = [0].obs;
-  RxList<int> img7Bytes = [0].obs;
+  Rx<Uint8List> img1Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img2Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img3Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img4Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img5Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img6Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
 
   void reload() {
     Get.delete<MainPresenter>();
@@ -74,21 +76,26 @@ class MainPresenter extends GetxController {
   Future<List<CandleData>> get futureListCandleData async {
     Future<List<CandleData>> futureListCandleData = CandleAdapter()
         .listListToCandles(Candle().checkAPIProvider(init: true));
-    TrendMatch().countMatches(futureListCandleData, init: true);
+    await TrendMatch().countMatches(futureListCandleData, init: true);
+    SubsequentAnalysis().init();
     return futureListCandleData;
   }
 
-  void addJson(Function showSnackBar) {
-    if (FlavorService.to.apiProvider == APIProvider.polygon) {
-      TrendMatch().countMatches(
-          CandleAdapter()
-              .listListToCandles(Candle().checkAPIProvider(init: false)),
-          init: false);
-      MainPresenter.to.elapsedTime.value = 0;
-    } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
-      showSnackBar('You can only add JSON data if you\'re using JSON data.');
+  void showSnackBar(Function showSnackBar, Func func) {
+    if (func == Func.addJson) {
+      if (FlavorService.to.apiProvider == APIProvider.polygon) {
+        TrendMatch().countMatches(
+            CandleAdapter()
+                .listListToCandles(Candle().checkAPIProvider(init: false)),
+            init: false);
+        MainPresenter.to.elapsedTime.value = 0;
+      } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
+        showSnackBar('You can only add JSON data if you\'re using JSON data.');
+      } else {
+        throw ArgumentError('Failed to check API provider.');
+      }
     } else {
-      throw ArgumentError('Failed to check API provider.');
+      throw ArgumentError('Error: Failed to get function name.');
     }
   }
 }

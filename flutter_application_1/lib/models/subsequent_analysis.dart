@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import '../presenters/presenters.dart';
+import '../services/services.dart';
+// import '../utils/utils.dart';
 
 class SubsequentAnalysis {
   // Singleton implementation
@@ -8,9 +10,50 @@ class SubsequentAnalysis {
   factory SubsequentAnalysis() => _instance;
   SubsequentAnalysis._();
 
-  void parseJson(Map<String, dynamic> jsonResponse) {
-    // Get the CSV files and image data from the JSON response
-    var csvFiles = jsonResponse['csv_files'];
+  void init() async {
+    List<List<double>> lastClosePriceAndSubsequentTrends = [];
+
+    for (int i = 0; i < MainPresenter.to.matchRows.length; i++) {
+      lastClosePriceAndSubsequentTrends
+          .add(getMatchedTrendLastClosePriceAndSubsequentTrend(i));
+    }
+    Map<String, dynamic> parsedResponse =
+        await CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
+    // log(parsedResponse.toString());
+    parseJson(parsedResponse);
+  }
+
+  List<double> getMatchedTrendLastClosePriceAndSubsequentTrend(int index) {
+    List<double> lastClosePriceAndSubsequentTrend = [];
+    double selectedLength =
+        MainPresenter.to.selectedPeriodPercentDifferencesList.length.toDouble();
+
+    double lastActualDifference =
+        MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4] /
+            MainPresenter.to.listList[
+                MainPresenter.to.matchRows[index] + selectedLength.toInt()][4];
+
+    lastClosePriceAndSubsequentTrend.add(MainPresenter
+        .to.selectedPeriodActualPricesList[selectedLength.toInt() - 1]);
+
+    for (double i = selectedLength + 1; i < selectedLength * 2 + 2; i++) {
+      double adjustedMatchedTrendClosePrice = MainPresenter
+                  .to.listList[MainPresenter.to.matchRows[index] + i.toInt()]
+              [4] // Close price of matched trend
+          *
+          lastActualDifference;
+
+      lastClosePriceAndSubsequentTrend.add(adjustedMatchedTrendClosePrice);
+    }
+
+    // ignore: avoid_print
+    // print(lastClosePriceAndSubsequentTrend);
+    return lastClosePriceAndSubsequentTrend;
+  }
+
+  void parseJson(Map<String, dynamic> parsedResponse) {
+    // Get the CSV files and image data from the parsed JSON data
+    Map<String, dynamic> csvFiles = parsedResponse['csv_files'];
     String img1 = csvFiles['img1'];
     String img2 = csvFiles['img2'];
     String img3 = csvFiles['img3'];

@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../utils/utils.dart';
+
 class HTTPService {
   // Singleton implementation
   static final HTTPService _instance = HTTPService._();
@@ -19,34 +21,35 @@ class HTTPService {
     // Latest, based on the closing price on the trading day
     DateTime now = DateTime.now().toUtc();
     // Check if current UTC time is less than or equal to 13:30:50
-    if (now.hour < 13 ||
-        (now.hour == 13 && now.minute <= 30 && now.second <= 50)) {
-      endTimestamp = 9999999999;
-    } else {
-      if (isEasternDaylightTime(now)) {
-        // Check if current UTC time is greater than or equal to 20:00 in Eastern Daylight Time (USA summer and spring seasons)
-        if (now.hour >= 20) {
-          endTimestamp = 9999999999;
-        } else {
-          // Set endTimestamp to current UTC time minus 12 hours
-          endTimestamp =
-              now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
-                  1000;
-        }
-      } else {
-        // Check if current UTC time is greater than or equal to 21:00 in Eastern Standard Time
-        if (now.hour >= 21) {
-          endTimestamp = 9999999999;
-        } else {
-          // Set endTimestamp to current UTC time minus 12 hours
-          endTimestamp =
-              now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
-                  1000;
-        }
-      }
-    }
+    // if (now.hour < 13 ||
+    //     (now.hour == 13 && now.minute <= 30 && now.second <= 50)) {
+    //   endTimestamp = 9999999999;
+    // } else {
+    //   if (isEasternDaylightTime(now)) {
+    //     // Check if current UTC time is greater than or equal to 20:00 in Eastern Daylight Time (USA summer and spring seasons)
+    //     if (now.hour >= 20) {
+    //       endTimestamp = 9999999999;
+    //     } else {
+    //       // Set endTimestamp to current UTC time minus 12 hours
+    //       endTimestamp =
+    //           now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
+    //               1000;
+    //     }
+    //   } else {
+    //     // Check if current UTC time is greater than or equal to 21:00 in Eastern Standard Time
+    //     if (now.hour >= 21) {
+    //       endTimestamp = 9999999999;
+    //     } else {
+    //       // Set endTimestamp to current UTC time minus 12 hours
+    //       endTimestamp =
+    //           now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
+    //               1000;
+    //     }
+    //   }
+    // }
     // endTimestamp = 9999999999; // Latest, but closing prices may vary during trading sessions
-    // endTimestamp = 1701360000; // The end date of iconic 5-day trend matching subsequent trends
+    endTimestamp =
+        1701360000; // The end date of iconic 5-day trend matching subsequent trends
     // endTimestamp =
     //     DateTime.utc(2024, 3, 11, 23, 59, 59).millisecondsSinceEpoch ~/
     //         1000; // Select specific end date
@@ -93,10 +96,11 @@ class HTTPService {
     var response = await http.get(thisUrl);
 
     if (response.statusCode == 200) {
-      // Parse the JSON response
-      var jsonResponse = jsonDecode(response.body);
-      return jsonResponse; // Return the parsed JSON
+      var parsedResponse =
+          await jsonDecode(response.body); // Parse the JSON response
+      return parsedResponse; // Return the parsed JSON
     } else {
+      logger.d('Error: ${response.statusCode}');
       return {'Error': '${response.statusCode}'};
     }
   }

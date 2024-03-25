@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'services/services.dart';
-import 'views/main.dart';
-import 'presenters/presenters.dart';
+import './services/services.dart';
+import './views/views.dart';
+import './presenters/presenters.dart';
 
 var logger = Logger();
 

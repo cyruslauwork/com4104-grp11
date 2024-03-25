@@ -1,5 +1,5 @@
 import 'bootstrap.dart';
-import 'services/services.dart';
+import './services/services.dart';
 import 'dart:io';
 
 void main() {

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'services/services.dart';
+import './services/services.dart';
 import 'app_root.dart';
 
 var logger = Logger();

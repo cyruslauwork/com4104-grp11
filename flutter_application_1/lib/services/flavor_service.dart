@@ -68,3 +68,7 @@ enum SrcFileType {
   csv,
   json;
 }
+
+enum Func {
+  addJson;
+}
