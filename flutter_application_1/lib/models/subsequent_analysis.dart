@@ -47,7 +47,7 @@ class SubsequentAnalysis {
     }
 
     // ignore: avoid_print
-    // print(lastClosePriceAndSubsequentTrend);
+    print(lastClosePriceAndSubsequentTrend);
     return lastClosePriceAndSubsequentTrend;
   }
 

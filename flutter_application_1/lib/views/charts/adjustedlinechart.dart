@@ -17,7 +17,7 @@ class AdjustedLineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 393.w,
-      height: 200.h,
+      height: 100.h,
       child: LineChart(lineChartData),
     );
   }
