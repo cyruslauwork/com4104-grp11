@@ -30,7 +30,7 @@ Future<void> initServices(Flavor flavor, APIProvider apiProvider) async {
   logger.d('Starting services ...');
 
   /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
+  /// or drift connection, or whatever that's async.
   await Get.putAsync(() => PrefsService().init());
   await Get.putAsync(() => FlavorService().init(flavor, apiProvider));
 }

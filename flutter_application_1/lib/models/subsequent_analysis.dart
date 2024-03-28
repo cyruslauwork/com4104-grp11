@@ -17,10 +17,26 @@ class SubsequentAnalysis {
       lastClosePriceAndSubsequentTrends
           .add(getMatchedTrendLastClosePriceAndSubsequentTrend(i));
     }
-    Map<String, dynamic> parsedResponse =
-        await CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
-    // log(parsedResponse.toString());
-    parseJson(parsedResponse);
+
+    if (lastClosePriceAndSubsequentTrends.length >= 4) {
+      Map<String, dynamic> parsedResponse =
+          await CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
+      // log(parsedResponse.toString());
+      try {
+        Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
+        MainPresenter.to.subsequentAnalysisErr.value = '';
+        parseJson(csvPngFiles);
+        MainPresenter.to.subsequentAnalysis.value = true;
+      } catch (e) {
+        String err = parsedResponse['error'];
+        MainPresenter.to.subsequentAnalysisErr.value = err;
+        MainPresenter.to.subsequentAnalysis.value = true;
+      }
+    } else {
+      MainPresenter.to.subsequentAnalysisErr.value =
+          'The number of subsequent trends must be equal to or greater than 4.';
+      MainPresenter.to.subsequentAnalysis.value = true;
+    }
   }
 
   List<double> getMatchedTrendLastClosePriceAndSubsequentTrend(int index) {
@@ -47,20 +63,19 @@ class SubsequentAnalysis {
     }
 
     // ignore: avoid_print
-    print(lastClosePriceAndSubsequentTrend);
+    // print(lastClosePriceAndSubsequentTrend);
     return lastClosePriceAndSubsequentTrend;
   }
 
-  void parseJson(Map<String, dynamic> parsedResponse) {
-    // Get the CSV files and image data from the parsed JSON data
-    Map<String, dynamic> csvFiles = parsedResponse['csv_files'];
-    String img1 = csvFiles['img1'];
-    String img2 = csvFiles['img2'];
-    String img3 = csvFiles['img3'];
-    String img4 = csvFiles['img4'];
-    String img5 = csvFiles['img5'];
-    String img6 = csvFiles['img6'];
-    String img7 = csvFiles['img7'];
+  void parseJson(Map<String, dynamic> csvPngFiles) {
+    // Get the data from the parsed JSON data
+    String img1 = csvPngFiles['img1'];
+    String img2 = csvPngFiles['img2'];
+    String img3 = csvPngFiles['img3'];
+    String img4 = csvPngFiles['img4'];
+    String img5 = csvPngFiles['img5'];
+    String img6 = csvPngFiles['img6'];
+    String img7 = csvPngFiles['img7'];
 
     // Convert the base64-encoded image data to bytes
     MainPresenter.to.img1Bytes.value = base64Decode(img1);
@@ -70,7 +85,5 @@ class SubsequentAnalysis {
     MainPresenter.to.img5Bytes.value = base64Decode(img5);
     MainPresenter.to.img6Bytes.value = base64Decode(img6);
     MainPresenter.to.img7Bytes.value = base64Decode(img7);
-
-    MainPresenter.to.subsequentAnalysis.value = true;
   }
 }

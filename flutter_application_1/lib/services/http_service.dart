@@ -91,18 +91,41 @@ class HTTPService {
     return http.get(url, headers: headers);
   }
 
-  Future<Map<String, dynamic>> fetchJson(String url) async {
+  Future<Map<String, dynamic>> getFetchJson(String url) async {
     // Make an HTTP GET request to retrieve the JSON response
     var thisUrl = Uri.parse(url);
     var response = await http.get(thisUrl);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       var parsedResponse =
           await jsonDecode(response.body); // Parse the JSON response
       return parsedResponse; // Return the parsed JSON
     } else {
-      logger.d('Error: ${response.statusCode}');
-      return {'Error': '${response.statusCode}'};
+      var parsedErrorResponse =
+          await jsonDecode(response.body); // Parse the JSON error response
+      logger.d('${response.statusCode}, $parsedErrorResponse');
+      return parsedErrorResponse;
+    }
+  }
+
+  Future<Map<String, dynamic>> postFetchJson(
+      String url, Map<String, dynamic> body) async {
+    // Make an HTTP GET request to retrieve the JSON response
+    var thisUrl = Uri.parse(url);
+    var response = await http.post(
+      thisUrl,
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var parsedResponse =
+          await jsonDecode(response.body); // Parse the JSON response
+      return parsedResponse; // Return the parsed JSON
+    } else {
+      var parsedErrorResponse =
+          await jsonDecode(response.body); // Parse the JSON error response
+      logger.d('${response.statusCode}, $parsedErrorResponse');
+      return parsedErrorResponse;
     }
   }
 }

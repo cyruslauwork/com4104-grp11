@@ -66,6 +66,7 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img5Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img6Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  RxString subsequentAnalysisErr = ''.obs;
 
   void reload() {
     Get.delete<MainPresenter>();
