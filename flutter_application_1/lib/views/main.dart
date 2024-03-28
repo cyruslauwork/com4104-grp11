@@ -511,20 +511,154 @@ class _MainViewState extends State<MainView> {
                           ? (MainPresenter.to.subsequentAnalysisErr.value == ''
                               ? Column(
                                   children: [
-                                    Image.memory(
-                                        MainPresenter.to.img1Bytes.value),
-                                    Image.memory(
-                                        MainPresenter.to.img2Bytes.value),
-                                    Image.memory(
-                                        MainPresenter.to.img3Bytes.value),
-                                    Image.memory(
-                                        MainPresenter.to.img4Bytes.value),
-                                    Image.memory(
-                                        MainPresenter.to.img5Bytes.value),
-                                    Image.memory(
-                                        MainPresenter.to.img6Bytes.value),
-                                    Image.memory(
-                                        MainPresenter.to.img7Bytes.value),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img1Bytes.value,
+                                                ),
+                                                minScale: 0.48,
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img1Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img2Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img2Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img3Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img3Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img4Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img4Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img5Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img5Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img6Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img6Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img7Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: '',
+                                          child: Image.memory(MainPresenter
+                                              .to.img7Bytes.value)),
+                                    ),
                                   ],
                                 )
                               : Text(
@@ -540,7 +674,7 @@ class _MainViewState extends State<MainView> {
                                   child: const CircularProgressIndicator(),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(top: 20.h),
+                                  padding: EdgeInsets.only(top: 10.h),
                                   child: Text(
                                       'Awaiting subsequent trend analysis result...',
                                       style: TextStyle(fontSize: 5.sp)),
@@ -588,9 +722,9 @@ class _MainViewState extends State<MainView> {
                       child: const CircularProgressIndicator(),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20.h),
+                      padding: EdgeInsets.only(top: 10.h),
                       child: Text('Downloading stock data...',
-                          style: TextStyle(fontSize: 10.sp)),
+                          style: TextStyle(fontSize: 5.sp)),
                     ),
                   ],
                 ),
