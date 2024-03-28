@@ -529,7 +529,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img1',
                                           child: Image.memory(MainPresenter
                                               .to.img1Bytes.value)),
                                     ),
@@ -550,7 +550,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img2',
                                           child: Image.memory(MainPresenter
                                               .to.img2Bytes.value)),
                                     ),
@@ -571,7 +571,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img3',
                                           child: Image.memory(MainPresenter
                                               .to.img3Bytes.value)),
                                     ),
@@ -592,7 +592,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img4',
                                           child: Image.memory(MainPresenter
                                               .to.img4Bytes.value)),
                                     ),
@@ -613,7 +613,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img5',
                                           child: Image.memory(MainPresenter
                                               .to.img5Bytes.value)),
                                     ),
@@ -634,7 +634,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img6',
                                           child: Image.memory(MainPresenter
                                               .to.img6Bytes.value)),
                                     ),
@@ -655,7 +655,7 @@ class _MainViewState extends State<MainView> {
                                         );
                                       },
                                       child: Hero(
-                                          tag: '',
+                                          tag: 'img7',
                                           child: Image.memory(MainPresenter
                                               .to.img7Bytes.value)),
                                     ),
