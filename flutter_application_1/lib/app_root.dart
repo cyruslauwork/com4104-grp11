@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import './services/services.dart';
 import './views/views.dart';
 import './presenters/presenters.dart';
+import './styles/style.dart';
 
 var logger = Logger();
 
@@ -95,9 +96,14 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
           // This works for code too, not just values: Most code changes can be
           // tested with just a hot reload.
           useMaterial3: true,
-          brightness: MainPresenter.to.darkMode.value
-              ? Brightness.dark
-              : Brightness.light,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: ThemeColor.primary.value,
+            secondary: ThemeColor.secondary.value,
+            tertiary: ThemeColor.tertiary.value,
+            brightness: MainPresenter.to.darkMode.value
+                ? Brightness.dark
+                : Brightness.light,
+          ),
         ),
         initialRoute: RouteName.mainScreen.path,
         getPages: [

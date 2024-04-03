@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_application_1/styles/theme.dart';
 
 import '../../presenters/presenters.dart';
 import '../../utils/utils.dart';
@@ -78,7 +79,7 @@ LineChartData getDefaultAdjustedLineChartData() {
             spots: getAdjustedlineBarsData(index),
             isCurved: true,
             barWidth: 1,
-            color: Colors.grey))
+            color: AppColor.greyColor))
         // .take(5) // Add this line to limit the items to the first 5
         .toList()
       ..add(
@@ -86,7 +87,7 @@ LineChartData getDefaultAdjustedLineChartData() {
           spots: getSelectedPeriodClosePrices(),
           isCurved: true,
           barWidth: 3,
-          color: Colors.red,
+          color: AppColor.errorColor,
         ),
       ),
   );

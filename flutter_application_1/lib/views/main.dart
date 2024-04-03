@@ -9,6 +9,7 @@ import 'package:collection/collection.dart';
 import '../presenters/presenters.dart';
 import '../utils/utils.dart';
 import '../views/views.dart';
+import '../styles/style.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -32,8 +33,10 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Stock Insight'),
+        title: Text(
+          'Stock Insight',
+          style: const TextTheme().sp10,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -58,7 +61,7 @@ class _MainViewState extends State<MainView> {
                               width: 7.w,
                               child: Text(
                                 '${MainPresenter.to.elapsedTime}',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                             )),
                       IconButton(
@@ -121,38 +124,36 @@ class _MainViewState extends State<MainView> {
                           ? Column(children: [
                               Text(
                                 'Trend Match',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               Table(
                                 border: TableBorder.all(
-                                    color: Colors.black,
+                                    color: AppColor.blackColor,
                                     style: BorderStyle.solid,
                                     width: 2),
                                 children: [
                                   TableRow(children: [
                                     Column(children: [
-                                      Text('True',
-                                          style: TextStyle(fontSize: 3.sp))
+                                      Text('True', style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text('False',
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text('Exe (ms)',
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
-                                      Text('Rows',
-                                          style: TextStyle(fontSize: 3.sp))
+                                      Text('Rows', style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text('Sel Count',
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text('DL (ms)',
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ])
                                   ]),
                                   TableRow(children: [
@@ -160,37 +161,37 @@ class _MainViewState extends State<MainView> {
                                       Text(
                                           MainPresenter.to.trendMatchOutput[0]
                                               .toString(),
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text(
                                           MainPresenter.to.trendMatchOutput[1]
                                               .toString(),
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text(
                                           MainPresenter.to.trendMatchOutput[2]
                                               .toString(),
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text(
                                           MainPresenter.to.trendMatchOutput[3]
                                               .toString(),
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text(
                                           MainPresenter.to.trendMatchOutput[4]
                                               .toString(),
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text(
                                           MainPresenter.to.downloadTime
                                               .toString(),
-                                          style: TextStyle(fontSize: 3.sp))
+                                          style: const TextTheme().sp3)
                                     ]),
                                   ]),
                                 ],
@@ -201,7 +202,7 @@ class _MainViewState extends State<MainView> {
                     ),
                     Text(
                       'Max 1000-Row Candlestick Chart',
-                      style: TextStyle(fontSize: 5.sp),
+                      style: const TextTheme().sp5,
                     ),
                     Obx(
                       () {
@@ -217,30 +218,40 @@ class _MainViewState extends State<MainView> {
                                     snapshot.data!.length - 999,
                                     snapshot.data!.length)
                                 : snapshot.data!),
-                            /** Example styling */
-                            // style: ChartStyle(
-                            //   priceGainColor: Colors.teal[200]!,
-                            //   priceLossColor: Colors.blueGrey,
-                            //   volumeColor: Colors.teal.withOpacity(0.8),
-                            //   trendLineStyles: [
-                            //     Paint()
-                            //       ..strokeWidth = 2.0
-                            //       ..strokeCap = StrokeCap.round
-                            //       ..color = Colors.deepOrange,
-                            //     Paint()
-                            //       ..strokeWidth = 4.0
-                            //       ..strokeCap = StrokeCap.round
-                            //       ..color = Colors.orange,
-                            //   ],
-                            //   priceGridLineColor: Colors.blue[200]!,
-                            //   priceLabelStyle: TextStyle(color: Colors.blue[200]),
-                            //   timeLabelStyle: TextStyle(color: Colors.blue[200]),
-                            //   selectionHighlightColor: Colors.red.withOpacity(0.2),
-                            //   overlayBackgroundColor: Colors.red[900]!.withOpacity(0.6),
-                            //   overlayTextStyle: TextStyle(color: Colors.red[100]),
-                            //   timeLabelHeight: 32,
-                            //   volumeHeightFactor: 0.2, // volume area is 20% of total height
-                            // ),
+                            style: ChartStyle(
+                              trendLineStyles: [
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.orange,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.lightBlue,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.purple[300]!,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.pink[300]!,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.blue[700]!,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.green,
+                              ],
+                              selectionHighlightColor:
+                                  Colors.red.withOpacity(0.2),
+                              overlayBackgroundColor:
+                                  Colors.red.withOpacity(0.2),
+                              overlayTextStyle:
+                                  const TextStyle(color: AppColor.whiteColor),
+                            ),
                             /** Customize axis labels */
                             // timeLabel: (timestamp, visibleDataCount) => "📅",
                             // priceLabel: (price) => "${price.round()} 💎",
@@ -263,14 +274,14 @@ class _MainViewState extends State<MainView> {
                         ? Column(children: [
                             Text(
                               'Percentage differences between selected period',
-                              style: TextStyle(fontSize: 5.sp),
+                              style: const TextTheme().sp5,
                             ),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
                                 showCheckboxColumn: false,
                                 border: TableBorder.all(
-                                    color: Colors.black,
+                                    color: AppColor.blackColor,
                                     style: BorderStyle.solid,
                                     width: 2),
                                 columns: MainPresenter
@@ -278,7 +289,7 @@ class _MainViewState extends State<MainView> {
                                     .mapIndexed((i, e) => DataColumn(
                                             label: Text(
                                           'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                                          style: TextStyle(fontSize: 3.sp),
+                                          style: const TextTheme().sp3,
                                         )))
                                     .toList(),
                                 rows: [
@@ -287,7 +298,7 @@ class _MainViewState extends State<MainView> {
                                         .to.selectedPeriodPercentDifferencesList
                                         .map((e) => DataCell(Text(
                                               e.toString(),
-                                              style: TextStyle(fontSize: 3.sp),
+                                              style: const TextTheme().sp3,
                                             )))
                                         .toList(),
                                   ),
@@ -297,14 +308,14 @@ class _MainViewState extends State<MainView> {
                             SizedBox(height: 10.h),
                             Text(
                               'Actual differences between selected period',
-                              style: TextStyle(fontSize: 5.sp),
+                              style: const TextTheme().sp5,
                             ),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
                                 showCheckboxColumn: false,
                                 border: TableBorder.all(
-                                    color: Colors.black,
+                                    color: AppColor.blackColor,
                                     style: BorderStyle.solid,
                                     width: 2),
                                 columns: MainPresenter
@@ -312,7 +323,7 @@ class _MainViewState extends State<MainView> {
                                     .mapIndexed((i, e) => DataColumn(
                                             label: Text(
                                           'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                                          style: TextStyle(fontSize: 3.sp),
+                                          style: const TextTheme().sp3,
                                         )))
                                     .toList(),
                                 rows: [
@@ -321,7 +332,7 @@ class _MainViewState extends State<MainView> {
                                         .to.selectedPeriodActualDifferencesList
                                         .map((e) => DataCell(Text(
                                               e.toString(),
-                                              style: TextStyle(fontSize: 3.sp),
+                                              style: const TextTheme().sp3,
                                             )))
                                         .toList(),
                                   ),
@@ -331,14 +342,14 @@ class _MainViewState extends State<MainView> {
                             SizedBox(height: 10.h),
                             Text(
                               'Selected period Actual Prices',
-                              style: TextStyle(fontSize: 5.sp),
+                              style: const TextTheme().sp5,
                             ),
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: DataTable(
                                 showCheckboxColumn: false,
                                 border: TableBorder.all(
-                                    color: Colors.black,
+                                    color: AppColor.blackColor,
                                     style: BorderStyle.solid,
                                     width: 2),
                                 columns: MainPresenter
@@ -346,7 +357,7 @@ class _MainViewState extends State<MainView> {
                                     .mapIndexed((i, e) => DataColumn(
                                             label: Text(
                                           'Close Price ${(i + 1).toString()}',
-                                          style: TextStyle(fontSize: 3.sp),
+                                          style: const TextTheme().sp3,
                                         )))
                                     .toList(),
                                 rows: [
@@ -355,7 +366,7 @@ class _MainViewState extends State<MainView> {
                                         .to.selectedPeriodActualPricesList
                                         .map((e) => DataCell(Text(
                                               e.toString(),
-                                              style: TextStyle(fontSize: 3.sp),
+                                              style: const TextTheme().sp3,
                                             )))
                                         .toList(),
                                   ),
@@ -365,27 +376,27 @@ class _MainViewState extends State<MainView> {
                             SizedBox(height: 10.h),
                             Text(
                               'Matched Historical Trend Row(s)',
-                              style: TextStyle(fontSize: 5.sp),
+                              style: const TextTheme().sp5,
                             ),
                             (MainPresenter.to.matchRows.isNotEmpty
                                 ? SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Text(
                                       MainPresenter.to.matchRows.toString(),
-                                      style: TextStyle(fontSize: 3.sp),
+                                      style: const TextTheme().sp3,
                                     ),
                                   )
-                                : Text('0', style: TextStyle(fontSize: 3.sp))),
+                                : Text('0', style: const TextTheme().sp3)),
                             SizedBox(height: 10.h),
                             Text(
                               'Matched Historical Trend(s)',
-                              style: TextStyle(fontSize: 5.sp),
+                              style: const TextTheme().sp5,
                             ),
                             SimpleLineChart(),
                             SizedBox(height: 10.h),
                             Text(
                               'Normalized Matched Historical Trend(s)',
-                              style: TextStyle(fontSize: 5.sp),
+                              style: const TextTheme().sp5,
                             ),
                             SimpleLineChart(
                               normalized: true,
@@ -398,19 +409,19 @@ class _MainViewState extends State<MainView> {
                       children: [
                         Text(
                           'Selected trend with matched historical trends',
-                          style: TextStyle(fontSize: 5.sp),
+                          style: const TextTheme().sp5,
                         ),
                         Text(
                           '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-                          style: TextStyle(fontSize: 3.sp),
+                          style: const TextTheme().sp3,
                         ),
                         Text(
                           'and their subsequent trends',
-                          style: TextStyle(fontSize: 5.sp),
+                          style: const TextTheme().sp5,
                         ),
                         Text(
                           '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-                          style: TextStyle(fontSize: 3.sp),
+                          style: const TextTheme().sp3,
                         ),
                         AdjustedLineChart(),
                       ],
@@ -421,85 +432,82 @@ class _MainViewState extends State<MainView> {
                           ? Column(children: [
                               Text(
                                 'Matched Historical Trend(s) Percentage Differences',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               (MainPresenter.to.matchPercentDifferencesListList
                                       .isNotEmpty
                                   ? SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: Text(
-                                        '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 100 ? MainPresenter.to.matchPercentDifferencesListList.length - 100 : 0)} rows left',
-                                        style: TextStyle(fontSize: 3.sp),
+                                        '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 10 ? MainPresenter.to.matchPercentDifferencesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
                                       ),
                                     )
-                                  : Text('0',
-                                      style: TextStyle(fontSize: 3.sp))),
+                                  : Text('0', style: const TextTheme().sp3)),
                               SizedBox(height: 10.h),
                               Text(
                                 'Matched Historical Trend(s) Actual Differences',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               (MainPresenter.to.matchActualDifferencesListList
                                       .isNotEmpty
                                   ? SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: Text(
-                                        '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 100 ? MainPresenter.to.matchActualDifferencesListList.length - 100 : 0)} rows left',
-                                        style: TextStyle(fontSize: 3.sp),
+                                        '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 10 ? MainPresenter.to.matchActualDifferencesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
                                       ),
                                     )
-                                  : Text('0',
-                                      style: TextStyle(fontSize: 3.sp))),
+                                  : Text('0', style: const TextTheme().sp3)),
                               SizedBox(height: 10.h),
                               Text(
                                 'Matched Historical Trend(s) Actual Prices',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               (MainPresenter
                                       .to.matchActualPricesListList.isNotEmpty
                                   ? SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: Text(
-                                        '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(100).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 100 ? MainPresenter.to.matchActualPricesListList.length - 100 : 0)} rows left',
-                                        style: TextStyle(fontSize: 3.sp),
+                                        '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 10 ? MainPresenter.to.matchActualPricesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
                                       ),
                                     )
-                                  : Text('0',
-                                      style: TextStyle(fontSize: 3.sp))),
+                                  : Text('0', style: const TextTheme().sp3)),
                               SizedBox(height: 10.h),
                               Text(
                                 'Comparison Historical Trends Percentage Differences',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Text(
-                                  '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 100} rows left',
-                                  style: TextStyle(fontSize: 3.sp),
+                                  '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
                                 ),
                               ),
                               SizedBox(height: 10.h),
                               Text(
                                 'Comparison Historical Trends Actual Differences',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Text(
-                                  '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 100} rows left',
-                                  style: TextStyle(fontSize: 3.sp),
+                                  '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
                                 ),
                               ),
                               SizedBox(height: 10.h),
                               Text(
                                 'Comparison Historical Trends Actual Prices',
-                                style: TextStyle(fontSize: 5.sp),
+                                style: const TextTheme().sp5,
                               ),
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Text(
-                                  '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(100).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 100} rows left',
-                                  style: TextStyle(fontSize: 3.sp),
+                                  '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
                                 ),
                               ),
                               SizedBox(height: 10.h),
@@ -663,7 +671,7 @@ class _MainViewState extends State<MainView> {
                                 )
                               : Text(
                                   MainPresenter.to.subsequentAnalysisErr.value,
-                                  style: TextStyle(fontSize: 5.sp),
+                                  style: const TextTheme().sp5,
                                 ))
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -677,7 +685,7 @@ class _MainViewState extends State<MainView> {
                                   padding: EdgeInsets.only(top: 10.h),
                                   child: Text(
                                       'Awaiting subsequent trend analysis result...',
-                                      style: TextStyle(fontSize: 5.sp)),
+                                      style: const TextTheme().sp5),
                                 ),
                               ],
                             )),
@@ -693,14 +701,14 @@ class _MainViewState extends State<MainView> {
                   children: [
                     Icon(
                       Icons.error_outline,
-                      color: Colors.red,
+                      color: AppColor.errorColor,
                       size: 60.w,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20.h),
                       child: Text(
                         'Error: ${snapshot.error}',
-                        style: TextStyle(fontSize: 10.sp),
+                        style: const TextTheme().sp10,
                       ),
                     ),
                   ],
@@ -724,7 +732,7 @@ class _MainViewState extends State<MainView> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h),
                       child: Text('Downloading stock data...',
-                          style: TextStyle(fontSize: 5.sp)),
+                          style: const TextTheme().sp5),
                     ),
                   ],
                 ),
@@ -746,9 +754,19 @@ class _MainViewState extends State<MainView> {
     final ma5 = CandleData.computeMA(MainPresenter.to.listCandleData, 5);
     final ma10 = CandleData.computeMA(MainPresenter.to.listCandleData, 10);
     final ma20 = CandleData.computeMA(MainPresenter.to.listCandleData, 20);
+    final ma60 = CandleData.computeMA(MainPresenter.to.listCandleData, 60);
+    final ma120 = CandleData.computeMA(MainPresenter.to.listCandleData, 120);
+    final ma240 = CandleData.computeMA(MainPresenter.to.listCandleData, 240);
 
     for (int i = 0; i < MainPresenter.to.listCandleData.length; i++) {
-      MainPresenter.to.listCandleData[i].trends = [ma5[i], ma10[i], ma20[i]];
+      MainPresenter.to.listCandleData[i].trends = [
+        ma5[i],
+        ma10[i],
+        ma20[i],
+        ma60[i],
+        ma120[i],
+        ma240[i]
+      ];
     }
   }
 
