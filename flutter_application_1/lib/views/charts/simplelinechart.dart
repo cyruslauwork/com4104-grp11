@@ -37,7 +37,7 @@ List<FlSpot> getSimplelineBarsData(int index, bool normalized) {
       for (int i = 0;
           i < MainPresenter.to.selectedPeriodPercentDifferencesList.length;
           i++) {
-        closePrices.add(MainPresenter.to.listList[// The CSV/JSON data
+        closePrices.add(MainPresenter.to.candleListList[// The CSV/JSON data
             MainPresenter.to.matchRows[l] +
                 i // Loop all closing prices in the matched trend
             ][4]); // The 4th row of the list is the closing price
@@ -50,7 +50,7 @@ List<FlSpot> getSimplelineBarsData(int index, bool normalized) {
     for (double i = 0;
         i < MainPresenter.to.selectedPeriodPercentDifferencesList.length + 1;
         i++) {
-      double closePrice = MainPresenter.to.listList[// The CSV/JSON data
+      double closePrice = MainPresenter.to.candleListList[// The CSV/JSON data
               MainPresenter.to.matchRows[
                       index] // Get the matched trend row from this index
                   +
@@ -72,7 +72,7 @@ List<FlSpot> getSimplelineBarsData(int index, bool normalized) {
         i++) {
       flsportList.add(FlSpot(
           i, // Equal to selectedPeriodCount, starting from 0
-          MainPresenter.to.listList[// The CSV/JSON data
+          MainPresenter.to.candleListList[// The CSV/JSON data
                   MainPresenter.to.matchRows[
                           index] // Get the matched trend row from this index
                       +

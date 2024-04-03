@@ -23,7 +23,7 @@ class Candle {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    MainPresenter.to.downloadTime.value = downloadTime;
+    MainPresenter.to.candledownloadTime.value = downloadTime;
 
     if (response.statusCode == 200) {
       // print(response.body);
@@ -88,7 +88,7 @@ class Candle {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    MainPresenter.to.downloadTime.value = downloadTime;
+    MainPresenter.to.candledownloadTime.value = downloadTime;
 
     MainPresenter.to.lastJson = json; // Record the current JSON
     MainPresenter.to.lastJsonEndDate.value =

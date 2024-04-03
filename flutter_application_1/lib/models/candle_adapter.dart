@@ -37,7 +37,7 @@ class CandleAdapter {
   Future<List<CandleData>> listListToCandles(
       Future<List<List<dynamic>>> futureListList) async {
     List<List<dynamic>> listList = await futureListList;
-    MainPresenter.to.listList.value = listList;
+    MainPresenter.to.candleListList.value = listList;
     List<CandleData> listCandleData;
 
     if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {

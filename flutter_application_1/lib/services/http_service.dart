@@ -128,6 +128,17 @@ class HTTPService {
       return parsedErrorResponse;
     }
   }
+
+  Future<http.Response> fetchListingCSV() async {
+    final url = Uri.parse(
+        'https://r2.datahub.io/clt989dvv0003l708h2jgh5ef/main/raw/data/constituents.csv');
+
+    // Modify the request headers to accept CSV data
+    final headers = {'Accept': 'text/csv'};
+
+    // Send the HTTP GET request with the updated URL and headers
+    return http.get(url, headers: headers);
+  }
 }
 
 bool isEasternDaylightTime(DateTime dateTime) {

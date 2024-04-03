@@ -47,6 +47,15 @@ class _MainViewState extends State<MainView> {
               );
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.contact_support),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatView()),
+              );
+            },
+          ),
           Obx(
             () => (MainPresenter.to.listCandleData.length > 1
                 ? Row(
@@ -189,7 +198,7 @@ class _MainViewState extends State<MainView> {
                                     ]),
                                     Column(children: [
                                       Text(
-                                          MainPresenter.to.downloadTime
+                                          MainPresenter.to.candledownloadTime
                                               .toString(),
                                           style: const TextTheme().sp3)
                                     ]),

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import '../models/models.dart';
@@ -19,11 +20,16 @@ class MainPresenter extends GetxController {
   RxBool showAverage = true.obs;
   RxBool devMode = false.obs;
 
-  RxInt downloadTime = 0.obs;
-  RxList<List<dynamic>> listList = [[]].obs;
+  RxInt candledownloadTime = 0.obs;
+  RxList<List<dynamic>> candleListList = [[]].obs;
   RxList<CandleData> listCandleData = [
     CandleData(timestamp: 0000000000 * 1000, open: 0, close: 0, volume: 0)
   ].obs;
+
+  RxInt listingDownloadTime = 0.obs;
+  RxList<List<dynamic>> symbolAndNameListList = [[]].obs;
+  RxList<SymbolAndName> listSymbolAndName =
+      [const SymbolAndName(symbol: '', name: '')].obs;
 
   RxList<double> selectedPeriodPercentDifferencesList =
       [0.0, 0.0, 0.0, 0.0, 0.0].obs; // The root selected period here

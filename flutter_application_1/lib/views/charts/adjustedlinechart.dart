@@ -29,20 +29,20 @@ List<FlSpot> getAdjustedlineBarsData(int index) {
   double selectedLength =
       MainPresenter.to.selectedPeriodPercentDifferencesList.length.toDouble();
 
-  double lastSelectedClosePrice =
-      MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4];
+  double lastSelectedClosePrice = MainPresenter
+      .to.candleListList[MainPresenter.to.candleListList.length - 1][4];
 
-  double lastActualDifference =
-      MainPresenter.to.listList[MainPresenter.to.listList.length - 1][4] /
-          MainPresenter.to.listList[
-              MainPresenter.to.matchRows[index] + selectedLength.toInt()][4];
+  double lastActualDifference = MainPresenter
+          .to.candleListList[MainPresenter.to.candleListList.length - 1][4] /
+      MainPresenter.to.candleListList[
+          MainPresenter.to.matchRows[index] + selectedLength.toInt()][4];
 
   for (double i = 0; i < selectedLength * 2 + 2; i++) {
     if (i == selectedLength) {
       flspotList.add(FlSpot(i, lastSelectedClosePrice));
     } else {
-      double adjustedMatchedTrendClosePrice = MainPresenter
-                  .to.listList[MainPresenter.to.matchRows[index] + i.toInt()]
+      double adjustedMatchedTrendClosePrice = MainPresenter.to
+                  .candleListList[MainPresenter.to.matchRows[index] + i.toInt()]
               [4] // Close price of matched trend
           *
           lastActualDifference;
@@ -62,7 +62,7 @@ List<FlSpot> getSelectedPeriodClosePrices() {
       i++) {
     flspotList.add(FlSpot(
         i.toDouble(),
-        MainPresenter.to.listList[MainPresenter.to.listList.length -
+        MainPresenter.to.candleListList[MainPresenter.to.candleListList.length -
             MainPresenter.to.selectedPeriodPercentDifferencesList.length +
             i -
             1][4]));
