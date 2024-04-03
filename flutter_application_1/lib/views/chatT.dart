@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 
 class ChatView extends StatefulWidget {
@@ -19,8 +18,8 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   DateTimeRange? selectedDateRange;
   final TextEditingController _dateRangeController = TextEditingController();
-  final TextEditingController _varienceController = TextEditingController();
-  final TextEditingController _stockNameController = TextEditingController();
+  // final TextEditingController _varienceController = TextEditingController();
+  // final TextEditingController _stockNameController = TextEditingController();
 
   @override
   void dispose() {
@@ -71,9 +70,9 @@ class _ChatViewState extends State<ChatView> {
                 BubbleNormal(
                   text: 'bubble normal with tail',
                   isSender: false,
-                  color: Color(0xFF1B97F3),
+                  color: const Color(0xFF1B97F3),
                   tail: true,
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),
@@ -81,14 +80,14 @@ class _ChatViewState extends State<ChatView> {
                 BubbleNormal(
                   text: 'bubble normal with tail',
                   isSender: true,
-                  color: Color(0xFFE8E8EE),
+                  color: const Color(0xFFE8E8EE),
                   tail: true,
                   sent: true,
                 ),
                 // DateChip(
                 //   date: new DateTime(now.year, now.month, now.day - 2),
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 )
               ],

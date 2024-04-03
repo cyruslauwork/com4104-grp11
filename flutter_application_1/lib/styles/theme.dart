@@ -46,13 +46,13 @@ extension CustomStyles on TextTheme {
         color: AppColor.primaryTextColor,
         fontSize: 5.sp,
       );
+  TextStyle get sp7 => TextStyle(
+        color: AppColor.primaryTextColor,
+        fontSize: 7.sp,
+      );
   TextStyle get sp10 => TextStyle(
         color: AppColor.primaryTextColor,
         fontSize: 10.sp,
-      );
-  TextStyle get sp20 => TextStyle(
-        color: AppColor.primaryTextColor,
-        fontSize: 20.sp,
       );
 }
 

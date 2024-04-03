@@ -16,7 +16,6 @@ class _ChatViewState extends State<ChatView> {
   TextEditingController _controller = TextEditingController();
   List<String> messages = [];
   bool isWaitingForReply = false;
-  SymbolAndName? _selectedQuestion;
   static late List<SymbolAndName> symbolAndNameList;
 
   // static const List<SymbolAndName> _questionOptions = <SymbolAndName>[
@@ -154,9 +153,6 @@ class _ChatViewState extends State<ChatView> {
                 });
               },
               onSelected: (SymbolAndName selection) {
-                setState(() {
-                  _selectedQuestion = selection;
-                });
                 _sendMessage(selection.symbol);
                 _controller.clear();
                 debugPrint(
@@ -170,19 +166,8 @@ class _ChatViewState extends State<ChatView> {
                 return TextField(
                   controller: textEditingController,
                   focusNode: focusNode,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Type a name',
-                    suffixIcon: _selectedQuestion != null
-                        ? IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedQuestion = null;
-                              });
-                              textEditingController.clear();
-                            },
-                            icon: const Icon(Icons.clear),
-                          )
-                        : null,
                   ),
                   enabled:
                       !isWaitingForReply, // Disable text field when waiting for a reply

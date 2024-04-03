@@ -35,7 +35,7 @@ class _MainViewState extends State<MainView> {
       appBar: AppBar(
         title: Text(
           'Stock Insight',
-          style: const TextTheme().sp10,
+          style: const TextTheme().sp7,
         ),
         actions: [
           IconButton(
@@ -717,7 +717,7 @@ class _MainViewState extends State<MainView> {
                       padding: EdgeInsets.only(top: 20.h),
                       child: Text(
                         'Error: ${snapshot.error}',
-                        style: const TextTheme().sp10,
+                        style: const TextTheme().sp7,
                       ),
                     ),
                   ],
