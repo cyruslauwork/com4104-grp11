@@ -60,7 +60,6 @@ class MainPresenter extends GetxController {
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
   RxList<int> matchRows = [0].obs;
 
-  RxInt elapsedTime = 0.obs;
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
   RxInt lastCandleDataLength = 0.obs;
@@ -92,18 +91,8 @@ class MainPresenter extends GetxController {
   }
 
   void showSnackBar(Function showSnackBar, Func func) {
-    if (func == Func.addJson) {
-      if (FlavorService.to.apiProvider == APIProvider.polygon) {
-        TrendMatch().countMatches(
-            CandleAdapter()
-                .listListToCandles(Candle().checkAPIProvider(init: false)),
-            init: false);
-        MainPresenter.to.elapsedTime.value = 0;
-      } else if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
-        showSnackBar('You can only add JSON data if you\'re using JSON data.');
-      } else {
-        throw ArgumentError('Failed to check API provider.');
-      }
+    if (func == Func.devMode) {
+      showSnackBar('Developer mode is on');
     } else {
       throw ArgumentError('Error: Failed to get function name.');
     }

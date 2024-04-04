@@ -36,76 +36,56 @@ class _MainViewState extends State<MainView> {
       appBar: AppBar(
         title: Text(
           'app_name'.tr,
-          style: const TextTheme().sp7,
+          style: const TextTheme().sp7.w700,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SearchView()),
-              );
+              Get.to(() => const SearchView());
             },
           ),
           IconButton(
             icon: const Icon(Icons.contact_support),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatView()),
-              );
+              Get.to(() => const ChatView());
             },
           ),
           Obx(
             () => (MainPresenter.to.listCandleData.length > 1
                 ? Row(
                     children: [
-                      (MainPresenter.to.elapsedTime > 60
-                          ? IconButton(
-                              icon: const Icon(Icons.plus_one),
-                              onPressed: () => MainPresenter.to
-                                  .showSnackBar(snackBar, Func.addJson),
-                            )
-                          : SizedBox(
-                              width: 7.w,
-                              child: Text(
-                                '${MainPresenter.to.elapsedTime}',
-                                style: const TextTheme().sp5,
-                              ),
-                            )),
                       IconButton(
                         icon: Icon(MainPresenter.to.darkMode.value
                             ? Icons.dark_mode
                             : Icons.light_mode),
-                        onPressed: () => MainPresenter.to.darkMode.value =
-                            !MainPresenter.to.darkMode.value,
+                        onPressed: () => MainPresenter.to.darkMode.toggle(),
                       ),
                       (MainPresenter.to.devMode.value
                           ? IconButton(
                               icon: Icon(MainPresenter.to.showAverage.value
                                   ? Icons.show_chart
                                   : Icons.bar_chart_outlined),
-                              onPressed: () {
-                                MainPresenter.to.showAverage.value =
-                                    !MainPresenter.to.showAverage.value;
-                              },
+                              onPressed: () =>
+                                  MainPresenter.to.showAverage.toggle(),
                             )
                           : const SizedBox.shrink()),
                       IconButton(
                         icon: Icon(MainPresenter.to.devMode.value
                             ? Icons.code
                             : Icons.code_off),
-                        onPressed: () => MainPresenter.to.devMode.value =
-                            !MainPresenter.to.devMode.value,
+                        onPressed: () {
+                          MainPresenter.to.devMode.toggle();
+                          if (MainPresenter.to.devMode.value) {
+                            MainPresenter.to
+                                .showSnackBar(snackBar, Func.devMode);
+                          }
+                        },
                       ),
                       IconButton(
-                          icon: Icon(MainPresenter.to.isEn.value
-                              ? Icons.abc
-                              : Icons.abc),
+                          icon: const Icon(Icons.translate),
                           onPressed: () {
-                            MainPresenter.to.isEn.value =
-                                !MainPresenter.to.isEn.value;
+                            MainPresenter.to.isEn.toggle();
                             if (MainPresenter.to.isEn.value) {
                               LangService.to.changeLanguage(Lang.en);
                             } else {
@@ -134,9 +114,6 @@ class _MainViewState extends State<MainView> {
           builder:
               (BuildContext context, AsyncSnapshot<List<CandleData>> snapshot) {
             if (snapshot.hasData) {
-              Timer.periodic(const Duration(seconds: 1), (timer) {
-                MainPresenter.to.elapsedTime++;
-              });
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -220,11 +197,68 @@ class _MainViewState extends State<MainView> {
                                 ],
                               ),
                               SizedBox(height: 10.h),
+                              Text(
+                                'Misc',
+                                style: const TextTheme().sp5,
+                              ),
+                              Table(
+                                border: TableBorder.all(
+                                    color: AppColor.blackColor,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                children: [
+                                  TableRow(children: [
+                                    Column(children: [
+                                      Text('Listing DL (ms)',
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ])
+                                  ]),
+                                  TableRow(children: [
+                                    Column(children: [
+                                      Text(
+                                          MainPresenter.to.listingDownloadTime
+                                              .toString(),
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('', style: const TextTheme().sp3)
+                                    ]),
+                                  ]),
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
                             ])
                           : const SizedBox.shrink()),
                     ),
                     Text(
-                      'Max 1000-Row Candlestick Chart',
+                      'candle_chart'.tr,
                       style: const TextTheme().sp5,
                     ),
                     Obx(

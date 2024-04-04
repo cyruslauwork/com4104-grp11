@@ -53,7 +53,9 @@ class FlavorService extends GetxService {
 }
 
 enum RouteName {
-  mainScreen('/mainscreen');
+  mainView('/mainview'),
+  searchView('/searchview'),
+  chatView('/chatview');
 
   const RouteName(this.path);
 
@@ -71,5 +73,5 @@ enum SrcFileType {
 }
 
 enum Func {
-  addJson;
+  devMode;
 }

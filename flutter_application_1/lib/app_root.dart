@@ -109,13 +109,15 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
         translations: Msg(),
         // locale: Get.deviceLocale,
         // fallbackLocale: const Locale('en', 'UK'),
-        initialRoute: RouteName.mainScreen.path,
+        initialRoute: RouteName.mainView.path,
         getPages: [
           // GetPage(
           //     name: RouteName.pageNotFound.path,
           //     page: () => const PageNotFoundScreen()),
+          GetPage(name: RouteName.mainView.path, page: () => const MainView()),
           GetPage(
-              name: RouteName.mainScreen.path, page: () => const MainView()),
+              name: RouteName.searchView.path, page: () => const SearchView()),
+          GetPage(name: RouteName.chatView.path, page: () => const ChatView()),
           // GetPage(
           //   name: RouteName.mainScreen.path,
           //   page: () => const MainScreen(),
