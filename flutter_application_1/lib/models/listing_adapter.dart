@@ -21,7 +21,7 @@ class ListingAdapter {
   Future<List<SymbolAndName>> listListToSymbolAndName(
       Future<List<List<dynamic>>> futureListList) async {
     List<List<dynamic>> listList = await futureListList;
-    MainPresenter.to.candleListList.value = listList;
+    MainPresenter.to.symbolAndNameListList.value = listList;
     List<SymbolAndName> listSymbolAndName;
 
     listList.removeAt(0);
@@ -42,7 +42,7 @@ class SymbolAndName {
 
   const SymbolAndName({required this.symbol, required this.name});
 
-    @override
+  @override
   String toString() {
     return '$symbol, $name';
   }

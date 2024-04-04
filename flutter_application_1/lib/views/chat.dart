@@ -43,7 +43,7 @@ class _ChatViewState extends State<ChatView> {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    MainPresenter.to.candledownloadTime.value = downloadTime;
+    MainPresenter.to.listingDownloadTime.value = downloadTime;
     if (response.statusCode == 200) {
       // print(response.body);
       // CSV object received, pass the data
