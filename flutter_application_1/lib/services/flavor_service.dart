@@ -24,6 +24,7 @@ class FlavorService extends GetxService {
     return _instance!;
   }
   FlavorService._();
+
   static FlavorService get to => Get.find();
 
   late final Flavor flavor;

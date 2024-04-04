@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
-import '../models/models.dart';
-import '../services/services.dart';
+import 'package:flutter_application_1/models/models.dart';
+import 'package:flutter_application_1/services/services.dart';
 
 class MainPresenter extends GetxController {
   // Singleton implementation
@@ -14,6 +14,7 @@ class MainPresenter extends GetxController {
     return _instance!;
   }
   MainPresenter._();
+
   static MainPresenter get to => Get.find();
 
   RxBool darkMode = true.obs;
@@ -73,6 +74,8 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img6Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   RxString subsequentAnalysisErr = ''.obs;
+
+  RxBool isEn = true.obs;
 
   void reload() {
     Get.delete<MainPresenter>();

@@ -1,15 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/services/l10n/lang.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:collection/collection.dart';
 
-import '../presenters/presenters.dart';
-import '../utils/utils.dart';
-import '../views/views.dart';
-import '../styles/style.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:flutter_application_1/utils/utils.dart';
+import 'package:flutter_application_1/views/views.dart';
+import 'package:flutter_application_1/styles/style.dart';
+import 'package:flutter_application_1/services/services.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Stock Insight',
+          'app_name'.tr,
           style: const TextTheme().sp7,
         ),
         actions: [
@@ -97,7 +98,20 @@ class _MainViewState extends State<MainView> {
                             : Icons.code_off),
                         onPressed: () => MainPresenter.to.devMode.value =
                             !MainPresenter.to.devMode.value,
-                      )
+                      ),
+                      IconButton(
+                          icon: Icon(MainPresenter.to.isEn.value
+                              ? Icons.abc
+                              : Icons.abc),
+                          onPressed: () {
+                            MainPresenter.to.isEn.value =
+                                !MainPresenter.to.isEn.value;
+                            if (MainPresenter.to.isEn.value) {
+                              LangService.to.changeLanguage(Lang.en);
+                            } else {
+                              LangService.to.changeLanguage(Lang.zh);
+                            }
+                          }),
                     ],
                   )
                 : Padding(

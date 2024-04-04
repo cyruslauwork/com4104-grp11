@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import './services/services.dart';
-import './views/views.dart';
-import './presenters/presenters.dart';
-import './styles/style.dart';
+import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/views/views.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:flutter_application_1/styles/style.dart';
+import 'package:flutter_application_1/services/l10n/msg.dart';
 
 var logger = Logger();
 
@@ -105,6 +106,9 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
                 : Brightness.light,
           ),
         ),
+        translations: Msg(),
+        // locale: Get.deviceLocale,
+        // fallbackLocale: const Locale('en', 'UK'),
         initialRoute: RouteName.mainScreen.path,
         getPages: [
           // GetPage(

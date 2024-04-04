@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-import '../services/services.dart';
-import '../presenters/presenters.dart';
+import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
 import 'candle_adapter.dart';
 
 class Candle {

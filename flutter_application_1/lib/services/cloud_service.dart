@@ -1,13 +1,20 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 
-import '../services/services.dart';
-// import '../utils/utils.dart';
+import 'package:flutter_application_1/services/services.dart';
+// import 'package:flutter_application_1/utils/utils.dart';
 
 class CloudService {
   // Singleton implementation
   static final CloudService _instance = CloudService._();
   factory CloudService() => _instance;
   CloudService._();
+
+  static HTTPService get to => Get.find();
+
+  Future<CloudService> init() async {
+    return this;
+  }
 
   Future<Map<String, dynamic>> getCsvAndPng(
       List<List<double>> lastClosePriceAndSubsequentTrends) async {

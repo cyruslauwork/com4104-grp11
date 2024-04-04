@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_application_1/styles/theme.dart';
 
-import '../../presenters/presenters.dart';
-import '../../utils/utils.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 
 class AdjustedLineChart extends StatelessWidget {
   final LineChartData lineChartData;

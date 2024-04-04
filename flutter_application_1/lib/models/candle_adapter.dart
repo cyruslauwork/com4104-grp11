@@ -1,8 +1,8 @@
 import 'package:csv/csv.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
-import '../services/services.dart';
-import '../presenters/presenters.dart';
+import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
 
 class CandleAdapter {
   // Singleton implementation

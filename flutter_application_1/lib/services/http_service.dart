@@ -1,13 +1,20 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 
-import '../utils/utils.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 
 class HTTPService {
   // Singleton implementation
   static final HTTPService _instance = HTTPService._();
   factory HTTPService() => _instance;
   HTTPService._();
+
+  static HTTPService get to => Get.find();
+
+  Future<HTTPService> init() async {
+    return this;
+  }
 
   Future<http.Response> fetchCandleCSV(int callbackTime) async {
     /* 

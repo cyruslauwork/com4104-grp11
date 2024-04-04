@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import '../models/listing_adapter.dart';
-import '../presenters/main.dart';
-import '../services/http_service.dart';
-import '../utils/screen_utils.dart';
+import 'package:flutter_application_1/models/listing_adapter.dart';
+import 'package:flutter_application_1/presenters/main.dart';
+import 'package:flutter_application_1/services/http_service.dart';
+import 'package:flutter_application_1/utils/screen_utils.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({Key? key}) : super(key: key);

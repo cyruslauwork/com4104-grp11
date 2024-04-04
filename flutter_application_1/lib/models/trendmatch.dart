@@ -1,6 +1,6 @@
 import 'package:interactive_chart/interactive_chart.dart';
 
-import '../presenters/presenters.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
 
 class TrendMatch {
   // Singleton implementation

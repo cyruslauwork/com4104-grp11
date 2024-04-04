@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/utils.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 
 class AppColor {
   // Singleton implementation
@@ -58,9 +58,10 @@ extension CustomStyles on TextTheme {
 
 extension CustomTextStyle on TextStyle {
   TextStyle get w400 => copyWith(fontWeight: FontWeight.w400);
-  TextStyle get w500 => copyWith(fontWeight: FontWeight.w500);
-  TextStyle get w600 => copyWith(fontWeight: FontWeight.w600);
+  // TextStyle get w500 => copyWith(fontWeight: FontWeight.w500);
+  // TextStyle get w600 => copyWith(fontWeight: FontWeight.w600);
   TextStyle get w700 => copyWith(fontWeight: FontWeight.w700);
+  // TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
   // TextStyle get secondaryTextColor =>
   //     copyWith(color: AppColor.secondaryTextColor);
   // TextStyle get primaryTextColor => copyWith(color: AppColor.primaryTextColor);

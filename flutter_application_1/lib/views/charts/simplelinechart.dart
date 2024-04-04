@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'dart:math';
 
-import '../../presenters/presenters.dart';
-import '../../utils/utils.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 
 class SimpleLineChart extends StatelessWidget {
   final LineChartData lineChartData;

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import './services/services.dart';
+import 'package:flutter_application_1/services/services.dart';
 import 'app_root.dart';
 
 var logger = Logger();
@@ -33,4 +33,8 @@ Future<void> initServices(Flavor flavor, APIProvider apiProvider) async {
   /// or drift connection, or whatever that's async.
   await Get.putAsync(() => PrefsService().init());
   await Get.putAsync(() => FlavorService().init(flavor, apiProvider));
+  await Get.putAsync(() => TimeService().init());
+  await Get.putAsync(() => HTTPService().init());
+  await Get.putAsync(() => CloudService().init());
+  await Get.putAsync(() => LangService().init());
 }
