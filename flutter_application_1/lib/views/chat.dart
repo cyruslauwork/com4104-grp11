@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_application_1/models/listing_adapter.dart';
@@ -17,6 +19,7 @@ class _ChatViewState extends State<ChatView> {
   List<String> messages = [];
   bool isWaitingForReply = false;
   static late List<SymbolAndName> symbolAndNameList;
+  final _scrollController = ScrollController();
 
   // static const List<SymbolAndName> _questionOptions = <SymbolAndName>[
   //   SymbolAndName(symbol: 'Alice', name: 'alice@example.com'),
@@ -67,6 +70,10 @@ class _ChatViewState extends State<ChatView> {
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         messages.add("hi");
+
+        Timer(const Duration(milliseconds: 500), () {
+          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        });
         isWaitingForReply =
             false; // Set the flag to false after the non-sender replies
       });
@@ -97,19 +104,20 @@ class _ChatViewState extends State<ChatView> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         ElevatedButton(
-          onPressed:
-              isWaitingForReply ? null : () => _handleOptionSelected('Alice'),
-          child: const Text('Alice'),
+          onPressed: isWaitingForReply
+              ? null
+              : () => _handleOptionSelected(
+                  'Are there any recent market news that may affecting the prices of stocks in my watchlist?'),
+          child: const Text(
+              'Are there any recent market news that may affecting the prices of stocks in my watchlist?'),
         ),
         ElevatedButton(
-          onPressed:
-              isWaitingForReply ? null : () => _handleOptionSelected('Bob'),
-          child: const Text('Bob'),
-        ),
-        ElevatedButton(
-          onPressed:
-              isWaitingForReply ? null : () => _handleOptionSelected('Charlie'),
-          child: const Text('Charlie'),
+          onPressed: isWaitingForReply
+              ? null
+              : () => _handleOptionSelected(
+                  'What are the major challenges facing the stocks in my watchlist?'),
+          child: const Text(
+              'What are the major challenges facing the stocks in my watchlist?'),
         ),
       ],
     );
@@ -126,6 +134,7 @@ class _ChatViewState extends State<ChatView> {
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               itemCount: messages.length,
               itemBuilder: (BuildContext context, int index) {
                 final message = messages[index];
@@ -155,8 +164,8 @@ class _ChatViewState extends State<ChatView> {
               onSelected: (SymbolAndName selection) {
                 _sendMessage(selection.symbol);
                 _controller.clear();
-                debugPrint(
-                    'You just selected ${_ChatViewState._displayStringForOption(selection)}');
+                // debugPrint(
+                //     'You just selected ${_ChatViewState._displayStringForOption(selection)}');
               },
               fieldViewBuilder: (BuildContext context,
                   TextEditingController textEditingController,
@@ -167,7 +176,7 @@ class _ChatViewState extends State<ChatView> {
                   controller: textEditingController,
                   focusNode: focusNode,
                   decoration: const InputDecoration(
-                    hintText: 'Type a name',
+                    hintText: "Type your interested stock and select ^_^",
                   ),
                   enabled:
                       !isWaitingForReply, // Disable text field when waiting for a reply

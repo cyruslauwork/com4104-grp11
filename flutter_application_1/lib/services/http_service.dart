@@ -138,7 +138,7 @@ class HTTPService {
 
   Future<http.Response> fetchListingCSV() async {
     final url = Uri.parse(
-        'https://r2.datahub.io/clt989dvv0003l708h2jgh5ef/main/raw/data/constituents.csv');
+        'https://r2.datahub.io/clt98kj4f0005ia08b4a7ergo/master/raw/data/nasdaq-listed-symbols.csv');
 
     // Modify the request headers to accept CSV data
     final headers = {'Accept': 'text/csv'};
