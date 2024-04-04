@@ -24,7 +24,7 @@ class CloudService {
     /* POST method */
     Map<String, dynamic> parsedResponse = await HTTPService().postFetchJson(
         'http://35.221.170.30/',
-        {'sub_trend': encodedTrends, 'func': 'subTrendToCsvAndPng'});
+        {'sub_trend': encodedTrends, 'func': 'subtrend-to-csv-png'});
 
     /* GET method */
     // String urlEncodedTrends = Uri.encodeComponent(encodedTrends);
@@ -32,5 +32,15 @@ class CloudService {
     // Map<String, dynamic> parsedResponse = await HTTPService().getFetchJson(
     //     'http://35.221.170.30/?func=subTrendToCsvAndPng&sub_trend=$urlEncodedTrends');
     return parsedResponse;
+  }
+
+  Future<String> getNewsAnalysis(String symbolAndName) async {
+    /* GET method */
+    String urlEncodedSymbolAndName = Uri.encodeComponent(symbolAndName);
+    // log(urlEncodedSymbolAndName);
+    Map<String, dynamic> parsedResponse = await HTTPService().getFetchJson(
+        'http://35.221.170.30/?func=gemini-pro-news&symbolAndName=$urlEncodedSymbolAndName');
+    String response = parsedResponse['result'];
+    return response;
   }
 }

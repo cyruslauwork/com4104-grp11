@@ -5,6 +5,7 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:flutter_application_1/presenters/main.dart';
 import 'package:flutter_application_1/services/http_service.dart';
+import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/utils/screen_utils.dart';
 
 class ChatView extends StatefulWidget {
@@ -59,24 +60,21 @@ class _ChatViewState extends State<ChatView> {
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
 
-  void _sendMessage(String message) {
+  void _sendMessage(String message) async {
+    String newsAnalysis = await CloudService().getNewsAnalysis(message);
+
     setState(() {
       messages.add(message);
       isWaitingForReply =
           true; // Set the flag to true when the SymbolAndName sends a message
-    });
 
-    // Simulate non-sender replying with "hi" after a delay
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        messages.add("hi");
+      messages.add(newsAnalysis);
 
-        Timer(const Duration(milliseconds: 500), () {
-          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-        });
-        isWaitingForReply =
-            false; // Set the flag to false after the non-sender replies
+      Timer(const Duration(milliseconds: 500), () {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       });
+      isWaitingForReply =
+          false; // Set the flag to false after the non-sender replies
     });
   }
 
@@ -162,7 +160,7 @@ class _ChatViewState extends State<ChatView> {
                 });
               },
               onSelected: (SymbolAndName selection) {
-                _sendMessage(selection.symbol);
+                _sendMessage('${selection.symbol} ${selection.name}');
                 _controller.clear();
                 // debugPrint(
                 //     'You just selected ${_ChatViewState._displayStringForOption(selection)}');
@@ -188,7 +186,7 @@ class _ChatViewState extends State<ChatView> {
               },
             ),
           ),
-          SizedBox(height: 100.h)
+          SizedBox(height: 50.h)
         ],
       ),
     );
