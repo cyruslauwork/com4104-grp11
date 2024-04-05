@@ -134,10 +134,19 @@ class _MainViewState extends State<MainView> {
                                 children: [
                                   TableRow(children: [
                                     Column(children: [
-                                      Text('True', style: const TextTheme().sp3)
+                                      Text('CSV DL (ms)',
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
-                                      Text('False',
+                                      Text('CSV Rows',
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('Sel Count',
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('TM Rows',
                                           style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
@@ -145,33 +154,17 @@ class _MainViewState extends State<MainView> {
                                           style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
-                                      Text('Rows', style: const TextTheme().sp3)
+                                      Text('True', style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
-                                      Text('Sel Count',
-                                          style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text('DL (ms)',
+                                      Text('False',
                                           style: const TextTheme().sp3)
                                     ])
                                   ]),
                                   TableRow(children: [
                                     Column(children: [
                                       Text(
-                                          MainPresenter.to.trendMatchOutput[0]
-                                              .toString(),
-                                          style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text(
-                                          MainPresenter.to.trendMatchOutput[1]
-                                              .toString(),
-                                          style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text(
-                                          MainPresenter.to.trendMatchOutput[2]
+                                          MainPresenter.to.candledownloadTime
                                               .toString(),
                                           style: const TextTheme().sp3)
                                     ]),
@@ -189,7 +182,28 @@ class _MainViewState extends State<MainView> {
                                     ]),
                                     Column(children: [
                                       Text(
-                                          MainPresenter.to.candledownloadTime
+                                          (MainPresenter
+                                                      .to.trendMatchOutput[3] -
+                                                  MainPresenter
+                                                      .to.trendMatchOutput[4])
+                                              .toString(),
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text(
+                                          MainPresenter.to.trendMatchOutput[2]
+                                              .toString(),
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text(
+                                          MainPresenter.to.trendMatchOutput[0]
+                                              .toString(),
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text(
+                                          MainPresenter.to.trendMatchOutput[1]
                                               .toString(),
                                           style: const TextTheme().sp3)
                                     ]),
@@ -209,24 +223,20 @@ class _MainViewState extends State<MainView> {
                                 children: [
                                   TableRow(children: [
                                     Column(children: [
-                                      Text('Listing DL (ms)',
+                                      Text('Listing CSV DL (ms)',
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('SA Prep (ms)',
+                                          style: const TextTheme().sp3)
+                                    ]),
+                                    Column(children: [
+                                      Text('Cloud SA (ms)',
                                           style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text('', style: const TextTheme().sp3)
                                     ]),
-                                    Column(children: [
-                                      Text('', style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text('', style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text('', style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text('', style: const TextTheme().sp3)
-                                    ])
                                   ]),
                                   TableRow(children: [
                                     Column(children: [
@@ -236,16 +246,18 @@ class _MainViewState extends State<MainView> {
                                           style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
-                                      Text('', style: const TextTheme().sp3)
+                                      Text(
+                                          MainPresenter.to
+                                              .lastClosePriceAndSubsequentTrendsExeTime
+                                              .toString(),
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
-                                      Text('', style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text('', style: const TextTheme().sp3)
-                                    ]),
-                                    Column(children: [
-                                      Text('', style: const TextTheme().sp3)
+                                      Text(
+                                          MainPresenter
+                                              .to.cloudSubsequentAnalysisTime
+                                              .toString(),
+                                          style: const TextTheme().sp3)
                                     ]),
                                     Column(children: [
                                       Text('', style: const TextTheme().sp3)
@@ -303,9 +315,9 @@ class _MainViewState extends State<MainView> {
                                   ..color = Colors.green,
                               ],
                               selectionHighlightColor:
-                                  Colors.red.withOpacity(0.2),
+                                  Colors.red.withOpacity(0.75),
                               overlayBackgroundColor:
-                                  Colors.red.withOpacity(0.2),
+                                  Colors.red.withOpacity(0.75),
                               overlayTextStyle:
                                   const TextStyle(color: AppColor.whiteColor),
                             ),

@@ -32,6 +32,9 @@ class MainPresenter extends GetxController {
   RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
 
+  RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
+  RxInt cloudSubsequentAnalysisTime = 0.obs;
+
   RxList<double> selectedPeriodPercentDifferencesList =
       [0.0, 0.0, 0.0, 0.0, 0.0].obs; // The root selected period here
   RxList<double> selectedPeriodActualDifferencesList = [0.0].obs;

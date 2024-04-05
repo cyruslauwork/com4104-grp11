@@ -107,7 +107,6 @@ class HTTPService {
       var parsedResponse =
           await jsonDecode(response.body); // Parse the JSON response
       // print(response.body.runtimeType);
-      // print(parsedResponse.runtimeType);
       return parsedResponse; // Return the parsed JSON
     } else {
       var parsedErrorResponse =
@@ -130,18 +129,43 @@ class HTTPService {
       var parsedResponse =
           await jsonDecode(response.body); // Parse the JSON response
       // print(response.body.runtimeType);
-      // log(response.body);
-      // print('\n');
-      // print('\n');
-      // print('\n');
-      // print('\n');
-      // log(parsedResponse.toString());
       return parsedResponse; // Return the parsed JSON
     } else {
       var parsedErrorResponse =
           await jsonDecode(response.body); // Parse the JSON error response
       logger.d('${response.statusCode}, $parsedErrorResponse');
       return parsedErrorResponse;
+    }
+  }
+
+  Future<String> getFetchString(String url) async {
+    // Make an HTTP GET request to retrieve the String response
+    var thisUrl = Uri.parse(url);
+    var response = await http.get(thisUrl);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // print(response.body.runtimeType);
+      return response.body;
+    } else {
+      logger.d('${response.statusCode}, $response.body');
+      return response.body;
+    }
+  }
+
+  Future<String> postFetchString(String url, Map<String, dynamic> body) async {
+    // Make an HTTP GET request to retrieve the String response
+    var thisUrl = Uri.parse(url);
+    var response = await http.post(
+      thisUrl,
+      body: body,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // print(response.body.runtimeType);
+      return response.body;
+    } else {
+      logger.d('${response.statusCode}, $response.body');
+      return response.body;
     }
   }
 

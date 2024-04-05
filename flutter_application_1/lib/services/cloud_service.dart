@@ -30,7 +30,7 @@ class CloudService {
     // String urlEncodedTrends = Uri.encodeComponent(encodedTrends);
     // log(urlEncodedTrends);
     // Map<String, dynamic> parsedResponse = await HTTPService().getFetchJson(
-    //     'http://35.221.170.30/?func=subTrendToCsvAndPng&sub_trend=$urlEncodedTrends');
+    //     'http://35.221.170.30/?func=subtrend-to-csv-png&sub_trend=$urlEncodedTrends');
     return parsedResponse;
   }
 
@@ -38,9 +38,8 @@ class CloudService {
     /* GET method */
     String urlEncodedSymbolAndName = Uri.encodeComponent(symbolAndName);
     // log(urlEncodedSymbolAndName);
-    Map<String, dynamic> parsedResponse = await HTTPService().getFetchJson(
-        'http://35.221.170.30/?func=gemini-pro-news&symbolAndName=$urlEncodedSymbolAndName');
-    String response = parsedResponse['result'];
+    String response = await HTTPService().getFetchString(
+        'http://35.221.170.30/?func=gemini-pro-news&symbol_and_name=$urlEncodedSymbolAndName');
     return response;
   }
 }

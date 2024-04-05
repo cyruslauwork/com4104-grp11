@@ -13,15 +13,27 @@ class SubsequentAnalysis {
   void init() async {
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
+    DateTime exeStartTime = DateTime.now(); // Record the download start time
     for (int i = 0; i < MainPresenter.to.matchRows.length; i++) {
       lastClosePriceAndSubsequentTrends
           .add(getMatchedTrendLastClosePriceAndSubsequentTrend(i));
     }
+    DateTime exeEndTime = DateTime.now(); // Record the download end time
+    // Calculate the time difference
+    Duration exeDuration = exeEndTime.difference(exeStartTime);
+    int exeTime = exeDuration.inMilliseconds;
+    MainPresenter.to.lastClosePriceAndSubsequentTrendsExeTime.value = exeTime;
 
     if (lastClosePriceAndSubsequentTrends.length >= 4) {
+      exeStartTime = DateTime.now(); // Record the download start time
       Map<String, dynamic> parsedResponse =
           await CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
       // log(parsedResponse.toString());
+      exeEndTime = DateTime.now(); // Record the download end time
+      // Calculate the time difference
+      exeDuration = exeEndTime.difference(exeStartTime);
+      exeTime = exeDuration.inMilliseconds;
+      MainPresenter.to.cloudSubsequentAnalysisTime.value = exeTime;
       try {
         Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
         MainPresenter.to.subsequentAnalysisErr.value = '';
