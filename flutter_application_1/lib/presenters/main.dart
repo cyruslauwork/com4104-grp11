@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_application_1/models/listing_adapter.dart';
+import 'package:flutter_application_1/services/prefs/prefs_const.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
@@ -79,17 +80,28 @@ class MainPresenter extends GetxController {
 
   RxBool isEn = true.obs;
 
+  RxList<SymbolAndName> symbolAndNameList =
+      [const SymbolAndName(symbol: '', name: '')].obs;
+  RxBool searched = false.obs;
+
   void reload() {
     Get.delete<MainPresenter>();
     Get.put(MainPresenter());
     super.onInit();
   }
 
-  Future<List<CandleData>> get futureListCandleData async {
+  Future<List<CandleData>> futureListCandleData({String? stockSymbol}) async {
+    // PrefsService.to.prefs
+    //     .setString(SharedPreferencesConstant.stockSymbol, 'SPY');
+    stockSymbol ??= PrefsService.to.prefs
+            .getString(SharedPreferencesConstant.stockSymbol) ??
+        'SPY';
+    // print(stockSymbol);
     Future<List<CandleData>> futureListCandleData = CandleAdapter()
-        .listListToCandles(Candle().checkAPIProvider(init: true));
-    await TrendMatch().countMatches(futureListCandleData, init: true);
-    SubsequentAnalysis().init();
+        .listListToCandles(
+            Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
+    // await TrendMatch().countMatches(futureListCandleData, init: true);
+    // SubsequentAnalysis().init();
     return futureListCandleData;
   }
 

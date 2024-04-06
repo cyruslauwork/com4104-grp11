@@ -115,9 +115,8 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
           //     name: RouteName.pageNotFound.path,
           //     page: () => const PageNotFoundScreen()),
           GetPage(name: RouteName.mainView.path, page: () => const MainView()),
-          GetPage(
-              name: RouteName.searchView.path, page: () => const SearchView()),
-          GetPage(name: RouteName.chatView.path, page: () => const ChatView()),
+          GetPage(name: RouteName.searchView.path, page: () => SearchView()),
+          GetPage(name: RouteName.chatView.path, page: () => ChatView()),
           // GetPage(
           //   name: RouteName.mainScreen.path,
           //   page: () => const MainScreen(),

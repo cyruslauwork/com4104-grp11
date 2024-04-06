@@ -14,7 +14,7 @@ class AppColor {
   // static const editTextErrorColor = Color(0xff000000);
   static const whiteColor = Colors.white;
   static const blackColor = Colors.black;
-  static const greyColor = Color(0xff808080);
+  static const greyColor = Color(0xff909090);
   // static const backgroundColor = Color(0xff000000);
   static const errorColor = Colors.red;
   // static const imageDefaultBgColor = Color(0xff000000);

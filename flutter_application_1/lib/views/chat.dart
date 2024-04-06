@@ -4,12 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:flutter_application_1/presenters/main.dart';
-import 'package:flutter_application_1/services/http_service.dart';
 import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/styles/style.dart';
 import 'package:flutter_application_1/utils/screen_utils.dart';
 
 class ChatView extends StatefulWidget {
-  const ChatView({Key? key}) : super(key: key);
+  // const ChatView({Key? key}) : super(key: key);
+
+// Singleton implementation
+  static ChatView? _instance;
+  factory ChatView({Key? key}) {
+    _instance ??= ChatView._(key: key);
+    return _instance!;
+  }
+  const ChatView._({Key? key}) : super(key: key);
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -19,7 +27,6 @@ class _ChatViewState extends State<ChatView> {
   TextEditingController _controller = TextEditingController();
   List<String> messages = [];
   bool isWaitingForReply = false;
-  static late List<SymbolAndName> symbolAndNameList;
   final _scrollController = ScrollController();
 
   // static const List<SymbolAndName> _questionOptions = <SymbolAndName>[
@@ -28,34 +35,11 @@ class _ChatViewState extends State<ChatView> {
   //   SymbolAndName(symbol: 'Charlie', name: 'charlie123@gmail.com'),
   // ];
 
-  @override
-  void initState() {
-    super.initState();
-    initListing();
-  }
-
-  void initListing() async {
-    symbolAndNameList = await ListingAdapter().listListToSymbolAndName(
-        ListingAdapter().csvToListList(getListingCSV()));
-  }
-
-  Future<String> getListingCSV() async {
-    DateTime downloadStartTime =
-        DateTime.now(); // Record the download start time
-    final response = await HTTPService().fetchListingCSV();
-    DateTime downloadEndTime = DateTime.now(); // Record the download end time
-    // Calculate the time difference
-    Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
-    int downloadTime = downloadDuration.inMilliseconds;
-    MainPresenter.to.listingDownloadTime.value = downloadTime;
-    if (response.statusCode == 200) {
-      // print(response.body);
-      // CSV object received, pass the data
-      return response.body;
-    } else {
-      throw ArgumentError('Failed to fetch CSV data: ${response.statusCode}');
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initListing();
+  // }
 
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
@@ -78,8 +62,22 @@ class _ChatViewState extends State<ChatView> {
     });
   }
 
-  void _handleOptionSelected(String option) {
-    _sendMessage(option);
+  void _handleOptionSelected(String option) async {
+    String newsAnalysis = await CloudService().getNewsAnalysis(option);
+    setState(() {
+      messages.add(option);
+      isWaitingForReply =
+          true; // Set the flag to true when the SymbolAndName sends a message
+
+      messages.add(newsAnalysis);
+
+      Timer(const Duration(milliseconds: 500), () {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      });
+      isWaitingForReply =
+          false; // Set the flag to false after the non-sender replies
+    });
+    // _sendMessage(option);
   }
 
   Widget _buildChatBubble(String message, bool isQuestionObject) {
@@ -151,7 +149,7 @@ class _ChatViewState extends State<ChatView> {
                 if (textEditingValue.text == '') {
                   return const Iterable<SymbolAndName>.empty();
                 }
-                return _ChatViewState.symbolAndNameList
+                return MainPresenter.to.symbolAndNameList
                     .where((SymbolAndName option) {
                   return option
                       .toString()

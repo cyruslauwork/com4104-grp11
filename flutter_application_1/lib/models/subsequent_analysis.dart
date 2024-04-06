@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
-// import 'package:flutter_application_1/utils/utils.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 
 class SubsequentAnalysis {
   // Singleton implementation
@@ -28,7 +28,7 @@ class SubsequentAnalysis {
       exeStartTime = DateTime.now(); // Record the download start time
       Map<String, dynamic> parsedResponse =
           await CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
-      // log(parsedResponse.toString());
+      log(parsedResponse.toString());
       exeEndTime = DateTime.now(); // Record the download end time
       // Calculate the time difference
       exeDuration = exeEndTime.difference(exeStartTime);

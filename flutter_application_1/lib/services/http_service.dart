@@ -16,7 +16,8 @@ class HTTPService {
     return this;
   }
 
-  Future<http.Response> fetchCandleCSV(int callbackTime) async {
+  Future<http.Response> fetchCandleCSV(int callbackTime,
+      {required String stockSymbol}) async {
     /* 
     US exchanges – such as the NYSE or NASDAQ – which are open Monday through Friday from 9:30 am to 4:00 pm Eastern Daylight Time (GMT-04:00) i.e. 14:30 to 21:00 (UTC).
     Eastern Standard Time (Winter Time) or EST: It is 5 hours behind the Greenwich Mean Time/Coordinated Universal Time or UTC-5. 
@@ -28,42 +29,42 @@ class HTTPService {
     // Latest, based on the closing price on the trading day
     DateTime now = DateTime.now().toUtc();
     // Check if current UTC time is less than or equal to 13:30:50
-    if (now.hour < 13 ||
-        (now.hour == 13 && now.minute <= 30 && now.second <= 50)) {
-      endTimestamp = 9999999999;
-    } else {
-      if (isEasternDaylightTime(now)) {
-        // Check if current UTC time is greater than or equal to 20:00 in Eastern Daylight Time (USA summer and spring seasons)
-        if (now.hour >= 20) {
-          endTimestamp = 9999999999;
-        } else {
-          // Set endTimestamp to current UTC time minus 12 hours
-          endTimestamp =
-              now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
-                  1000;
-        }
-      } else {
-        // Check if current UTC time is greater than or equal to 21:00 in Eastern Standard Time
-        if (now.hour >= 21) {
-          endTimestamp = 9999999999;
-        } else {
-          // Set endTimestamp to current UTC time minus 12 hours
-          endTimestamp =
-              now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
-                  1000;
-        }
-      }
-    }
+    // if (now.hour < 13 ||
+    //     (now.hour == 13 && now.minute <= 30 && now.second <= 50)) {
+    //   endTimestamp = 9999999999;
+    // } else {
+    //   if (isEasternDaylightTime(now)) {
+    //     // Check if current UTC time is greater than or equal to 20:00 in Eastern Daylight Time (USA summer and spring seasons)
+    //     if (now.hour >= 20) {
+    //       endTimestamp = 9999999999;
+    //     } else {
+    //       // Set endTimestamp to current UTC time minus 12 hours
+    //       endTimestamp =
+    //           now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
+    //               1000;
+    //     }
+    //   } else {
+    //     // Check if current UTC time is greater than or equal to 21:00 in Eastern Standard Time
+    //     if (now.hour >= 21) {
+    //       endTimestamp = 9999999999;
+    //     } else {
+    //       // Set endTimestamp to current UTC time minus 12 hours
+    //       endTimestamp =
+    //           now.subtract(const Duration(hours: 12)).millisecondsSinceEpoch ~/
+    //               1000;
+    //     }
+    //   }
+    // }
     // endTimestamp =
     //     9999999999; // Latest, but closing prices may vary during trading sessions
-    // endTimestamp =
-    //     1701360000; // The end date of iconic 5-day trend matching subsequent trends
+    endTimestamp =
+        1701360000; // The end date of iconic 5-day trend matching subsequent trends
     // endTimestamp =
     //     DateTime.utc(2024, 3, 11, 23, 59, 59).millisecondsSinceEpoch ~/
     //         1000; // Select specific end date
 
     final url = Uri.parse(
-        'https://query1.finance.yahoo.com/v7/finance/download/SPY?period1=$startTimestamp&period2=$endTimestamp&interval=1d&events=history&includeAdjustedClose=true');
+        'https://query1.finance.yahoo.com/v7/finance/download/$stockSymbol?period1=$startTimestamp&period2=$endTimestamp&interval=1d&events=history&includeAdjustedClose=true');
     /* 
     Maximum end timestamp: 9999999999
 

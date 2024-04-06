@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/models/listing_adapter.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:flutter_application_1/services/services.dart';
+import 'package:get/get.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({Key? key}) : super(key: key);
+  // const SearchView({Key? key}) : super(key: key);
+
+  // Singleton implementation
+  static SearchView? _instance;
+  factory SearchView({Key? key}) {
+    _instance ??= SearchView._(key: key);
+    return _instance!;
+  }
+  const SearchView._({Key? key}) : super(key: key);
+
   //DateTime? start;
   //DateTime? end;
 /*class _NewPageState extends State<NewPage>{
@@ -19,13 +32,15 @@ class _SearchViewState extends State<SearchView> {
   DateTimeRange? selectedDateRange;
   final TextEditingController _dateRangeController = TextEditingController();
   final TextEditingController _varienceController = TextEditingController();
-  final TextEditingController _stockNameController = TextEditingController();
 
   @override
   void dispose() {
     _dateRangeController.dispose();
     super.dispose();
   }
+
+  static String _displayStringForOption(SymbolAndName option) =>
+      '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +69,9 @@ class _SearchViewState extends State<SearchView> {
                 controller: _varienceController,
                 maxLength: 3,
                 decoration: const InputDecoration(
-                    labelText: 'Enter Varience Value(%)',
-                    border: OutlineInputBorder()),
+                  labelText: 'Enter Varience Value(%)',
+                  border: OutlineInputBorder(),
+                ),
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -64,13 +80,56 @@ class _SearchViewState extends State<SearchView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
-                controller: _stockNameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter Stock Name/Number',
-                ),
+              child: Autocomplete<SymbolAndName>(
+                displayStringForOption:
+                    _SearchViewState._displayStringForOption,
+                optionsBuilder: (TextEditingValue textEditingValue) {
+                  if (textEditingValue.text == '') {
+                    return const Iterable<SymbolAndName>.empty();
+                  }
+                  return MainPresenter.to.symbolAndNameList
+                      .where((SymbolAndName option) {
+                    return option
+                        .toString()
+                        .toLowerCase()
+                        .contains(textEditingValue.text.toLowerCase());
+                  });
+                },
+                onSelected: (SymbolAndName selection) {
+                  MainPresenter.to
+                      .futureListCandleData(stockSymbol: selection.symbol);
+                  MainPresenter.to.searched.value = true;
+                  PrefsService.to.prefs.setString(
+                      SharedPreferencesConstant.stockSymbol, selection.symbol);
+                },
+                fieldViewBuilder: (BuildContext context,
+                    TextEditingController textEditingController,
+                    FocusNode focusNode,
+                    VoidCallback onFieldSubmitted) {
+                  return TextField(
+                    controller: textEditingController,
+                    focusNode: focusNode,
+                    decoration: const InputDecoration(
+                      hintText: "Type your interested stock and select ^_^",
+                    ),
+                  );
+                },
               ),
+
+              //       TextField(
+              //         controller: _stockNameController,
+              //         decoration:  InputDecoration(
+              //           border: const OutlineInputBorder(),
+              //           labelText: 'Enter Stock Name/Number',
+              //                             suffixIcon: IconButton(
+              //             icon: const Icon(Icons.search),
+              //             onPressed: () {
+              //               PrefsService.to.prefs
+              // .setString(SharedPreferencesConstant.stockSymbol, _stockNameController.text);
+              //             },
+              //           ),
+              //         ),
+              //       ),
             ),
 
             /* Column(
