@@ -5,7 +5,6 @@ import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:flutter_application_1/services/l10n/lang.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
-import 'package:collection/collection.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/utils/utils.dart';

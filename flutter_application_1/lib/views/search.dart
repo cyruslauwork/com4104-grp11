@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
-import 'package:get/get.dart';
 
 class SearchView extends StatefulWidget {
   // const SearchView({Key? key}) : super(key: key);

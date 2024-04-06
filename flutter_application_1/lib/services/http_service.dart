@@ -27,7 +27,7 @@ class HTTPService {
     // DateTime.utc(2023, 10, 1, 0, 0, 0).millisecondsSinceEpoch ~/1000; // e.g. DateTime(2017, 9, 7, 17, 30, 0); 7th of September 2017, 05:30:00pm
     int endTimestamp;
     // Latest, based on the closing price on the trading day
-    DateTime now = DateTime.now().toUtc();
+    // DateTime now = DateTime.now().toUtc();
     // Check if current UTC time is less than or equal to 13:30:50
     // if (now.hour < 13 ||
     //     (now.hour == 13 && now.minute <= 30 && now.second <= 50)) {

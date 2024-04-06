@@ -5,7 +5,6 @@ import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:flutter_application_1/models/listing_adapter.dart';
 import 'package:flutter_application_1/presenters/main.dart';
 import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/styles/style.dart';
 import 'package:flutter_application_1/utils/screen_utils.dart';
 
 class ChatView extends StatefulWidget {
