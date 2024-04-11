@@ -25,7 +25,7 @@ class ListingAdapter {
     MainPresenter.to.symbolAndNameListList.value = listList;
     List<SymbolAndName> listSymbolAndName;
 
-    listList.removeAt(0);
+    listList = [];
     listSymbolAndName = listList
         .map((row) => SymbolAndName(
               symbol: row[0].toString(),

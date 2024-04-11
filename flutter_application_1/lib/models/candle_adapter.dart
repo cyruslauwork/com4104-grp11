@@ -41,7 +41,7 @@ class CandleAdapter {
     List<CandleData> listCandleData;
 
     if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
-      listList.removeAt(0);
+      listList = [];
       listCandleData = listList
           .map((row) => CandleData(
                 timestamp: TimeService().convertToUnixTimestamp(row[0]) * 1000,

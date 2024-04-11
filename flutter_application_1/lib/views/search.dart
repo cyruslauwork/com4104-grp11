@@ -43,6 +43,8 @@ class _SearchViewState extends State<SearchView> {
   }
 
   void _submitForm() {
+    PrefsService.to.prefs.setString(
+        SharedPreferencesConstant.stockSymbol, _textEditingController.text);
     MainPresenter.to.futureListCandleData();
     MainPresenter.to.searched.value = true;
   }
@@ -141,8 +143,6 @@ class _SearchViewState extends State<SearchView> {
                 onSelected: (SymbolAndName selection) {
                   autocomplete = false;
                   _textEditingController.text = selection.symbol;
-                  PrefsService.to.prefs.setString(
-                      SharedPreferencesConstant.stockSymbol, selection.symbol);
                 },
                 fieldViewBuilder: (BuildContext context,
                     TextEditingController textEditingController,
