@@ -796,7 +796,9 @@ class _MainViewState extends State<MainView> {
                     Image.network(
                       'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
                       fit: BoxFit.cover,
-                      colorBlendMode: BlendMode.softLight,
+                      opacity: const AlwaysStoppedAnimation(.9),
+                      color: ThemeColor.primary.value,
+                      colorBlendMode: BlendMode.color,
                     ),
                     SizedBox(height: 10.h),
                     SizedBox(

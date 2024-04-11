@@ -330,29 +330,17 @@ class TrendMatch {
     // log('executionTime${MainPresenter.to.trendMatchOutput[2]}');
     // log('candleData.length${MainPresenter.to.trendMatchOutput[3]}');
     // log('selectedCount${MainPresenter.to.trendMatchOutput[4]}');
-
     // log('candleListList${MainPresenter.to.candleListList.length}');
     // log('listCandleData${MainPresenter.to.listCandleData.length}');
-    // log(
-    //     'selectedPeriodPercentDifferencesList${MainPresenter.to.selectedPeriodPercentDifferencesList.length}');
-    // log(
-    //     'selectedPeriodActualDifferencesList${MainPresenter.to.selectedPeriodActualDifferencesList.length}');
-    // log(
-    //     'selectedPeriodActualPricesList${MainPresenter.to.selectedPeriodActualPricesList.length}');
-
-    // log(
-    //     'comparePeriodPercentDifferencesListList${MainPresenter.to.comparePeriodPercentDifferencesListList.length}');
-    // log(
-    //     'comparePeriodActualDifferencesListList${MainPresenter.to.comparePeriodActualDifferencesListList.length}');
-    // log(
-    //     'comparePeriodActualPricesListList${MainPresenter.to.comparePeriodActualPricesListList.length}');
-    // log(
-    //     'matchPercentDifferencesListList${MainPresenter.to.matchPercentDifferencesListList.length}');
-
-    // log(
-    //     'matchActualDifferencesListList${MainPresenter.to.matchActualDifferencesListList.length}');
-    // log(
-    //     'matchActualPricesListList${MainPresenter.to.matchActualPricesListList.length}');
+    // log('selectedPeriodPercentDifferencesList${MainPresenter.to.selectedPeriodPercentDifferencesList.length}');
+    // log('selectedPeriodActualDifferencesList${MainPresenter.to.selectedPeriodActualDifferencesList.length}');
+    // log('selectedPeriodActualPricesList${MainPresenter.to.selectedPeriodActualPricesList.length}');
+    // log('comparePeriodPercentDifferencesListList${MainPresenter.to.comparePeriodPercentDifferencesListList.length}');
+    // log('comparePeriodActualDifferencesListList${MainPresenter.to.comparePeriodActualDifferencesListList.length}');
+    // log('comparePeriodActualPricesListList${MainPresenter.to.comparePeriodActualPricesListList.length}');
+    // log('matchPercentDifferencesListList${MainPresenter.to.matchPercentDifferencesListList.length}');
+    // log('matchActualDifferencesListList${MainPresenter.to.matchActualDifferencesListList.length}');
+    // log('matchActualPricesListList${MainPresenter.to.matchActualPricesListList.length}');
     // log('matchRows${MainPresenter.to.matchRows.length}');
     // log('lastCandleDataLength${MainPresenter.to.lastCandleDataLength}');
   }

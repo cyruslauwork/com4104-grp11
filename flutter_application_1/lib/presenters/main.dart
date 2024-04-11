@@ -5,6 +5,8 @@ import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/services/services.dart';
 
+// import 'package:flutter_application_1/utils/utils.dart';
+
 class MainPresenter extends GetxController {
   // Singleton implementation
   static MainPresenter? _instance;
@@ -105,10 +107,10 @@ class MainPresenter extends GetxController {
     Future<List<CandleData>> futureListCandleData = CandleAdapter()
         .listListToCandles(
             Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
-    var abc = await futureListCandleData;
-    print(abc.length);
+    // var listCandleData = await futureListCandleData;
+    // log(listCandleData.length);
     await TrendMatch().countMatches(futureListCandleData, init: true);
-    // SubsequentAnalysis().init();
+    SubsequentAnalysis().init();
     return futureListCandleData;
   }
 
