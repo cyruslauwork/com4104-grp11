@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flutter_application_1/models/listing_adapter.dart';
-import 'package:flutter_application_1/services/prefs/prefs_const.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
@@ -25,7 +23,13 @@ class MainPresenter extends GetxController {
   RxInt candledownloadTime = 0.obs;
   RxList<List<dynamic>> candleListList = [[]].obs;
   RxList<CandleData> listCandleData = [
-    CandleData(timestamp: 0000000000 * 1000, open: 0, close: 0, volume: 0)
+    CandleData(
+        timestamp: 0000000000 * 1000,
+        open: 0,
+        high: 0,
+        low: 0,
+        close: 0,
+        volume: 0)
   ].obs;
 
   RxInt listingDownloadTime = 0.obs;
@@ -36,8 +40,9 @@ class MainPresenter extends GetxController {
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
   RxInt cloudSubsequentAnalysisTime = 0.obs;
 
+  RxInt selectedPeriod = 5.obs;
   RxList<double> selectedPeriodPercentDifferencesList =
-      [0.0, 0.0, 0.0, 0.0, 0.0].obs; // The root selected period here
+      [0.0].obs; // The root selected period here
   RxList<double> selectedPeriodActualDifferencesList = [0.0].obs;
   RxList<double> selectedPeriodActualPricesList = [0.0].obs;
 
@@ -100,7 +105,9 @@ class MainPresenter extends GetxController {
     Future<List<CandleData>> futureListCandleData = CandleAdapter()
         .listListToCandles(
             Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
-    // await TrendMatch().countMatches(futureListCandleData, init: true);
+    var abc = await futureListCandleData;
+    print(abc.length);
+    await TrendMatch().countMatches(futureListCandleData, init: true);
     // SubsequentAnalysis().init();
     return futureListCandleData;
   }

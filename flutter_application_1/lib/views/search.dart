@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_application_1/models/listing_adapter.dart';
+import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/styles/styles.dart';
 
 class SearchView extends StatefulWidget {
   // const SearchView({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   DateTimeRange? selectedDateRange;
   final TextEditingController _dateRangeController = TextEditingController();
-  final TextEditingController _varienceController = TextEditingController();
+  double _currentSliderValue = 100;
 
   @override
   void dispose() {
@@ -41,42 +41,69 @@ class _SearchViewState extends State<SearchView> {
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
 
+  void _resetSlider() {
+    setState(() {
+      _currentSliderValue = 100;
+    });
+  }
+
+  void _submitForm() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search'),
-        /*title: TextField(
-          decoration: InputDecoration(
-            hintText: 'Search here...',
-          ),
-        ),*/
       ),
-      /*body: Center(
-        child: Text(
-          'This is a search page!',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),*/
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextField(
-                controller: _varienceController,
-                maxLength: 3,
-                decoration: const InputDecoration(
-                  labelText: 'Enter Varience Value(%)',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ], // Only numbers can be entered
-              ),
-            ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                child: Column(
+                  children: [
+                    Text(
+                      'Trend Match Tolerance %',
+                      style: const TextTheme().sp7,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 16),
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          overlayShape: SliderComponentShape.noOverlay,
+                        ),
+                        child: Slider(
+                          value: _currentSliderValue,
+                          max: 200,
+                          min: 5,
+                          divisions: 39,
+                          label: '${_currentSliderValue.round().toString()}%',
+                          onChanged: (double value) {
+                            setState(() {
+                              _currentSliderValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '5%',
+                          style: const TextTheme().sp3,
+                        ),
+                        Text(
+                          '200 %',
+                          style: const TextTheme().sp3,
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: Autocomplete<SymbolAndName>(
@@ -109,80 +136,13 @@ class _SearchViewState extends State<SearchView> {
                     controller: textEditingController,
                     focusNode: focusNode,
                     decoration: const InputDecoration(
-                      hintText: "Type your interested stock and select ^_^",
+                      border: OutlineInputBorder(),
+                      labelText: "Type your interested stock and select ^_^",
                     ),
                   );
                 },
               ),
-
-              //       TextField(
-              //         controller: _stockNameController,
-              //         decoration:  InputDecoration(
-              //           border: const OutlineInputBorder(),
-              //           labelText: 'Enter Stock Name/Number',
-              //                             suffixIcon: IconButton(
-              //             icon: const Icon(Icons.search),
-              //             onPressed: () {
-              //               PrefsService.to.prefs
-              // .setString(SharedPreferencesConstant.stockSymbol, _stockNameController.text);
-              //             },
-              //           ),
-              //         ),
-              //       ),
             ),
-
-            /* Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-              child: Text(
-                'Date Range Picker',
-                //style: textStyle,
-              ),
-              onPressed: () async {
-                final range = await showDateRangePicker(
-                    context: context,
-                    firstDate: DateTime(2020, 01),
-                    lastDate: DateTime(2100, 12));
-                debugPrint(range.toString());
-              },
-            ),
-        ],
-      ),*/
-
-            /*Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-              
-              children: [
-                Text('Date Range Picker',
-                style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                Text(start?.toIso8601String() ?? "-"),
-                const Text('to'),
-                Text(end?.toIso8601String() ?? "-"),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    final result = await showDateRangePicker(
-                      context: context, 
-                      firstDate: DateTime(1900), 
-                      lastDate: DateTime.now().add(const Duration(days: 356),
-                      ),
-                      );
-                      if(result != null){
-                        setState((){
-                          start = result.start;
-                          end = result.end;
-                        });
-                      }
-                  }, 
-                  child: const Text("Date Range Picker"),
-                  ),
-              ],
-              ),
-            ),*/
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: TextFormField(
@@ -211,6 +171,22 @@ class _SearchViewState extends State<SearchView> {
                 },
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: _resetSlider,
+                    child: const Text('Reset'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _submitForm,
+                    child: const Text('Submit'),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

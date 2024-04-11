@@ -1,16 +1,14 @@
-import 'dart:async';
-
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/listing_adapter.dart';
-import 'package:flutter_application_1/services/l10n/lang.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/views/views.dart';
-import 'package:flutter_application_1/styles/style.dart';
+import 'package:flutter_application_1/styles/styles.dart';
 import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/models/models.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
@@ -52,56 +50,49 @@ class _MainViewState extends State<MainView> {
             },
           ),
           Obx(
-            () => (MainPresenter.to.listCandleData.length > 1
-                ? Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(MainPresenter.to.darkMode.value
-                            ? Icons.dark_mode
-                            : Icons.light_mode),
-                        onPressed: () => MainPresenter.to.darkMode.toggle(),
-                      ),
-                      (MainPresenter.to.devMode.value
-                          ? IconButton(
-                              icon: Icon(MainPresenter.to.showAverage.value
-                                  ? Icons.show_chart
-                                  : Icons.bar_chart_outlined),
-                              onPressed: () =>
-                                  MainPresenter.to.showAverage.toggle(),
-                            )
-                          : const SizedBox.shrink()),
-                      IconButton(
-                        icon: Icon(MainPresenter.to.devMode.value
-                            ? Icons.code
-                            : Icons.code_off),
-                        onPressed: () {
-                          MainPresenter.to.devMode.toggle();
-                          if (MainPresenter.to.devMode.value) {
-                            MainPresenter.to
-                                .showSnackBar(snackBar, Func.devMode);
-                          }
-                        },
-                      ),
-                      IconButton(
-                          icon: const Icon(Icons.translate),
-                          onPressed: () {
-                            MainPresenter.to.isEn.toggle();
-                            if (MainPresenter.to.isEn.value) {
-                              LangService.to.changeLanguage(Lang.en);
-                            } else {
-                              LangService.to.changeLanguage(Lang.zh);
-                            }
-                          }),
-                    ],
+            () => IconButton(
+              icon: Icon(MainPresenter.to.darkMode.value
+                  ? Icons.dark_mode
+                  : Icons.light_mode),
+              onPressed: () => MainPresenter.to.darkMode.toggle(),
+            ),
+          ),
+          Obx(
+            () => (MainPresenter.to.devMode.value
+                ? IconButton(
+                    icon: Icon(MainPresenter.to.showAverage.value
+                        ? Icons.show_chart
+                        : Icons.bar_chart_outlined),
+                    onPressed: () => MainPresenter.to.showAverage.toggle(),
                   )
-                : Padding(
-                    padding: EdgeInsets.only(right: 5.w),
-                    child: SizedBox(
-                      height: 5.h,
-                      width: 5.w,
-                      child: const CircularProgressIndicator(),
-                    ),
-                  )),
+                : const SizedBox.shrink()),
+          ),
+          Obx(
+            () => IconButton(
+              icon: Icon(
+                  MainPresenter.to.devMode.value ? Icons.code : Icons.code_off),
+              onPressed: () {
+                MainPresenter.to.devMode.toggle();
+                if (MainPresenter.to.devMode.value) {
+                  MainPresenter.to.showSnackBar(snackBar, Func.devMode);
+                }
+              },
+            ),
+          ),
+          Obx(
+            () => IconButton(
+              icon: Icon(MainPresenter.to.isEn.value
+                  ? Icons.g_translate
+                  : Icons.translate),
+              onPressed: () {
+                MainPresenter.to.isEn.toggle();
+                if (MainPresenter.to.isEn.value) {
+                  LangService.to.changeLanguage(Lang.en);
+                } else {
+                  LangService.to.changeLanguage(Lang.zh);
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -277,14 +268,19 @@ class _MainViewState extends State<MainView> {
                     Obx(
                       () {
                         MainPresenter.to.showAverage.value
-                            ? _computeTrendLines()
-                            : _removeTrendLines();
+                            ? Candle().computeTrendLines()
+                            : Candle().removeTrendLines();
                         return SizedBox(
                           width: 393.w,
                           height: 100.h,
                           child: InteractiveChart(
                             candles: (MainPresenter.to.searched.value
-                                ? MainPresenter.to.listCandleData
+                                ? (MainPresenter.to.listCandleData.length > 1000
+                                    ? MainPresenter.to.listCandleData.sublist(
+                                        MainPresenter.to.listCandleData.length -
+                                            999,
+                                        MainPresenter.to.listCandleData.length)
+                                    : MainPresenter.to.listCandleData)
                                 : (snapshot.data!.length > 1000
                                     ? snapshot.data!.sublist(
                                         snapshot.data!.length - 999,
@@ -316,6 +312,10 @@ class _MainViewState extends State<MainView> {
                                   ..strokeWidth = 1.0
                                   ..strokeCap = StrokeCap.round
                                   ..color = Colors.green,
+                                // Paint()
+                                //   ..strokeWidth = 1.0
+                                //   ..strokeCap = StrokeCap.round
+                                //   ..color = Colors.yellow,
                               ],
                               selectionHighlightColor:
                                   Colors.red.withOpacity(0.75),
@@ -341,428 +341,430 @@ class _MainViewState extends State<MainView> {
                         );
                       },
                     ),
-                    // SizedBox(height: 10.h),
-                    // Obx(() => (MainPresenter.to.devMode.value
-                    //     ? Column(children: [
-                    //         Text(
-                    //           'Percentage differences between selected period',
-                    //           style: const TextTheme().sp5,
-                    //         ),
-                    //         SingleChildScrollView(
-                    //           scrollDirection: Axis.horizontal,
-                    //           child: DataTable(
-                    //             showCheckboxColumn: false,
-                    //             border: TableBorder.all(
-                    //                 color: AppColor.blackColor,
-                    //                 style: BorderStyle.solid,
-                    //                 width: 2),
-                    //             columns: MainPresenter
-                    //                 .to.selectedPeriodPercentDifferencesList
-                    //                 .mapIndexed((i, e) => DataColumn(
-                    //                         label: Text(
-                    //                       'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                    //                       style: const TextTheme().sp3,
-                    //                     )))
-                    //                 .toList(),
-                    //             rows: [
-                    //               DataRow(
-                    //                 cells: MainPresenter
-                    //                     .to.selectedPeriodPercentDifferencesList
-                    //                     .map((e) => DataCell(Text(
-                    //                           e.toString(),
-                    //                           style: const TextTheme().sp3,
-                    //                         )))
-                    //                     .toList(),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         ),
-                    //         SizedBox(height: 10.h),
-                    //         Text(
-                    //           'Actual differences between selected period',
-                    //           style: const TextTheme().sp5,
-                    //         ),
-                    //         SingleChildScrollView(
-                    //           scrollDirection: Axis.horizontal,
-                    //           child: DataTable(
-                    //             showCheckboxColumn: false,
-                    //             border: TableBorder.all(
-                    //                 color: AppColor.blackColor,
-                    //                 style: BorderStyle.solid,
-                    //                 width: 2),
-                    //             columns: MainPresenter
-                    //                 .to.selectedPeriodActualDifferencesList
-                    //                 .mapIndexed((i, e) => DataColumn(
-                    //                         label: Text(
-                    //                       'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                    //                       style: const TextTheme().sp3,
-                    //                     )))
-                    //                 .toList(),
-                    //             rows: [
-                    //               DataRow(
-                    //                 cells: MainPresenter
-                    //                     .to.selectedPeriodActualDifferencesList
-                    //                     .map((e) => DataCell(Text(
-                    //                           e.toString(),
-                    //                           style: const TextTheme().sp3,
-                    //                         )))
-                    //                     .toList(),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         ),
-                    //         SizedBox(height: 10.h),
-                    //         Text(
-                    //           'Selected period Actual Prices',
-                    //           style: const TextTheme().sp5,
-                    //         ),
-                    //         SingleChildScrollView(
-                    //           scrollDirection: Axis.horizontal,
-                    //           child: DataTable(
-                    //             showCheckboxColumn: false,
-                    //             border: TableBorder.all(
-                    //                 color: AppColor.blackColor,
-                    //                 style: BorderStyle.solid,
-                    //                 width: 2),
-                    //             columns: MainPresenter
-                    //                 .to.selectedPeriodActualPricesList
-                    //                 .mapIndexed((i, e) => DataColumn(
-                    //                         label: Text(
-                    //                       'Close Price ${(i + 1).toString()}',
-                    //                       style: const TextTheme().sp3,
-                    //                     )))
-                    //                 .toList(),
-                    //             rows: [
-                    //               DataRow(
-                    //                 cells: MainPresenter
-                    //                     .to.selectedPeriodActualPricesList
-                    //                     .map((e) => DataCell(Text(
-                    //                           e.toString(),
-                    //                           style: const TextTheme().sp3,
-                    //                         )))
-                    //                     .toList(),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         ),
-                    //         SizedBox(height: 10.h),
-                    //         Text(
-                    //           'Matched Historical Trend Row(s)',
-                    //           style: const TextTheme().sp5,
-                    //         ),
-                    //         (MainPresenter.to.matchRows.isNotEmpty
-                    //             ? SingleChildScrollView(
-                    //                 scrollDirection: Axis.horizontal,
-                    //                 child: Text(
-                    //                   MainPresenter.to.matchRows.toString(),
-                    //                   style: const TextTheme().sp3,
-                    //                 ),
-                    //               )
-                    //             : Text('0', style: const TextTheme().sp3)),
-                    //         SizedBox(height: 10.h),
-                    //         Text(
-                    //           'Matched Historical Trend(s)',
-                    //           style: const TextTheme().sp5,
-                    //         ),
-                    //         SimpleLineChart(),
-                    //         SizedBox(height: 10.h),
-                    //         Text(
-                    //           'Normalized Matched Historical Trend(s)',
-                    //           style: const TextTheme().sp5,
-                    //         ),
-                    //         SimpleLineChart(
-                    //           normalized: true,
-                    //         ),
-                    //         SizedBox(height: 10.h),
-                    //       ])
-                    //     : const SizedBox.shrink())),
-                    // Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    //   children: [
-                    //     Text(
-                    //       'Selected trend with matched historical trends',
-                    //       style: const TextTheme().sp5,
-                    //     ),
-                    //     Text(
-                    //       '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-                    //       style: const TextTheme().sp3,
-                    //     ),
-                    //     Text(
-                    //       'and their subsequent trends',
-                    //       style: const TextTheme().sp5,
-                    //     ),
-                    //     Text(
-                    //       '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-                    //       style: const TextTheme().sp3,
-                    //     ),
-                    //     AdjustedLineChart(),
-                    //   ],
-                    // ),
-                    // SizedBox(height: 10.h),
-                    // Obx(
-                    //   () => (MainPresenter.to.devMode.value
-                    //       ? Column(children: [
-                    //           Text(
-                    //             'Matched Historical Trend(s) Percentage Differences',
-                    //             style: const TextTheme().sp5,
-                    //           ),
-                    //           (MainPresenter.to.matchPercentDifferencesListList
-                    //                   .isNotEmpty
-                    //               ? SingleChildScrollView(
-                    //                   scrollDirection: Axis.horizontal,
-                    //                   child: Text(
-                    //                     '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 10 ? MainPresenter.to.matchPercentDifferencesListList.length - 10 : 0)} rows left',
-                    //                     style: const TextTheme().sp3,
-                    //                   ),
-                    //                 )
-                    //               : Text('0', style: const TextTheme().sp3)),
-                    //           SizedBox(height: 10.h),
-                    //           Text(
-                    //             'Matched Historical Trend(s) Actual Differences',
-                    //             style: const TextTheme().sp5,
-                    //           ),
-                    //           (MainPresenter.to.matchActualDifferencesListList
-                    //                   .isNotEmpty
-                    //               ? SingleChildScrollView(
-                    //                   scrollDirection: Axis.horizontal,
-                    //                   child: Text(
-                    //                     '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 10 ? MainPresenter.to.matchActualDifferencesListList.length - 10 : 0)} rows left',
-                    //                     style: const TextTheme().sp3,
-                    //                   ),
-                    //                 )
-                    //               : Text('0', style: const TextTheme().sp3)),
-                    //           SizedBox(height: 10.h),
-                    //           Text(
-                    //             'Matched Historical Trend(s) Actual Prices',
-                    //             style: const TextTheme().sp5,
-                    //           ),
-                    //           (MainPresenter
-                    //                   .to.matchActualPricesListList.isNotEmpty
-                    //               ? SingleChildScrollView(
-                    //                   scrollDirection: Axis.horizontal,
-                    //                   child: Text(
-                    //                     '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 10 ? MainPresenter.to.matchActualPricesListList.length - 10 : 0)} rows left',
-                    //                     style: const TextTheme().sp3,
-                    //                   ),
-                    //                 )
-                    //               : Text('0', style: const TextTheme().sp3)),
-                    //           SizedBox(height: 10.h),
-                    //           Text(
-                    //             'Comparison Historical Trends Percentage Differences',
-                    //             style: const TextTheme().sp5,
-                    //           ),
-                    //           SingleChildScrollView(
-                    //             scrollDirection: Axis.horizontal,
-                    //             child: Text(
-                    //               '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 10} rows left',
-                    //               style: const TextTheme().sp3,
-                    //             ),
-                    //           ),
-                    //           SizedBox(height: 10.h),
-                    //           Text(
-                    //             'Comparison Historical Trends Actual Differences',
-                    //             style: const TextTheme().sp5,
-                    //           ),
-                    //           SingleChildScrollView(
-                    //             scrollDirection: Axis.horizontal,
-                    //             child: Text(
-                    //               '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 10} rows left',
-                    //               style: const TextTheme().sp3,
-                    //             ),
-                    //           ),
-                    //           SizedBox(height: 10.h),
-                    //           Text(
-                    //             'Comparison Historical Trends Actual Prices',
-                    //             style: const TextTheme().sp5,
-                    //           ),
-                    //           SingleChildScrollView(
-                    //             scrollDirection: Axis.horizontal,
-                    //             child: Text(
-                    //               '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 10} rows left',
-                    //               style: const TextTheme().sp3,
-                    //             ),
-                    //           ),
-                    //           SizedBox(height: 10.h),
-                    //         ])
-                    //       : const SizedBox.shrink()),
-                    // ),
-                    // Obx(
-                    //   () => (MainPresenter.to.subsequentAnalysis.value
-                    //       ? (MainPresenter.to.subsequentAnalysisErr.value == ''
-                    //           ? Column(
-                    //               children: [
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img1Bytes.value,
-                    //                             ),
-                    //                             minScale: 0.48,
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img1',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img1Bytes.value)),
-                    //                 ),
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img2Bytes.value,
-                    //                             ),
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img2',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img2Bytes.value)),
-                    //                 ),
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img3Bytes.value,
-                    //                             ),
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img3',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img3Bytes.value)),
-                    //                 ),
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img4Bytes.value,
-                    //                             ),
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img4',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img4Bytes.value)),
-                    //                 ),
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img5Bytes.value,
-                    //                             ),
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img5',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img5Bytes.value)),
-                    //                 ),
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img6Bytes.value,
-                    //                             ),
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img6',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img6Bytes.value)),
-                    //                 ),
-                    //                 GestureDetector(
-                    //                   onTap: () {
-                    //                     showDialog(
-                    //                       context: context,
-                    //                       builder: (BuildContext context) {
-                    //                         return Dialog(
-                    //                           child: HeroPhotoViewRouteWrapper(
-                    //                             imageProvider: MemoryImage(
-                    //                               MainPresenter
-                    //                                   .to.img7Bytes.value,
-                    //                             ),
-                    //                           ),
-                    //                         );
-                    //                       },
-                    //                     );
-                    //                   },
-                    //                   child: Hero(
-                    //                       tag: 'img7',
-                    //                       child: Image.memory(MainPresenter
-                    //                           .to.img7Bytes.value)),
-                    //                 ),
-                    //               ],
-                    //             )
-                    //           : Text(
-                    //               MainPresenter.to.subsequentAnalysisErr.value,
-                    //               style: const TextTheme().sp5,
-                    //             ))
-                    //       : Column(
-                    //           mainAxisAlignment: MainAxisAlignment.center,
-                    //           children: [
-                    //             SizedBox(
-                    //               width: 40.w,
-                    //               height: 40.h,
-                    //               child: const CircularProgressIndicator(),
-                    //             ),
-                    //             Padding(
-                    //               padding: EdgeInsets.only(top: 10.h),
-                    //               child: Text(
-                    //                   'Awaiting subsequent trend analysis result...',
-                    //                   style: const TextTheme().sp5),
-                    //             ),
-                    //           ],
-                    //         )),
-                    // ),
-                    // SizedBox(height: 10.h),
+                    SizedBox(height: 10.h),
+                    Obx(() => (MainPresenter.to.devMode.value
+                        ? Column(children: [
+                            Text(
+                              'Percentage differences between selected period',
+                              style: const TextTheme().sp5,
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                showCheckboxColumn: false,
+                                border: TableBorder.all(
+                                    color: AppColor.blackColor,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                columns: MainPresenter
+                                    .to.selectedPeriodPercentDifferencesList
+                                    .mapIndexed((i, e) => DataColumn(
+                                            label: Text(
+                                          'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                          style: const TextTheme().sp3,
+                                        )))
+                                    .toList(),
+                                rows: [
+                                  DataRow(
+                                    cells: MainPresenter
+                                        .to.selectedPeriodPercentDifferencesList
+                                        .map((e) => DataCell(Text(
+                                              e.toString(),
+                                              style: const TextTheme().sp3,
+                                            )))
+                                        .toList(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Actual differences between selected period',
+                              style: const TextTheme().sp5,
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                showCheckboxColumn: false,
+                                border: TableBorder.all(
+                                    color: AppColor.blackColor,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                columns: MainPresenter
+                                    .to.selectedPeriodActualDifferencesList
+                                    .mapIndexed((i, e) => DataColumn(
+                                            label: Text(
+                                          'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                          style: const TextTheme().sp3,
+                                        )))
+                                    .toList(),
+                                rows: [
+                                  DataRow(
+                                    cells: MainPresenter
+                                        .to.selectedPeriodActualDifferencesList
+                                        .map((e) => DataCell(Text(
+                                              e.toString(),
+                                              style: const TextTheme().sp3,
+                                            )))
+                                        .toList(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Selected period Actual Prices',
+                              style: const TextTheme().sp5,
+                            ),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: DataTable(
+                                showCheckboxColumn: false,
+                                border: TableBorder.all(
+                                    color: AppColor.blackColor,
+                                    style: BorderStyle.solid,
+                                    width: 2),
+                                columns: MainPresenter
+                                    .to.selectedPeriodActualPricesList
+                                    .mapIndexed((i, e) => DataColumn(
+                                            label: Text(
+                                          'Close Price ${(i + 1).toString()}',
+                                          style: const TextTheme().sp3,
+                                        )))
+                                    .toList(),
+                                rows: [
+                                  DataRow(
+                                    cells: MainPresenter
+                                        .to.selectedPeriodActualPricesList
+                                        .map((e) => DataCell(Text(
+                                              e.toString(),
+                                              style: const TextTheme().sp3,
+                                            )))
+                                        .toList(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Matched Historical Trend Row(s)',
+                              style: const TextTheme().sp5,
+                            ),
+                            (MainPresenter.to.matchRows.isNotEmpty
+                                ? SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Text(
+                                      MainPresenter.to.matchRows.toString(),
+                                      style: const TextTheme().sp3,
+                                    ),
+                                  )
+                                : Text('0', style: const TextTheme().sp3)),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Matched Historical Trend(s)',
+                              style: const TextTheme().sp5,
+                            ),
+                            SimpleLineChart(),
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Normalized Matched Historical Trend(s)',
+                              style: const TextTheme().sp5,
+                            ),
+                            SimpleLineChart(
+                              normalized: true,
+                            ),
+                            SizedBox(height: 10.h),
+                          ])
+                        : const SizedBox.shrink())),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Selected trend with matched historical trends',
+                          style: const TextTheme().sp5,
+                        ),
+                        Text(
+                          '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
+                          style: const TextTheme().sp3,
+                        ),
+                        Text(
+                          'and their subsequent trends',
+                          style: const TextTheme().sp5,
+                        ),
+                        Text(
+                          '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
+                          style: const TextTheme().sp3,
+                        ),
+                        Obx(() => (MainPresenter.to.listCandleData.isNotEmpty
+                            ? AdjustedLineChart()
+                            : AdjustedLineChart())),
+                      ],
+                    ),
+                    SizedBox(height: 10.h),
+                    Obx(
+                      () => (MainPresenter.to.devMode.value
+                          ? Column(children: [
+                              Text(
+                                'Matched Historical Trend(s) Percentage Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter.to.matchPercentDifferencesListList
+                                      .isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 10 ? MainPresenter.to.matchPercentDifferencesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
+                                      ),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Matched Historical Trend(s) Actual Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter.to.matchActualDifferencesListList
+                                      .isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 10 ? MainPresenter.to.matchActualDifferencesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
+                                      ),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Matched Historical Trend(s) Actual Prices',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter
+                                      .to.matchActualPricesListList.isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 10 ? MainPresenter.to.matchActualPricesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
+                                      ),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Comparison Historical Trends Percentage Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Comparison Historical Trends Actual Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Comparison Historical Trends Actual Prices',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                            ])
+                          : const SizedBox.shrink()),
+                    ),
+                    Obx(
+                      () => (MainPresenter.to.subsequentAnalysis.value
+                          ? (MainPresenter.to.subsequentAnalysisErr.value == ''
+                              ? Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img1Bytes.value,
+                                                ),
+                                                minScale: 0.48,
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img1',
+                                          child: Image.memory(MainPresenter
+                                              .to.img1Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img2Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img2',
+                                          child: Image.memory(MainPresenter
+                                              .to.img2Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img3Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img3',
+                                          child: Image.memory(MainPresenter
+                                              .to.img3Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img4Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img4',
+                                          child: Image.memory(MainPresenter
+                                              .to.img4Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img5Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img5',
+                                          child: Image.memory(MainPresenter
+                                              .to.img5Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img6Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img6',
+                                          child: Image.memory(MainPresenter
+                                              .to.img6Bytes.value)),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Dialog(
+                                              child: HeroPhotoViewRouteWrapper(
+                                                imageProvider: MemoryImage(
+                                                  MainPresenter
+                                                      .to.img7Bytes.value,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                          tag: 'img7',
+                                          child: Image.memory(MainPresenter
+                                              .to.img7Bytes.value)),
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  MainPresenter.to.subsequentAnalysisErr.value,
+                                  style: const TextTheme().sp5,
+                                ))
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 40.w,
+                                  height: 40.h,
+                                  child: const CircularProgressIndicator(),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.h),
+                                  child: Text(
+                                      'Awaiting subsequent trend analysis result...',
+                                      style: const TextTheme().sp5),
+                                ),
+                              ],
+                            )),
+                    ),
+                    SizedBox(height: 10.h),
                   ],
                 ),
               );
@@ -794,6 +796,7 @@ class _MainViewState extends State<MainView> {
                     Image.network(
                       'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
                       fit: BoxFit.cover,
+                      colorBlendMode: BlendMode.softLight,
                     ),
                     SizedBox(height: 10.h),
                     SizedBox(
@@ -820,31 +823,5 @@ class _MainViewState extends State<MainView> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(text),
     ));
-  }
-
-  _computeTrendLines() {
-    final ma5 = CandleData.computeMA(MainPresenter.to.listCandleData, 5);
-    final ma10 = CandleData.computeMA(MainPresenter.to.listCandleData, 10);
-    final ma20 = CandleData.computeMA(MainPresenter.to.listCandleData, 20);
-    final ma60 = CandleData.computeMA(MainPresenter.to.listCandleData, 60);
-    final ma120 = CandleData.computeMA(MainPresenter.to.listCandleData, 120);
-    final ma240 = CandleData.computeMA(MainPresenter.to.listCandleData, 240);
-
-    for (int i = 0; i < MainPresenter.to.listCandleData.length; i++) {
-      MainPresenter.to.listCandleData[i].trends = [
-        ma5[i],
-        ma10[i],
-        ma20[i],
-        ma60[i],
-        ma120[i],
-        ma240[i]
-      ];
-    }
-  }
-
-  _removeTrendLines() {
-    for (final data in MainPresenter.to.listCandleData) {
-      data.trends = [];
-    }
   }
 }

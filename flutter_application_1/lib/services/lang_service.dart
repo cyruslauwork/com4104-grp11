@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter_application_1/services/l10n/lang.dart';
+export 'package:flutter_application_1/services/l10n/lang.dart';
+export 'package:flutter_application_1/services/l10n/msg.dart';
 import 'package:flutter_application_1/services/prefs/prefs_service.dart';
-import 'package:flutter_application_1/services/prefs/prefs_const.dart';
 
 class LangService extends GetxService {
   // Singleton implementation

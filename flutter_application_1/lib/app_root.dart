@@ -5,8 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/views/views.dart';
 import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/styles/style.dart';
-import 'package:flutter_application_1/services/l10n/msg.dart';
+import 'package:flutter_application_1/styles/styles.dart';
 
 var logger = Logger();
 
@@ -102,8 +101,8 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
             secondary: ThemeColor.secondary.value,
             tertiary: ThemeColor.tertiary.value,
             brightness: MainPresenter.to.darkMode.value
-                ? Brightness.dark
-                : Brightness.light,
+                ? Brightness.light
+                : Brightness.dark,
           ),
         ),
         translations: Msg(),

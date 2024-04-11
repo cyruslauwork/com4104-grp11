@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
-class TimeService {
+class TimeService extends GetxService {
   // Singleton implementation
   static final TimeService _instance = TimeService._();
   factory TimeService() => _instance;

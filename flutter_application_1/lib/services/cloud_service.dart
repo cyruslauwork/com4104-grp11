@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter_application_1/services/services.dart';
 // import 'package:flutter_application_1/utils/utils.dart';
 
-class CloudService {
+class CloudService extends GetxService {
   // Singleton implementation
   static final CloudService _instance = CloudService._();
   factory CloudService() => _instance;
