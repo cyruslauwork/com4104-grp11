@@ -8,7 +8,7 @@ class AppColor {
   factory AppColor() => _instance;
   AppColor._();
 
-  static final primaryTextColor = ThemeColor.primary.value;
+  static const primaryTextColor = Colors.black;
   // static const secondaryTextColor = Color(0xff000000);
   // static const editTextColor = Color(0xff000000);
   // static const editTextErrorColor = Color(0xff000000);
@@ -39,19 +39,19 @@ extension ThemeColorExtension on ThemeColor {
 
 extension CustomStyles on TextTheme {
   TextStyle get sp3 => TextStyle(
-        color: AppColor.primaryTextColor,
+        color: ThemeColor.primary.value,
         fontSize: 3.sp,
       );
   TextStyle get sp5 => TextStyle(
-        color: AppColor.primaryTextColor,
+        color: ThemeColor.primary.value,
         fontSize: 5.sp,
       );
   TextStyle get sp7 => TextStyle(
-        color: AppColor.primaryTextColor,
+        color: ThemeColor.primary.value,
         fontSize: 7.sp,
       );
   TextStyle get sp10 => TextStyle(
-        color: AppColor.primaryTextColor,
+        color: ThemeColor.primary.value,
         fontSize: 10.sp,
       );
 }
@@ -62,11 +62,9 @@ extension CustomTextStyle on TextStyle {
   // TextStyle get w600 => copyWith(fontWeight: FontWeight.w600);
   TextStyle get w700 => copyWith(fontWeight: FontWeight.w700);
   // TextStyle get italic => copyWith(fontStyle: FontStyle.italic);
+  TextStyle get primaryTextColor => copyWith(color: AppColor.primaryTextColor);
   // TextStyle get secondaryTextColor =>
   //     copyWith(color: AppColor.secondaryTextColor);
-  // TextStyle get primaryTextColor => copyWith(color: AppColor.primaryTextColor);
-  // TextStyle get primaryTextColor2 =>
-  //     copyWith(color: AppColor.primaryTextColor2);
   // TextStyle get blackColor => copyWith(color: AppColor.blackColor);
   // TextStyle get editTextColor => copyWith(color: AppColor.editTextColor);
   // TextStyle get editTextErrorColor =>

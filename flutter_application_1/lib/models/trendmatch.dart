@@ -10,11 +10,9 @@ class TrendMatch {
   factory TrendMatch() => _instance;
   TrendMatch._();
 
-  countMatches(Future<List<CandleData>> futureCandleData,
-      {required bool init}) async {
-    List<CandleData> candleData = await futureCandleData;
-
-    // log(candleData.length.toString());
+  init({required bool init}) async {
+    List<CandleData> listCandleData = MainPresenter.to.listCandleData;
+    // log(listCandleData.length.toString());
 
     List<double> selectedPeriodPercentageDifferencesList = [];
     List<double> selectedPeriodActualDifferencesList = [];
@@ -63,17 +61,17 @@ class TrendMatch {
           for (int i = selectedCount; i > 1; i--) {
             try {
               double percentage =
-                  (candleData[candleData.length - (i - 1)].close! -
-                          candleData[candleData.length - i].close!) /
-                      (candleData[candleData.length - i].close!);
+                  (listCandleData[listCandleData.length - (i - 1)].close! -
+                          listCandleData[listCandleData.length - i].close!) /
+                      (listCandleData[listCandleData.length - i].close!);
               selectedPeriodPercentageDifferencesList.add(percentage);
             } catch (e) {
               log('1.3: An error occurred: $e');
             }
             try {
               selectedPeriodActualDifferencesList.add(
-                  candleData[candleData.length - (i - 1)].close! -
-                      candleData[candleData.length - i].close!);
+                  listCandleData[listCandleData.length - (i - 1)].close! -
+                      listCandleData[listCandleData.length - i].close!);
             } catch (e) {
               log('1.4: An error occurred: $e');
             }
@@ -85,7 +83,7 @@ class TrendMatch {
           for (int i = selectedCount; i > 0; i--) {
             try {
               selectedPeriodActualPricesList
-                  .add(candleData[candleData.length - i].close!);
+                  .add(listCandleData[listCandleData.length - i].close!);
             } catch (e) {
               log('1.6: An error occurred: $e');
             }
@@ -109,8 +107,8 @@ class TrendMatch {
         // --> 整daterange field
         // for (int i = 0; i < selectedCount - 1; i++) {
         //   double percentage =
-        //       (candleData[l + (i + 1)].close! - candleData[l + i].close!) /
-        //           (candleData[l + i].close!);
+        //       (listCandleData[l + (i + 1)].close! - listCandleData[l + i].close!) /
+        //           (listCandleData[l + i].close!);
         //   selectedPeriodList.add(percentage);
         // }
       }
@@ -127,13 +125,13 @@ class TrendMatch {
     // }
 
     // Loop all data
-    // log('candleData: ${candleData.length}');
+    // log('listCandleData: ${listCandleData.length}');
     try {
       for (int l = 0;
           l <
               (init
-                  ? candleData.length - selectedCount * 2
-                  : candleData.length -
+                  ? listCandleData.length - selectedCount * 2
+                  : listCandleData.length -
                       MainPresenter.to.lastCandleDataLength
                           .value); // init is false if and only if added new JSON data
           l++) {
@@ -141,16 +139,17 @@ class TrendMatch {
           // Minus selectedCount to avoid counting selected data as a same match
           for (int i = 0; i < selectedCount - 1; i++) {
             try {
-              double percentage =
-                  (candleData[l + (i + 1)].close! - candleData[l + i].close!) /
-                      (candleData[l + i].close!);
+              double percentage = (listCandleData[l + (i + 1)].close! -
+                      listCandleData[l + i].close!) /
+                  (listCandleData[l + i].close!);
               comparePeriodPercentageDifferencesList.add(percentage);
             } catch (e) {
               log('2.2: An error occurred: $e');
             }
             try {
               comparePeriodActualDifferencesList.add(
-                  candleData[l + (i + 1)].close! - candleData[l + i].close!);
+                  listCandleData[l + (i + 1)].close! -
+                      listCandleData[l + i].close!);
             } catch (e) {
               log('2.3: An error occurred: $e');
             }
@@ -161,7 +160,7 @@ class TrendMatch {
         try {
           for (int i = 0; i < selectedCount; i++) {
             try {
-              comparePeriodActualPricesList.add(candleData[l + i].close!);
+              comparePeriodActualPricesList.add(listCandleData[l + i].close!);
             } catch (e) {
               log('2.5: An error occurred: $e');
             }
@@ -192,8 +191,8 @@ class TrendMatch {
               try {
                 for (int i = 0; i < comparisonResult.$2.length; i++) {
                   try {
-                    double actual = candleData[l + (i + 1)].close! -
-                        candleData[l + i].close!;
+                    double actual = listCandleData[l + (i + 1)].close! -
+                        listCandleData[l + i].close!;
                     matchActualDifferencesList.add(actual);
                   } catch (e) {
                     log('2.9.1: An error occurred: $e');
@@ -205,7 +204,7 @@ class TrendMatch {
               try {
                 for (int i = 0; i < comparisonResult.$2.length + 1; i++) {
                   try {
-                    matchActualPricesList.add(candleData[l + i].close!);
+                    matchActualPricesList.add(listCandleData[l + i].close!);
                   } catch (e) {
                     log('2.9.3: An error occurred: $e');
                   }
@@ -307,7 +306,7 @@ class TrendMatch {
     //   }
     // }
     try {
-      MainPresenter.to.lastCandleDataLength.value = candleData.length;
+      MainPresenter.to.lastCandleDataLength.value = listCandleData.length;
 
       DateTime endTime = DateTime.now(); // Record the end time
       // Calculate the time difference
@@ -318,7 +317,7 @@ class TrendMatch {
         trueCount,
         falseCount,
         executionTime,
-        candleData.length,
+        listCandleData.length,
         selectedCount,
       ];
     } catch (e) {
@@ -328,31 +327,19 @@ class TrendMatch {
     // log('True${MainPresenter.to.trendMatchOutput[0]}');
     // log('False${MainPresenter.to.trendMatchOutput[1]}');
     // log('executionTime${MainPresenter.to.trendMatchOutput[2]}');
-    // log('candleData.length${MainPresenter.to.trendMatchOutput[3]}');
+    // log('listCandleData.length${MainPresenter.to.trendMatchOutput[3]}');
     // log('selectedCount${MainPresenter.to.trendMatchOutput[4]}');
-
     // log('candleListList${MainPresenter.to.candleListList.length}');
     // log('listCandleData${MainPresenter.to.listCandleData.length}');
-    // log(
-    //     'selectedPeriodPercentDifferencesList${MainPresenter.to.selectedPeriodPercentDifferencesList.length}');
-    // log(
-    //     'selectedPeriodActualDifferencesList${MainPresenter.to.selectedPeriodActualDifferencesList.length}');
-    // log(
-    //     'selectedPeriodActualPricesList${MainPresenter.to.selectedPeriodActualPricesList.length}');
-
-    // log(
-    //     'comparePeriodPercentDifferencesListList${MainPresenter.to.comparePeriodPercentDifferencesListList.length}');
-    // log(
-    //     'comparePeriodActualDifferencesListList${MainPresenter.to.comparePeriodActualDifferencesListList.length}');
-    // log(
-    //     'comparePeriodActualPricesListList${MainPresenter.to.comparePeriodActualPricesListList.length}');
-    // log(
-    //     'matchPercentDifferencesListList${MainPresenter.to.matchPercentDifferencesListList.length}');
-
-    // log(
-    //     'matchActualDifferencesListList${MainPresenter.to.matchActualDifferencesListList.length}');
-    // log(
-    //     'matchActualPricesListList${MainPresenter.to.matchActualPricesListList.length}');
+    // log('selectedPeriodPercentDifferencesList${MainPresenter.to.selectedPeriodPercentDifferencesList.length}');
+    // log('selectedPeriodActualDifferencesList${MainPresenter.to.selectedPeriodActualDifferencesList.length}');
+    // log('selectedPeriodActualPricesList${MainPresenter.to.selectedPeriodActualPricesList.length}');
+    // log('comparePeriodPercentDifferencesListList${MainPresenter.to.comparePeriodPercentDifferencesListList.length}');
+    // log('comparePeriodActualDifferencesListList${MainPresenter.to.comparePeriodActualDifferencesListList.length}');
+    // log('comparePeriodActualPricesListList${MainPresenter.to.comparePeriodActualPricesListList.length}');
+    // log('matchPercentDifferencesListList${MainPresenter.to.matchPercentDifferencesListList.length}');
+    // log('matchActualDifferencesListList${MainPresenter.to.matchActualDifferencesListList.length}');
+    // log('matchActualPricesListList${MainPresenter.to.matchActualPricesListList.length}');
     // log('matchRows${MainPresenter.to.matchRows.length}');
     // log('lastCandleDataLength${MainPresenter.to.lastCandleDataLength}');
   }

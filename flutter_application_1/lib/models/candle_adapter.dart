@@ -34,7 +34,7 @@ class CandleAdapter {
     return rowsAsListOfValues;
   }
 
-  Future<List<CandleData>> listListToCandles(
+  Future<List<CandleData>> listListToListCandleData(
       Future<List<List<dynamic>>> futureListList) async {
     List<List<dynamic>> listList = await futureListList;
     MainPresenter.to.candleListList.value = listList;

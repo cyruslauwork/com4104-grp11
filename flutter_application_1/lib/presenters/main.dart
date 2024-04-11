@@ -5,6 +5,8 @@ import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/services/services.dart';
 
+// import 'package:flutter_application_1/utils/utils.dart';
+
 class MainPresenter extends GetxController {
   // Singleton implementation
   static MainPresenter? _instance;
@@ -73,7 +75,7 @@ class MainPresenter extends GetxController {
   List<Map<String, dynamic>> lastJson = [];
   RxInt lastCandleDataLength = 0.obs;
 
-  RxBool subsequentAnalysis = false.obs;
+  RxBool hasSubsequentAnalysis = false.obs;
   Rx<Uint8List> img1Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img2Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img3Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
@@ -96,6 +98,7 @@ class MainPresenter extends GetxController {
   }
 
   Future<List<CandleData>> futureListCandleData({String? stockSymbol}) async {
+    hasSubsequentAnalysis.value = false;
     // PrefsService.to.prefs
     //     .setString(SharedPreferencesConstant.stockSymbol, 'SPY');
     stockSymbol ??= PrefsService.to.prefs
@@ -103,12 +106,11 @@ class MainPresenter extends GetxController {
         'SPY';
     // print(stockSymbol);
     Future<List<CandleData>> futureListCandleData = CandleAdapter()
-        .listListToCandles(
+        .listListToListCandleData(
             Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
-    var abc = await futureListCandleData;
-    print(abc.length);
-    await TrendMatch().countMatches(futureListCandleData, init: true);
-    // SubsequentAnalysis().init();
+    await futureListCandleData;
+    await TrendMatch().init(init: true);
+    await SubsequentAnalysis().init();
     return futureListCandleData;
   }
 

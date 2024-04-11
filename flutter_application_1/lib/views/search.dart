@@ -15,45 +15,46 @@ class SearchView extends StatefulWidget {
   }
   const SearchView._({Key? key}) : super(key: key);
 
-  //DateTime? start;
-  //DateTime? end;
-/*class _NewPageState extends State<NewPage>{
-   DateTimeRange dateRange = DateTimeRange(
-    start: DateTime(2022,11,5), 
-    end: DateTime(2022, 12, 24),
-  );*/
-
   @override
   State<SearchView> createState() => _SearchViewState();
 }
 
 class _SearchViewState extends State<SearchView> {
-  DateTimeRange? selectedDateRange;
-  final TextEditingController _dateRangeController = TextEditingController();
+  // DateTimeRange? selectedDateRange;
+  // final TextEditingController _dateRangeController = TextEditingController();
   double _currentSliderValue = 100;
+  TextEditingController _textEditingController = TextEditingController();
+  bool autocomplete = true;
 
   @override
   void dispose() {
-    _dateRangeController.dispose();
+    // _dateRangeController.dispose();
     super.dispose();
   }
 
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
 
-  void _resetSlider() {
+  void _resetForm() {
     setState(() {
       _currentSliderValue = 100;
+      _textEditingController.clear();
     });
   }
 
-  void _submitForm() {}
+  void _submitForm() {
+    MainPresenter.to.futureListCandleData();
+    MainPresenter.to.searched.value = true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search'),
+        title: Text(
+          'Search',
+          style: const TextTheme().sp7,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
@@ -63,14 +64,14 @@ class _SearchViewState extends State<SearchView> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Trend Match Tolerance %',
-                      style: const TextTheme().sp7,
+                      'Trend Match Tolerance',
+                      style: const TextTheme().sp7.primaryTextColor,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       child: SliderTheme(
                         data: SliderTheme.of(context).copyWith(
                           overlayShape: SliderComponentShape.noOverlay,
@@ -97,6 +98,18 @@ class _SearchViewState extends State<SearchView> {
                           style: const TextTheme().sp3,
                         ),
                         Text(
+                          '50%',
+                          style: const TextTheme().sp3,
+                        ),
+                        Text(
+                          '100%',
+                          style: const TextTheme().sp3,
+                        ),
+                        Text(
+                          '150%',
+                          style: const TextTheme().sp3,
+                        ),
+                        Text(
                           '200 %',
                           style: const TextTheme().sp3,
                         ),
@@ -113,18 +126,21 @@ class _SearchViewState extends State<SearchView> {
                   if (textEditingValue.text == '') {
                     return const Iterable<SymbolAndName>.empty();
                   }
-                  return MainPresenter.to.symbolAndNameList
-                      .where((SymbolAndName option) {
-                    return option
-                        .toString()
-                        .toLowerCase()
-                        .contains(textEditingValue.text.toLowerCase());
-                  });
+                  if (autocomplete) {
+                    return MainPresenter.to.symbolAndNameList
+                        .where((SymbolAndName option) {
+                      return option
+                          .toString()
+                          .toLowerCase()
+                          .contains(textEditingValue.text.toLowerCase());
+                    });
+                  } else {
+                    return const Iterable<SymbolAndName>.empty();
+                  }
                 },
                 onSelected: (SymbolAndName selection) {
-                  MainPresenter.to
-                      .futureListCandleData(stockSymbol: selection.symbol);
-                  MainPresenter.to.searched.value = true;
+                  autocomplete = false;
+                  _textEditingController.text = selection.symbol;
                   PrefsService.to.prefs.setString(
                       SharedPreferencesConstant.stockSymbol, selection.symbol);
                 },
@@ -132,7 +148,11 @@ class _SearchViewState extends State<SearchView> {
                     TextEditingController textEditingController,
                     FocusNode focusNode,
                     VoidCallback onFieldSubmitted) {
+                  _textEditingController = textEditingController;
                   return TextField(
+                    onChanged: (String value) {
+                      autocomplete = true;
+                    },
                     controller: textEditingController,
                     focusNode: focusNode,
                     decoration: const InputDecoration(
@@ -143,46 +163,51 @@ class _SearchViewState extends State<SearchView> {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                controller: _dateRangeController,
-                decoration: const InputDecoration(
-                  labelText: 'Select Date Range',
-                  suffixIcon: Icon(Icons.calendar_today),
-                  border: OutlineInputBorder(),
-                ),
-                readOnly: true,
-                onTap: () async {
-                  final range = await showDateRangePicker(
-                    context: context,
-                    firstDate: DateTime(1990),
-                    lastDate:
-                        DateTime.now(), //restrict user to choose future date
-                  );
-
-                  if (range != null) {
-                    setState(() {
-                      selectedDateRange = range;
-                      _dateRangeController.text =
-                          '${range.start.day}/${range.start.month}/${range.start.year} - ${range.end.day}/${range.end.month}/${range.end.year}';
-                    });
-                  }
-                },
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            //   child: TextFormField(
+            //     controller: _dateRangeController,
+            //     decoration: const InputDecoration(
+            //       labelText: 'Select Date Range',
+            //       suffixIcon: Icon(Icons.calendar_today),
+            //       border: OutlineInputBorder(),
+            //     ),
+            //     readOnly: true,
+            //     onTap: () async {
+            //       final range = await showDateRangePicker(
+            //         context: context,
+            //         firstDate: DateTime(1990),
+            //         lastDate:
+            //             DateTime.now(), //restrict user to choose future date
+            //       );
+            //       if (range != null) {
+            //         setState(() {
+            //           selectedDateRange = range;
+            //           _dateRangeController.text =
+            //               '${range.start.day}/${range.start.month}/${range.start.year} - ${range.end.day}/${range.end.month}/${range.end.year}';
+            //         });
+            //       }
+            //     },
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ElevatedButton(
-                    onPressed: _resetSlider,
-                    child: const Text('Reset'),
+                    onPressed: _resetForm,
+                    child: Text(
+                      'Reset',
+                      style: const TextTheme().sp5,
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: _submitForm,
-                    child: const Text('Submit'),
+                    child: Text(
+                      'Submit',
+                      style: const TextTheme().sp5,
+                    ),
                   ),
                 ],
               ),

@@ -10,7 +10,7 @@ class SubsequentAnalysis {
   factory SubsequentAnalysis() => _instance;
   SubsequentAnalysis._();
 
-  void init() async {
+  init() async {
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
     DateTime exeStartTime = DateTime.now(); // Record the download start time
@@ -38,16 +38,16 @@ class SubsequentAnalysis {
         Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
         MainPresenter.to.subsequentAnalysisErr.value = '';
         parseJson(csvPngFiles);
-        MainPresenter.to.subsequentAnalysis.value = true;
+        MainPresenter.to.hasSubsequentAnalysis.value = true;
       } catch (e) {
         String err = parsedResponse['error'];
         MainPresenter.to.subsequentAnalysisErr.value = err;
-        MainPresenter.to.subsequentAnalysis.value = true;
+        MainPresenter.to.hasSubsequentAnalysis.value = true;
       }
     } else {
       MainPresenter.to.subsequentAnalysisErr.value =
           'The number of subsequent trends must be equal to or greater than 4.';
-      MainPresenter.to.subsequentAnalysis.value = true;
+      MainPresenter.to.hasSubsequentAnalysis.value = true;
     }
   }
 
