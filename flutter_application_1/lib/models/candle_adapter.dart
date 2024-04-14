@@ -15,8 +15,7 @@ class CandleAdapter {
 
     List<List<dynamic>> rowsAsListOfValues =
         const CsvToListConverter().convert(csv, eol: '\n');
-
-    // logger.d(rowsAsListOfValues);
+    rowsAsListOfValues.removeAt(0); // Remove CSV column titles
     return rowsAsListOfValues;
   }
 
@@ -30,19 +29,17 @@ class CandleAdapter {
       rowsAsListOfValues.add(values);
     }
 
-    // logger.d(rowsAsListOfValues);
     return rowsAsListOfValues;
   }
 
-  Future<List<CandleData>> listListToListCandleData(
+  Future<List<CandleData>> listListTolistCandledata(
       Future<List<List<dynamic>>> futureListList) async {
     List<List<dynamic>> listList = await futureListList;
     MainPresenter.to.candleListList.value = listList;
-    List<CandleData> listCandleData;
+    late List<CandleData> listCandledata;
 
     if (FlavorService.to.apiProvider == APIProvider.yahoofinance) {
-      listList = [];
-      listCandleData = listList
+      listCandledata = listList
           .map((row) => CandleData(
                 timestamp: TimeService().convertToUnixTimestamp(row[0]) * 1000,
                 open: row[1],
@@ -52,10 +49,10 @@ class CandleAdapter {
                 volume: row[6].toDouble(),
               ))
           .toList();
-      MainPresenter.to.listCandleData.value = listCandleData;
-      return listCandleData;
+      MainPresenter.to.listCandledata.value = listCandledata;
+      return listCandledata;
     } else if (FlavorService.to.apiProvider == APIProvider.polygon) {
-      listCandleData = listList
+      listCandledata = listList
           .map((row) => CandleData(
                 timestamp: row[6],
                 open: double.parse(row[2].toString()),
@@ -65,8 +62,8 @@ class CandleAdapter {
                 volume: double.parse(row[0].toString()),
               ))
           .toList();
-      MainPresenter.to.listCandleData.value = listCandleData;
-      return listCandleData;
+      MainPresenter.to.listCandledata.value = listCandledata;
+      return listCandledata;
     } else {
       throw ArgumentError('Failed to convert list to candles.');
     }

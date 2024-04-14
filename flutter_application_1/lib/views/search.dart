@@ -45,8 +45,7 @@ class _SearchViewState extends State<SearchView> {
   void _submitForm() {
     PrefsService.to.prefs.setString(
         SharedPreferencesConstant.stockSymbol, _textEditingController.text);
-    MainPresenter.to.futureListCandleData();
-    MainPresenter.to.searched.value = true;
+    MainPresenter.to.searchCount.value++;
   }
 
   @override

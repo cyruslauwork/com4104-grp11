@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
@@ -19,19 +20,42 @@ class MainPresenter extends GetxController {
   static MainPresenter get to => Get.find();
 
   RxBool darkMode = true.obs;
-  RxBool showAverage = true.obs;
-  RxBool devMode = false.obs;
+  ValueNotifier<bool> showAverage = ValueNotifier<bool>(true);
+  ValueNotifier<bool> devMode = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isEn = ValueNotifier<bool>(true);
 
   RxInt candledownloadTime = 0.obs;
   RxList<List<dynamic>> candleListList = [[]].obs;
-  RxList<CandleData> listCandleData = [
+  late Rx<Future<List<CandleData>>> futureListCandledata = init().obs;
+  RxList<CandleData> listCandledata = [
     CandleData(
         timestamp: 0000000000 * 1000,
         open: 0,
         high: 0,
         low: 0,
         close: 0,
-        volume: 0)
+        volume: 0),
+    // CandleData(
+    //     timestamp: 1555939800 * 1000,
+    //     open: 51.80,
+    //     high: 53.94,
+    //     low: 50.50,
+    //     close: 52.55,
+    //     volume: 60735500),
+    // CandleData(
+    //     timestamp: 1556026200 * 1000,
+    //     open: 43.80,
+    //     high: 53.94,
+    //     low: 42.50,
+    //     close: 52.55,
+    //     volume: 60735500),
+    // CandleData(
+    //     timestamp: 1556112600 * 1000,
+    //     open: 73.80,
+    //     high: 83.94,
+    //     low: 52.50,
+    //     close: 72.55,
+    //     volume: 60735500),
   ].obs;
 
   RxInt listingDownloadTime = 0.obs;
@@ -85,11 +109,39 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   RxString subsequentAnalysisErr = ''.obs;
 
-  RxBool isEn = true.obs;
-
   RxList<SymbolAndName> symbolAndNameList =
       [const SymbolAndName(symbol: '', name: '')].obs;
-  RxBool searched = false.obs;
+  ValueNotifier<int> searchCount = ValueNotifier<int>(0);
+
+  @override
+  void onInit() async {
+    super.onInit();
+    showAverage.addListener(() {
+      // Perform actions based on the new value of showAverage
+      if (showAverage.value) {
+        // Show the average
+        Candle().computeTrendLines();
+      } else {
+        // Hide the average
+        Candle().removeTrendLines();
+      }
+    });
+    devMode.addListener(() {
+      if (devMode.value) {
+        MainPresenter.to.showSnackBar(Func.devMode);
+      }
+    });
+    isEn.addListener(() {
+      if (isEn.value) {
+        LangService.to.changeLanguage(Lang.en);
+      } else {
+        LangService.to.changeLanguage(Lang.zh);
+      }
+    });
+    searchCount.addListener(() {
+      init();
+    });
+  }
 
   void reload() {
     Get.delete<MainPresenter>();
@@ -97,26 +149,24 @@ class MainPresenter extends GetxController {
     super.onInit();
   }
 
-  Future<List<CandleData>> futureListCandleData({String? stockSymbol}) async {
-    hasSubsequentAnalysis.value = false;
-    // PrefsService.to.prefs
-    //     .setString(SharedPreferencesConstant.stockSymbol, 'SPY');
-    stockSymbol ??= PrefsService.to.prefs
-            .getString(SharedPreferencesConstant.stockSymbol) ??
-        'SPY';
-    // print(stockSymbol);
-    Future<List<CandleData>> futureListCandleData = CandleAdapter()
-        .listListToListCandleData(
-            Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
-    await futureListCandleData;
+  Future<List<CandleData>> init() async {
+    Listing().init();
+    await Candle().init();
+    if (showAverage.value) {
+      Candle().computeTrendLines();
+    }
     await TrendMatch().init(init: true);
-    await SubsequentAnalysis().init();
-    return futureListCandleData;
+    SubsequentAnalysis().init();
+    return listCandledata;
   }
 
-  void showSnackBar(Function showSnackBar, Func func) {
+  void routeTo(String path) {
+    Get.toNamed(path);
+  }
+
+  void showSnackBar(Func func) {
     if (func == Func.devMode) {
-      showSnackBar('Developer mode is on');
+      Get.snackbar("Information", 'Developer mode is on');
     } else {
       throw ArgumentError('Error: Failed to get function name.');
     }

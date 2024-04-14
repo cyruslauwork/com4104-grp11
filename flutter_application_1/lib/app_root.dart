@@ -100,7 +100,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
             seedColor: ThemeColor.primary.value,
             secondary: ThemeColor.secondary.value,
             tertiary: ThemeColor.tertiary.value,
-            brightness: MainPresenter.to.darkMode.value
+            brightness: Get.find<MainPresenter>().darkMode.value
                 ? Brightness.light
                 : Brightness.dark,
           ),
@@ -113,7 +113,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
           // GetPage(
           //     name: RouteName.pageNotFound.path,
           //     page: () => const PageNotFoundScreen()),
-          GetPage(name: RouteName.mainView.path, page: () => const MainView()),
+          GetPage(name: RouteName.mainView.path, page: () => MainView()),
           GetPage(name: RouteName.searchView.path, page: () => SearchView()),
           GetPage(name: RouteName.chatView.path, page: () => ChatView()),
           // GetPage(
@@ -144,5 +144,11 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
         ],
       ),
     );
+  }
+
+  void snackBar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+    ));
   }
 }

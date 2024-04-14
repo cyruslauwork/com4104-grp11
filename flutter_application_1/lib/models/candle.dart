@@ -16,6 +16,17 @@ class Candle {
   factory Candle() => _instance;
   Candle._();
 
+  Future<List<CandleData>> init({String? stockSymbol}) {
+    // PrefsService.to.prefs
+    //     .setString(SharedPreferencesConstant.stockSymbol, 'SPY');
+    stockSymbol ??= PrefsService.to.prefs
+            .getString(SharedPreferencesConstant.stockSymbol) ??
+        'SPY';
+    // print(stockSymbol);
+    return CandleAdapter().listListTolistCandledata(
+        Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
+  }
+
   Future<String> getCSV(int callbackTime, {required String stockSymbol}) async {
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
@@ -113,18 +124,18 @@ class Candle {
   }
 
   computeTrendLines() {
-    final ma5 = CandleData.computeMA(MainPresenter.to.listCandleData, 5);
-    final ma10 = CandleData.computeMA(MainPresenter.to.listCandleData, 10);
-    final ma20 = CandleData.computeMA(MainPresenter.to.listCandleData, 20);
-    final ma60 = CandleData.computeMA(MainPresenter.to.listCandleData, 60);
-    final ma120 = CandleData.computeMA(MainPresenter.to.listCandleData, 120);
-    final ma240 = CandleData.computeMA(MainPresenter.to.listCandleData, 240);
-    // final vwap = _computeVWAP(MainPresenter.to.listCandleData);
+    final ma5 = CandleData.computeMA(MainPresenter.to.listCandledata, 5);
+    final ma10 = CandleData.computeMA(MainPresenter.to.listCandledata, 10);
+    final ma20 = CandleData.computeMA(MainPresenter.to.listCandledata, 20);
+    final ma60 = CandleData.computeMA(MainPresenter.to.listCandledata, 60);
+    final ma120 = CandleData.computeMA(MainPresenter.to.listCandledata, 120);
+    final ma240 = CandleData.computeMA(MainPresenter.to.listCandledata, 240);
+    // final vwap = _computeVWAP(MainPresenter.to.listCandledata);
 
     // log(vwap.toString());
 
-    for (int i = 0; i < MainPresenter.to.listCandleData.length; i++) {
-      MainPresenter.to.listCandleData[i].trends = [
+    for (int i = 0; i < MainPresenter.to.listCandledata.length; i++) {
+      MainPresenter.to.listCandledata[i].trends = [
         ma5[i],
         ma10[i],
         ma20[i],
@@ -160,7 +171,7 @@ class Candle {
   // }
 
   removeTrendLines() {
-    for (final data in MainPresenter.to.listCandleData) {
+    for (final data in MainPresenter.to.listCandledata) {
       data.trends = [];
     }
   }

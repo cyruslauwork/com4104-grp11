@@ -28,17 +28,10 @@ class _ChatViewState extends State<ChatView> {
   bool isWaitingForReply = false;
   final _scrollController = ScrollController();
 
-  // static const List<SymbolAndName> _questionOptions = <SymbolAndName>[
-  //   SymbolAndName(symbol: 'Alice', name: 'alice@example.com'),
-  //   SymbolAndName(symbol: 'Bob', name: 'bob@example.com'),
-  //   SymbolAndName(symbol: 'Charlie', name: 'charlie123@gmail.com'),
-  // ];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initListing();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
