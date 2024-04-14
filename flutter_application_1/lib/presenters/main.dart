@@ -5,6 +5,9 @@ import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/services/services.dart';
+import 'package:flutter_application_1/views/views.dart';
+import 'package:flutter_application_1/styles/styles.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 
 // import 'package:flutter_application_1/utils/utils.dart';
 
@@ -116,6 +119,7 @@ class MainPresenter extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    Listing().init();
     showAverage.addListener(() {
       // Perform actions based on the new value of showAverage
       if (showAverage.value) {
@@ -128,7 +132,7 @@ class MainPresenter extends GetxController {
     });
     devMode.addListener(() {
       if (devMode.value) {
-        MainPresenter.to.showSnackBar(Func.devMode);
+        showSnackBar(Func.devMode);
       }
     });
     isEn.addListener(() {
@@ -150,13 +154,10 @@ class MainPresenter extends GetxController {
   }
 
   Future<List<CandleData>> init() async {
-    Listing().init();
     await Candle().init();
     if (showAverage.value) {
       Candle().computeTrendLines();
     }
-    await TrendMatch().init(init: true);
-    SubsequentAnalysis().init();
     return listCandledata;
   }
 
@@ -170,5 +171,227 @@ class MainPresenter extends GetxController {
     } else {
       throw ArgumentError('Error: Failed to get function name.');
     }
+  }
+
+  Widget showTm() {
+    TrendMatch().init(init: true);
+    if (matchRows.isNotEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Selected trend with matched historical trends',
+            style: const TextTheme().sp5,
+          ),
+          Text(
+            '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
+            style: const TextTheme().sp3,
+          ),
+          Text(
+            'and their subsequent trends',
+            style: const TextTheme().sp5,
+          ),
+          Text(
+            '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
+            style: const TextTheme().sp3,
+          ),
+          AdjustedLineChart()
+        ],
+      );
+    } else if (matchRows.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: AppColor.errorColor,
+              size: 40.w,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.h),
+              child: Text(
+                'Error: matchRows.isEmpty',
+                style: const TextTheme().sp7,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 40.w,
+              height: 40.h,
+              child: const CircularProgressIndicator(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: Text('Trend matching...', style: const TextTheme().sp5),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget showSa(BuildContext context) {
+    SubsequentAnalysis().init();
+    return Obx(() {
+      if (hasSubsequentAnalysis.value) {
+        if (subsequentAnalysisErr.value == '') {
+          return Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img1Bytes.value,
+                          ),
+                          minScale: 0.48,
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img1', child: Image.memory(img1Bytes.value)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img2Bytes.value,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img2', child: Image.memory(img2Bytes.value)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img3Bytes.value,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img3', child: Image.memory(img3Bytes.value)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img4Bytes.value,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img4', child: Image.memory(img4Bytes.value)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img5Bytes.value,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img5', child: Image.memory(img5Bytes.value)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img6Bytes.value,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img6', child: Image.memory(img6Bytes.value)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: HeroPhotoViewRouteWrapper(
+                          imageProvider: MemoryImage(
+                            img7Bytes.value,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Hero(tag: 'img7', child: Image.memory(img7Bytes.value)),
+              ),
+            ],
+          );
+        } else {
+          return Text(
+            subsequentAnalysisErr.value,
+            style: const TextTheme().sp5,
+          );
+        }
+      } else {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 40.w,
+                height: 40.h,
+                child: const CircularProgressIndicator(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Text('Awaiting subsequent trend analysis result...',
+                    style: const TextTheme().sp5),
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 }

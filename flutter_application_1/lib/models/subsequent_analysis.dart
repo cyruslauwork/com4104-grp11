@@ -11,7 +11,7 @@ class SubsequentAnalysis {
   factory SubsequentAnalysis() => _instance;
   SubsequentAnalysis._();
 
-  init() async {
+  void init() {
     if (MainPresenter.to.hasSubsequentAnalysis.value) {
       MainPresenter.to.hasSubsequentAnalysis.toggle(); // Reset to false
     }
@@ -31,24 +31,29 @@ class SubsequentAnalysis {
 
     if (lastClosePriceAndSubsequentTrends.length >= 4) {
       exeStartTime = DateTime.now(); // Record the download start time
-      Map<String, dynamic> parsedResponse =
-          await CloudService().getCsvAndPng(lastClosePriceAndSubsequentTrends);
-      log(parsedResponse.toString());
-      exeEndTime = DateTime.now(); // Record the download end time
-      // Calculate the time difference
-      exeDuration = exeEndTime.difference(exeStartTime);
-      exeTime = exeDuration.inMilliseconds;
-      MainPresenter.to.cloudSubsequentAnalysisTime.value = exeTime;
-      try {
-        Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
-        MainPresenter.to.subsequentAnalysisErr.value = '';
-        parseJson(csvPngFiles);
-        MainPresenter.to.hasSubsequentAnalysis.value = true;
-      } catch (e) {
-        String err = parsedResponse['error'];
-        MainPresenter.to.subsequentAnalysisErr.value = err;
-        MainPresenter.to.hasSubsequentAnalysis.value = true;
-      }
+      CloudService()
+          .getCsvAndPng(lastClosePriceAndSubsequentTrends)
+          .then((parsedResponse) {
+        log(parsedResponse.toString());
+        exeEndTime = DateTime.now(); // Record the download end time
+        // Calculate the time difference
+        exeDuration = exeEndTime.difference(exeStartTime);
+        exeTime = exeDuration.inMilliseconds;
+        MainPresenter.to.cloudSubsequentAnalysisTime.value = exeTime;
+        try {
+          Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
+          MainPresenter.to.subsequentAnalysisErr.value = '';
+          parseJson(csvPngFiles);
+          MainPresenter.to.hasSubsequentAnalysis.value = true;
+        } catch (e) {
+          String err = parsedResponse['error'];
+          MainPresenter.to.subsequentAnalysisErr.value = err;
+          MainPresenter.to.hasSubsequentAnalysis.value = true;
+        }
+      }).catchError((error) {
+        // Handle any errors during the asynchronous operation
+        // ...
+      });
     } else {
       MainPresenter.to.subsequentAnalysisErr.value =
           'The number of subsequent trends must be equal to or greater than 4.';

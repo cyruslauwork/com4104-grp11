@@ -313,7 +313,7 @@ class _MainViewState extends State<MainView> {
                             // timeLabel: (timestamp, visibleDataCount) => "📅",
                             // priceLabel: (price) => "${price.round()} 💎",
                             /** Customize overlay (tap and hold to see it)
-                                  ** Or return an empty object to disable overlay info. */
+                                    ** Or return an empty object to disable overlay info. */
                             // overlayInfo: (candle) => {
                             //   "💎": "🤚    ",
                             //   "Hi": "${candle.high?.toStringAsFixed(2)}",
@@ -459,29 +459,8 @@ class _MainViewState extends State<MainView> {
                                 SizedBox(height: 10.h),
                               ])
                             : const SizedBox.shrink()),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Selected trend with matched historical trends',
-                              style: const TextTheme().sp5,
-                            ),
-                            Text(
-                              '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-                              style: const TextTheme().sp3,
-                            ),
-                            Text(
-                              'and their subsequent trends',
-                              style: const TextTheme().sp5,
-                            ),
-                            Text(
-                              '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-                              style: const TextTheme().sp3,
-                            ),
-                            AdjustedLineChart()
-                          ],
-                        ),
                         SizedBox(height: 10.h),
+                        const TrendMatchView(),
                         (MainPresenter.to.devMode.value
                             ? Column(children: [
                                 Text(
@@ -569,190 +548,8 @@ class _MainViewState extends State<MainView> {
                                 SizedBox(height: 10.h),
                               ])
                             : const SizedBox.shrink()),
-                        (MainPresenter.to.hasSubsequentAnalysis.value
-                            ? (MainPresenter.to.subsequentAnalysisErr.value ==
-                                    ''
-                                ? Column(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img1Bytes.value,
-                                                  ),
-                                                  minScale: 0.48,
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img1',
-                                            child: Image.memory(MainPresenter
-                                                .to.img1Bytes.value)),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img2Bytes.value,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img2',
-                                            child: Image.memory(MainPresenter
-                                                .to.img2Bytes.value)),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img3Bytes.value,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img3',
-                                            child: Image.memory(MainPresenter
-                                                .to.img3Bytes.value)),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img4Bytes.value,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img4',
-                                            child: Image.memory(MainPresenter
-                                                .to.img4Bytes.value)),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img5Bytes.value,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img5',
-                                            child: Image.memory(MainPresenter
-                                                .to.img5Bytes.value)),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img6Bytes.value,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img6',
-                                            child: Image.memory(MainPresenter
-                                                .to.img6Bytes.value)),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child:
-                                                    HeroPhotoViewRouteWrapper(
-                                                  imageProvider: MemoryImage(
-                                                    MainPresenter
-                                                        .to.img7Bytes.value,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Hero(
-                                            tag: 'img7',
-                                            child: Image.memory(MainPresenter
-                                                .to.img7Bytes.value)),
-                                      ),
-                                    ],
-                                  )
-                                : Text(
-                                    MainPresenter
-                                        .to.subsequentAnalysisErr.value,
-                                    style: const TextTheme().sp5,
-                                  ))
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 40.w,
-                                    height: 40.h,
-                                    child: const CircularProgressIndicator(),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 10.h),
-                                    child: Text(
-                                        'Awaiting subsequent trend analysis result...',
-                                        style: const TextTheme().sp5),
-                                  ),
-                                ],
-                              )),
                         SizedBox(height: 10.h),
+                        SubsequentAnalysisView(c: context),
                       ],
                     ),
                   ),
@@ -765,7 +562,7 @@ class _MainViewState extends State<MainView> {
                       Icon(
                         Icons.error_outline,
                         color: AppColor.errorColor,
-                        size: 60.w,
+                        size: 40.w,
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 20.h),
