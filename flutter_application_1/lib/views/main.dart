@@ -478,9 +478,7 @@ class _MainViewState extends State<MainView> {
                               '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
                               style: const TextTheme().sp3,
                             ),
-                            (MainPresenter.to.listCandledata.isNotEmpty
-                                ? AdjustedLineChart()
-                                : AdjustedLineChart())
+                            AdjustedLineChart()
                           ],
                         ),
                         SizedBox(height: 10.h),
