@@ -128,7 +128,7 @@ class _SearchViewState extends State<SearchView> {
                     return const Iterable<SymbolAndName>.empty();
                   }
                   if (autocomplete) {
-                    return MainPresenter.to.symbolAndNameList
+                    return MainPresenter.to.listSymbolAndName
                         .where((SymbolAndName option) {
                       return option
                           .toString()

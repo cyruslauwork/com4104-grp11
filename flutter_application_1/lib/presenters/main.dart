@@ -63,8 +63,6 @@ class MainPresenter extends GetxController {
 
   RxInt listingDownloadTime = 0.obs;
   RxList<List<dynamic>> symbolAndNameListList = [[]].obs;
-  RxList<SymbolAndName> listSymbolAndName =
-      [const SymbolAndName(symbol: '', name: '')].obs;
 
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
   RxInt cloudSubsequentAnalysisTime = 0.obs;
@@ -112,8 +110,9 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   RxString subsequentAnalysisErr = ''.obs;
 
-  RxList<SymbolAndName> symbolAndNameList =
+  RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
+  RxInt aiResponseTime = 0.obs;
   ValueNotifier<int> searchCount = ValueNotifier<int>(0);
 
   @override

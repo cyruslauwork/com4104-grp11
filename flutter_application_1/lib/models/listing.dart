@@ -12,7 +12,7 @@ class Listing {
     List<SymbolAndName> symbolAndNameList = await ListingAdapter()
         .listListToSymbolAndName(
             ListingAdapter().csvToListList(getListingCSV()));
-    MainPresenter.to.symbolAndNameList.value = symbolAndNameList;
+    MainPresenter.to.listSymbolAndName.value = symbolAndNameList;
   }
 
   Future<String> getListingCSV() async {

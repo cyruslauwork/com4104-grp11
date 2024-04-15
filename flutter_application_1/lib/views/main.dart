@@ -105,12 +105,79 @@ class _MainViewState extends State<MainView> {
               if (snapshot.hasData) {
                 return SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Obx(
-                    () => Column(
-                      mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
-                      children: [
-                        (MainPresenter.to.devMode.value
-                            ? Column(children: [
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
+                    children: [
+                      Text(
+                        'candle_chart'.tr,
+                        style: const TextTheme().sp5,
+                      ),
+                      SizedBox(
+                        width: 393.w,
+                        height: 100.h,
+                        child: InteractiveChart(
+                          candles: (snapshot.data!.length > 1000
+                              ? snapshot.data!.sublist(
+                                  snapshot.data!.length - 999,
+                                  snapshot.data!.length)
+                              : snapshot.data!),
+                          style: ChartStyle(
+                            trendLineStyles: [
+                              Paint()
+                                ..strokeWidth = 1.0
+                                ..strokeCap = StrokeCap.round
+                                ..color = Colors.orange,
+                              Paint()
+                                ..strokeWidth = 1.0
+                                ..strokeCap = StrokeCap.round
+                                ..color = Colors.lightBlue,
+                              Paint()
+                                ..strokeWidth = 1.0
+                                ..strokeCap = StrokeCap.round
+                                ..color = Colors.purple[300]!,
+                              Paint()
+                                ..strokeWidth = 1.0
+                                ..strokeCap = StrokeCap.round
+                                ..color = Colors.pink[300]!,
+                              Paint()
+                                ..strokeWidth = 1.0
+                                ..strokeCap = StrokeCap.round
+                                ..color = Colors.blue[700]!,
+                              Paint()
+                                ..strokeWidth = 1.0
+                                ..strokeCap = StrokeCap.round
+                                ..color = Colors.green,
+                              // Paint()
+                              //   ..strokeWidth = 1.0
+                              //   ..strokeCap = StrokeCap.round
+                              //   ..color = Colors.yellow,
+                            ],
+                            selectionHighlightColor:
+                                Colors.red.withOpacity(0.75),
+                            overlayBackgroundColor:
+                                Colors.red.withOpacity(0.75),
+                            overlayTextStyle:
+                                const TextStyle(color: AppColor.whiteColor),
+                          ),
+                          /** Customize axis labels */
+                          // timeLabel: (timestamp, visibleDataCount) => "📅",
+                          // priceLabel: (price) => "${price.round()} 💎",
+                          /** Customize overlay (tap and hold to see it)
+                                    ** Or return an empty object to disable overlay info. */
+                          // overlayInfo: (candle) => {
+                          //   "💎": "🤚    ",
+                          //   "Hi": "${candle.high?.toStringAsFixed(2)}",
+                          //   "Lo": "${candle.low?.toStringAsFixed(2)}",
+                          // },
+                          /** Callbacks */
+                          // onTap: (candle) => print("user tapped on $candle"),
+                          // onCandleResize: (width) => print("each candle is $width wide"),
+                        ),
+                      ),
+                      SizedBox(height: 10.h),
+                      (MainPresenter.to.devMode.value
+                          ? Column(children: [
+                              Column(children: [
                                 Text(
                                   'Trend Match',
                                   style: const TextTheme().sp5,
@@ -127,15 +194,15 @@ class _MainViewState extends State<MainView> {
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
-                                        Text('CSV Rows',
+                                        Text('CSV rows',
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
-                                        Text('Sel Count',
+                                        Text('Sel count',
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
-                                        Text('TM Rows',
+                                        Text('TM rows',
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
@@ -217,7 +284,7 @@ class _MainViewState extends State<MainView> {
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
-                                        Text('SA Prep (ms)',
+                                        Text('SA prep (ms)',
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
@@ -225,7 +292,8 @@ class _MainViewState extends State<MainView> {
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
-                                        Text('', style: const TextTheme().sp3)
+                                        Text('AI res (ms)',
+                                            style: const TextTheme().sp3)
                                       ]),
                                     ]),
                                     TableRow(children: [
@@ -250,308 +318,238 @@ class _MainViewState extends State<MainView> {
                                             style: const TextTheme().sp3)
                                       ]),
                                       Column(children: [
-                                        Text('', style: const TextTheme().sp3)
+                                        Text(
+                                            MainPresenter.to.aiResponseTime
+                                                .toString(),
+                                            style: const TextTheme().sp3)
                                       ]),
                                     ]),
                                   ],
                                 ),
                                 SizedBox(height: 10.h),
-                              ])
-                            : const SizedBox.shrink()),
-                        Text(
-                          'candle_chart'.tr,
-                          style: const TextTheme().sp5,
-                        ),
-                        SizedBox(
-                          width: 393.w,
-                          height: 100.h,
-                          child: InteractiveChart(
-                            candles: (snapshot.data!.length > 1000
-                                ? snapshot.data!.sublist(
-                                    snapshot.data!.length - 999,
-                                    snapshot.data!.length)
-                                : snapshot.data!),
-                            style: ChartStyle(
-                              trendLineStyles: [
-                                Paint()
-                                  ..strokeWidth = 1.0
-                                  ..strokeCap = StrokeCap.round
-                                  ..color = Colors.orange,
-                                Paint()
-                                  ..strokeWidth = 1.0
-                                  ..strokeCap = StrokeCap.round
-                                  ..color = Colors.lightBlue,
-                                Paint()
-                                  ..strokeWidth = 1.0
-                                  ..strokeCap = StrokeCap.round
-                                  ..color = Colors.purple[300]!,
-                                Paint()
-                                  ..strokeWidth = 1.0
-                                  ..strokeCap = StrokeCap.round
-                                  ..color = Colors.pink[300]!,
-                                Paint()
-                                  ..strokeWidth = 1.0
-                                  ..strokeCap = StrokeCap.round
-                                  ..color = Colors.blue[700]!,
-                                Paint()
-                                  ..strokeWidth = 1.0
-                                  ..strokeCap = StrokeCap.round
-                                  ..color = Colors.green,
-                                // Paint()
-                                //   ..strokeWidth = 1.0
-                                //   ..strokeCap = StrokeCap.round
-                                //   ..color = Colors.yellow,
-                              ],
-                              selectionHighlightColor:
-                                  Colors.red.withOpacity(0.75),
-                              overlayBackgroundColor:
-                                  Colors.red.withOpacity(0.75),
-                              overlayTextStyle:
-                                  const TextStyle(color: AppColor.whiteColor),
-                            ),
-                            /** Customize axis labels */
-                            // timeLabel: (timestamp, visibleDataCount) => "📅",
-                            // priceLabel: (price) => "${price.round()} 💎",
-                            /** Customize overlay (tap and hold to see it)
-                                    ** Or return an empty object to disable overlay info. */
-                            // overlayInfo: (candle) => {
-                            //   "💎": "🤚    ",
-                            //   "Hi": "${candle.high?.toStringAsFixed(2)}",
-                            //   "Lo": "${candle.low?.toStringAsFixed(2)}",
-                            // },
-                            /** Callbacks */
-                            // onTap: (candle) => print("user tapped on $candle"),
-                            // onCandleResize: (width) => print("each candle is $width wide"),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        (MainPresenter.to.devMode.value
-                            ? Column(children: [
-                                Text(
-                                  'Percentage differences between selected period',
-                                  style: const TextTheme().sp5,
+                              ]),
+                              Text(
+                                'Percentage differences between selected period',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  showCheckboxColumn: false,
+                                  border: TableBorder.all(
+                                      color: AppColor.blackColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  columns: MainPresenter
+                                      .to.selectedPeriodPercentDifferencesList
+                                      .mapIndexed((i, e) => DataColumn(
+                                              label: Text(
+                                            'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                            style: const TextTheme().sp3,
+                                          )))
+                                      .toList(),
+                                  rows: [
+                                    DataRow(
+                                      cells: MainPresenter.to
+                                          .selectedPeriodPercentDifferencesList
+                                          .map((e) => DataCell(Text(
+                                                e.toString(),
+                                                style: const TextTheme().sp3,
+                                              )))
+                                          .toList(),
+                                    ),
+                                  ],
                                 ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    border: TableBorder.all(
-                                        color: AppColor.blackColor,
-                                        style: BorderStyle.solid,
-                                        width: 2),
-                                    columns: MainPresenter
-                                        .to.selectedPeriodPercentDifferencesList
-                                        .mapIndexed((i, e) => DataColumn(
-                                                label: Text(
-                                              'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                                              style: const TextTheme().sp3,
-                                            )))
-                                        .toList(),
-                                    rows: [
-                                      DataRow(
-                                        cells: MainPresenter.to
-                                            .selectedPeriodPercentDifferencesList
-                                            .map((e) => DataCell(Text(
-                                                  e.toString(),
-                                                  style: const TextTheme().sp3,
-                                                )))
-                                            .toList(),
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Actual differences between selected period',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  showCheckboxColumn: false,
+                                  border: TableBorder.all(
+                                      color: AppColor.blackColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  columns: MainPresenter
+                                      .to.selectedPeriodActualDifferencesList
+                                      .mapIndexed((i, e) => DataColumn(
+                                              label: Text(
+                                            'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                                            style: const TextTheme().sp3,
+                                          )))
+                                      .toList(),
+                                  rows: [
+                                    DataRow(
+                                      cells: MainPresenter.to
+                                          .selectedPeriodActualDifferencesList
+                                          .map((e) => DataCell(Text(
+                                                e.toString(),
+                                                style: const TextTheme().sp3,
+                                              )))
+                                          .toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Selected period Actual Prices',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: DataTable(
+                                  showCheckboxColumn: false,
+                                  border: TableBorder.all(
+                                      color: AppColor.blackColor,
+                                      style: BorderStyle.solid,
+                                      width: 2),
+                                  columns: MainPresenter
+                                      .to.selectedPeriodActualPricesList
+                                      .mapIndexed((i, e) => DataColumn(
+                                              label: Text(
+                                            'Close Price ${(i + 1).toString()}',
+                                            style: const TextTheme().sp3,
+                                          )))
+                                      .toList(),
+                                  rows: [
+                                    DataRow(
+                                      cells: MainPresenter
+                                          .to.selectedPeriodActualPricesList
+                                          .map((e) => DataCell(Text(
+                                                e.toString(),
+                                                style: const TextTheme().sp3,
+                                              )))
+                                          .toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Matched Historical Trend Row(s)',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter.to.matchRows.isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        MainPresenter.to.matchRows.toString(),
+                                        style: const TextTheme().sp3,
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Actual differences between selected period',
-                                  style: const TextTheme().sp5,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    border: TableBorder.all(
-                                        color: AppColor.blackColor,
-                                        style: BorderStyle.solid,
-                                        width: 2),
-                                    columns: MainPresenter
-                                        .to.selectedPeriodActualDifferencesList
-                                        .mapIndexed((i, e) => DataColumn(
-                                                label: Text(
-                                              'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                                              style: const TextTheme().sp3,
-                                            )))
-                                        .toList(),
-                                    rows: [
-                                      DataRow(
-                                        cells: MainPresenter.to
-                                            .selectedPeriodActualDifferencesList
-                                            .map((e) => DataCell(Text(
-                                                  e.toString(),
-                                                  style: const TextTheme().sp3,
-                                                )))
-                                            .toList(),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Matched Historical Trend(s)',
+                                style: const TextTheme().sp5,
+                              ),
+                              SimpleLineChart(),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Normalized Matched Historical Trend(s)',
+                                style: const TextTheme().sp5,
+                              ),
+                              SimpleLineChart(
+                                normalized: true,
+                              ),
+                              SizedBox(height: 10.h),
+                            ])
+                          : const SizedBox.shrink()),
+                      SizedBox(height: 10.h),
+                      TrendMatchView(),
+                      (MainPresenter.to.devMode.value
+                          ? Column(children: [
+                              Text(
+                                'Matched Historical Trend(s) Percentage Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter.to.matchPercentDifferencesListList
+                                      .isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 10 ? MainPresenter.to.matchPercentDifferencesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
                                       ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Selected period Actual Prices',
-                                  style: const TextTheme().sp5,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: DataTable(
-                                    showCheckboxColumn: false,
-                                    border: TableBorder.all(
-                                        color: AppColor.blackColor,
-                                        style: BorderStyle.solid,
-                                        width: 2),
-                                    columns: MainPresenter
-                                        .to.selectedPeriodActualPricesList
-                                        .mapIndexed((i, e) => DataColumn(
-                                                label: Text(
-                                              'Close Price ${(i + 1).toString()}',
-                                              style: const TextTheme().sp3,
-                                            )))
-                                        .toList(),
-                                    rows: [
-                                      DataRow(
-                                        cells: MainPresenter
-                                            .to.selectedPeriodActualPricesList
-                                            .map((e) => DataCell(Text(
-                                                  e.toString(),
-                                                  style: const TextTheme().sp3,
-                                                )))
-                                            .toList(),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Matched Historical Trend(s) Actual Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter.to.matchActualDifferencesListList
+                                      .isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 10 ? MainPresenter.to.matchActualDifferencesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
                                       ),
-                                    ],
-                                  ),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Matched Historical Trend(s) Actual Prices',
+                                style: const TextTheme().sp5,
+                              ),
+                              (MainPresenter
+                                      .to.matchActualPricesListList.isNotEmpty
+                                  ? SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 10 ? MainPresenter.to.matchActualPricesListList.length - 10 : 0)} rows left',
+                                        style: const TextTheme().sp3,
+                                      ),
+                                    )
+                                  : Text('0', style: const TextTheme().sp3)),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Comparison Historical Trends Percentage Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
                                 ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Matched Historical Trend Row(s)',
-                                  style: const TextTheme().sp5,
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Comparison Historical Trends Actual Differences',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
                                 ),
-                                (MainPresenter.to.matchRows.isNotEmpty
-                                    ? SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          MainPresenter.to.matchRows.toString(),
-                                          style: const TextTheme().sp3,
-                                        ),
-                                      )
-                                    : Text('0', style: const TextTheme().sp3)),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Matched Historical Trend(s)',
-                                  style: const TextTheme().sp5,
+                              ),
+                              SizedBox(height: 10.h),
+                              Text(
+                                'Comparison Historical Trends Actual Prices',
+                                style: const TextTheme().sp5,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 10} rows left',
+                                  style: const TextTheme().sp3,
                                 ),
-                                SimpleLineChart(),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Normalized Matched Historical Trend(s)',
-                                  style: const TextTheme().sp5,
-                                ),
-                                SimpleLineChart(
-                                  normalized: true,
-                                ),
-                                SizedBox(height: 10.h),
-                              ])
-                            : const SizedBox.shrink()),
-                        SizedBox(height: 10.h),
-                        const TrendMatchView(),
-                        (MainPresenter.to.devMode.value
-                            ? Column(children: [
-                                Text(
-                                  'Matched Historical Trend(s) Percentage Differences',
-                                  style: const TextTheme().sp5,
-                                ),
-                                (MainPresenter
-                                        .to
-                                        .matchPercentDifferencesListList
-                                        .isNotEmpty
-                                    ? SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 10 ? MainPresenter.to.matchPercentDifferencesListList.length - 10 : 0)} rows left',
-                                          style: const TextTheme().sp3,
-                                        ),
-                                      )
-                                    : Text('0', style: const TextTheme().sp3)),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Matched Historical Trend(s) Actual Differences',
-                                  style: const TextTheme().sp5,
-                                ),
-                                (MainPresenter.to.matchActualDifferencesListList
-                                        .isNotEmpty
-                                    ? SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 10 ? MainPresenter.to.matchActualDifferencesListList.length - 10 : 0)} rows left',
-                                          style: const TextTheme().sp3,
-                                        ),
-                                      )
-                                    : Text('0', style: const TextTheme().sp3)),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Matched Historical Trend(s) Actual Prices',
-                                  style: const TextTheme().sp5,
-                                ),
-                                (MainPresenter
-                                        .to.matchActualPricesListList.isNotEmpty
-                                    ? SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Text(
-                                          '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 10 ? MainPresenter.to.matchActualPricesListList.length - 10 : 0)} rows left',
-                                          style: const TextTheme().sp3,
-                                        ),
-                                      )
-                                    : Text('0', style: const TextTheme().sp3)),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Comparison Historical Trends Percentage Differences',
-                                  style: const TextTheme().sp5,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Text(
-                                    '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 10} rows left',
-                                    style: const TextTheme().sp3,
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Comparison Historical Trends Actual Differences',
-                                  style: const TextTheme().sp5,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Text(
-                                    '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 10} rows left',
-                                    style: const TextTheme().sp3,
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                                Text(
-                                  'Comparison Historical Trends Actual Prices',
-                                  style: const TextTheme().sp5,
-                                ),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Text(
-                                    '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 10} rows left',
-                                    style: const TextTheme().sp3,
-                                  ),
-                                ),
-                                SizedBox(height: 10.h),
-                              ])
-                            : const SizedBox.shrink()),
-                        SizedBox(height: 10.h),
-                        SubsequentAnalysisView(c: context),
-                      ],
-                    ),
+                              ),
+                              SizedBox(height: 10.h),
+                            ])
+                          : const SizedBox.shrink()),
+                      SizedBox(height: 10.h),
+                      SubsequentAnalysisView(c: context),
+                    ],
                   ),
                 );
               } else if (snapshot.hasError) {

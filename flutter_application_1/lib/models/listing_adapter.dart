@@ -31,7 +31,6 @@ class ListingAdapter {
               name: row[1].toString(),
             ))
         .toList();
-    MainPresenter.to.listSymbolAndName.value = listSymbolAndName;
     return listSymbolAndName;
   }
 }

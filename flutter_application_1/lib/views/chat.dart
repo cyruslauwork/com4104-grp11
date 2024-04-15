@@ -37,7 +37,16 @@ class _ChatViewState extends State<ChatView> {
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
 
   void _sendMessage(String message) async {
+    DateTime downloadStartTime =
+        DateTime.now(); // Record the download start time
+
     String newsAnalysis = await CloudService().getNewsAnalysis(message);
+
+    DateTime downloadEndTime = DateTime.now(); // Record the download end time
+    // Calculate the time difference
+    Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
+    int downloadTime = downloadDuration.inMilliseconds;
+    MainPresenter.to.aiResponseTime.value = downloadTime;
 
     setState(() {
       messages.add(message);
@@ -55,7 +64,17 @@ class _ChatViewState extends State<ChatView> {
   }
 
   void _handleOptionSelected(String option) async {
+    DateTime downloadStartTime =
+        DateTime.now(); // Record the download start time
+
     String newsAnalysis = await CloudService().getNewsAnalysis(option);
+
+    DateTime downloadEndTime = DateTime.now(); // Record the download end time
+    // Calculate the time difference
+    Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
+    int downloadTime = downloadDuration.inMilliseconds;
+    MainPresenter.to.aiResponseTime.value = downloadTime;
+
     setState(() {
       messages.add(option);
       isWaitingForReply =
@@ -141,7 +160,7 @@ class _ChatViewState extends State<ChatView> {
                 if (textEditingValue.text == '') {
                   return const Iterable<SymbolAndName>.empty();
                 }
-                return MainPresenter.to.symbolAndNameList
+                return MainPresenter.to.listSymbolAndName
                     .where((SymbolAndName option) {
                   return option
                       .toString()
