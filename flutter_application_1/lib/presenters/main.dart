@@ -6,8 +6,6 @@ import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/views/views.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/utils/utils.dart';
 
 // import 'package:flutter_application_1/utils/utils.dart';
 
@@ -63,13 +61,22 @@ class MainPresenter extends GetxController {
   ].obs;
   ValueNotifier<bool> showAverage = ValueNotifier<bool>(true);
 
-  /* Listing-related */
+  /* Listing */
   RxInt listingDownloadTime = 0.obs;
   RxList<List<dynamic>> symbolAndNameListList = [[]].obs;
   RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
+
+  /* Search */
   ValueNotifier<int> searchCount = ValueNotifier<int>(0);
+
+  /* Chat */
+  RxList<String> messages = [
+    "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred financial instruments! ^_^"
+  ].obs;
+  RxBool isWaitingForReply = false.obs;
   RxInt aiResponseTime = 0.obs;
+  RxDouble thisScrollExtent = 0.0.obs;
 
   /* Trend match */
   RxInt selectedPeriod = 5.obs; // The root selected period here
@@ -203,201 +210,23 @@ class MainPresenter extends GetxController {
   Widget showTm() {
     return Obx(() {
       if (trendMatched.value) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Selected trend with matched historical trends',
-              style: const TextTheme().sp5,
-            ),
-            Text(
-              '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-              style: const TextTheme().sp3,
-            ),
-            Text(
-              'and their subsequent trends',
-              style: const TextTheme().sp5,
-            ),
-            Text(
-              '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-              style: const TextTheme().sp3,
-            ),
-            AdjustedLineChart()
-          ],
-        );
+        return TrendMatchView().showAdjustedLineChart();
       } else {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 40.w,
-                height: 40.h,
-                child: const CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10.h),
-                child: Text('Trend matching...', style: const TextTheme().sp5),
-              ),
-            ],
-          ),
-        );
+        return TrendMatchView().showCircularProgressIndicator();
       }
     });
   }
 
-  Widget showSa(BuildContext context) {
+  Widget showSa() {
     return Obx(() {
       if (hasSubsequentAnalysis.value) {
         if (subsequentAnalysisErr.value == '') {
-          return Column(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img1Bytes.value,
-                          ),
-                          minScale: 0.48,
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img1', child: Image.memory(img1Bytes.value)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img2Bytes.value,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img2', child: Image.memory(img2Bytes.value)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img3Bytes.value,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img3', child: Image.memory(img3Bytes.value)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img4Bytes.value,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img4', child: Image.memory(img4Bytes.value)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img5Bytes.value,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img5', child: Image.memory(img5Bytes.value)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img6Bytes.value,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img6', child: Image.memory(img6Bytes.value)),
-              ),
-              GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        child: HeroPhotoViewRouteWrapper(
-                          imageProvider: MemoryImage(
-                            img7Bytes.value,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Hero(tag: 'img7', child: Image.memory(img7Bytes.value)),
-              ),
-            ],
-          );
+          return SubsequentAnalysisView().showSaChart();
         } else {
-          return Text(
-            subsequentAnalysisErr.value,
-            style: const TextTheme().sp5,
-          );
+          return SubsequentAnalysisView().showError();
         }
       } else {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 40.w,
-                height: 40.h,
-                child: const CircularProgressIndicator(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10.h),
-                child: Text('Awaiting subsequent trend analysis result...',
-                    style: const TextTheme().sp5),
-              ),
-            ],
-          ),
-        );
+        return SubsequentAnalysisView().showCircularProgressIndicator();
       }
     });
   }

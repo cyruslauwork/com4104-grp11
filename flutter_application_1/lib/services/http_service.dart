@@ -60,7 +60,7 @@ class HTTPService extends GetxService {
     // endTimestamp =
     //     1701360000; // The end date of iconic 5-day trend matching subsequent trends
     // endTimestamp =
-    //     DateTime.utc(2024, 4, 9, 23, 59, 59).millisecondsSinceEpoch ~/
+    //     DateTime.utc(2024, 4, 15, 23, 59, 59).millisecondsSinceEpoch ~/
     //         1000; // Select specific end date
 
     final url = Uri.parse(

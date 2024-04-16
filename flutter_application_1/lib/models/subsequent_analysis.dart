@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/utils/utils.dart';
-import 'package:get/get.dart';
 
 class SubsequentAnalysis {
   // Singleton implementation
