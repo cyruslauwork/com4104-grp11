@@ -3,6 +3,7 @@ import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/styles/styles.dart';
+import 'package:get/get.dart';
 
 class SearchView extends StatefulWidget {
   // const SearchView({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class _SearchViewState extends State<SearchView> {
   // DateTimeRange? selectedDateRange;
   // final TextEditingController _dateRangeController = TextEditingController();
   double _currentSliderValue = 100;
+  double _currentDateValue = 5;
   TextEditingController _textEditingController = TextEditingController();
   bool autocomplete = true;
 
@@ -38,15 +40,27 @@ class _SearchViewState extends State<SearchView> {
   void _resetForm() {
     setState(() {
       _currentSliderValue = 100;
+      _currentDateValue = 5;
       _textEditingController.clear();
     });
   }
 
   void _submitForm() {
-    PrefsService.to.prefs.setString(
-        SharedPreferencesConstant.stockSymbol, _textEditingController.text);
-    MainPresenter.to.searchCount.value++;
-    MainPresenter.to.back();
+    if (_textEditingController.text != '') {
+      PrefsService.to.prefs.setString(
+          SharedPreferencesConstant.stockSymbol, _textEditingController.text);
+      SharedPreferencesConstant.dateRange = _currentDateValue;
+      SharedPreferencesConstant.tolerance = _currentSliderValue;
+      MainPresenter.to.searchCount.value++;
+      MainPresenter.to.back();
+    } else {
+      Get.snackbar(
+          "Alert!",
+          colorText: Colors.white,
+          backgroundColor: Colors.red,
+          icon: const Icon(Icons.error),
+          'A Stock should be selected before the submission.');
+    }
   }
 
   @override
@@ -70,10 +84,10 @@ class _SearchViewState extends State<SearchView> {
                   children: [
                     Text(
                       'Trend Match Tolerance',
-                      style: const TextTheme().sp7.primaryTextColor,
+                      style: const TextTheme().sp5.primaryTextColor,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       child: SliderTheme(
                         data: SliderTheme.of(context).copyWith(
                           overlayShape: SliderComponentShape.noOverlay,
@@ -120,13 +134,65 @@ class _SearchViewState extends State<SearchView> {
                   ],
                 )),
             Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Date Range',
+                      style: const TextTheme().sp5.primaryTextColor,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          overlayShape: SliderComponentShape.noOverlay,
+                        ),
+                        child: Slider(
+                          value: _currentDateValue,
+                          max: 20,
+                          min: 2,
+                          divisions: 18,
+                          label: _currentDateValue.round().toString(),
+                          onChanged: (double value) {
+                            setState(() {
+                              _currentDateValue = value;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '2 Days',
+                          style: const TextTheme().sp3,
+                        ),
+                        // Text(
+                        //   '10 Days',
+                        //   style: const TextTheme().sp3,
+                        // ),
+                        // Text(
+                        //   '15 Days',
+                        //   style: const TextTheme().sp3,
+                        // ),
+                        Text(
+                          '20 Days',
+                          style: const TextTheme().sp3,
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               child: Autocomplete<SymbolAndName>(
                 displayStringForOption:
                     _SearchViewState._displayStringForOption,
                 optionsBuilder: (TextEditingValue textEditingValue) {
                   if (textEditingValue.text == '') {
-                    return const Iterable<SymbolAndName>.empty();
+                    return MainPresenter.to.listSymbolAndName;
                   }
                   if (autocomplete) {
                     return MainPresenter.to.listSymbolAndName
@@ -149,6 +215,14 @@ class _SearchViewState extends State<SearchView> {
                     FocusNode focusNode,
                     VoidCallback onFieldSubmitted) {
                   _textEditingController = textEditingController;
+                  focusNode.addListener(() {
+                    if (!focusNode.hasFocus) {
+                      // Clear the text field when losing focus if no selection was made
+                      if (autocomplete) {
+                        _textEditingController.text = '';
+                      }
+                    }
+                  });
                   return TextField(
                     onChanged: (String value) {
                       autocomplete = true;
