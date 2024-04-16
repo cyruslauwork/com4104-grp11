@@ -26,11 +26,11 @@ class _SearchViewState extends State<SearchView> {
   TextEditingController _textEditingController = TextEditingController();
   bool autocomplete = true;
 
-  @override
-  void dispose() {
-    // _dateRangeController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // _dateRangeController.dispose();
+  //   super.dispose();
+  // }
 
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
@@ -46,6 +46,7 @@ class _SearchViewState extends State<SearchView> {
     PrefsService.to.prefs.setString(
         SharedPreferencesConstant.stockSymbol, _textEditingController.text);
     MainPresenter.to.searchCount.value++;
+    MainPresenter.to.back();
   }
 
   @override

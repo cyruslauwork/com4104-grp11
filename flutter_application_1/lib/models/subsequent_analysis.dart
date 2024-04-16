@@ -12,9 +12,7 @@ class SubsequentAnalysis {
   SubsequentAnalysis._();
 
   void init() {
-    if (MainPresenter.to.hasSubsequentAnalysis.value) {
-      MainPresenter.to.hasSubsequentAnalysis.toggle(); // Reset to false
-    }
+    MainPresenter.to.hasSubsequentAnalysis.value = false;
 
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
@@ -44,12 +42,11 @@ class SubsequentAnalysis {
           Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
           MainPresenter.to.subsequentAnalysisErr.value = '';
           parseJson(csvPngFiles);
-          MainPresenter.to.hasSubsequentAnalysis.value = true;
         } catch (e) {
           String err = parsedResponse['error'];
           MainPresenter.to.subsequentAnalysisErr.value = err;
-          MainPresenter.to.hasSubsequentAnalysis.value = true;
         }
+        MainPresenter.to.hasSubsequentAnalysis.value = true;
       }).catchError((error) {
         // Handle any errors during the asynchronous operation
         // ...

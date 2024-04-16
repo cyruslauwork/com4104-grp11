@@ -22,11 +22,12 @@ class MainPresenter extends GetxController {
 
   static MainPresenter get to => Get.find();
 
+  /* Preference */
   RxBool darkMode = true.obs;
-  ValueNotifier<bool> showAverage = ValueNotifier<bool>(true);
   ValueNotifier<bool> devMode = ValueNotifier<bool>(false);
   ValueNotifier<bool> isEn = ValueNotifier<bool>(true);
 
+  /* Candlestick-related */
   RxInt candledownloadTime = 0.obs;
   RxList<List<dynamic>> candleListList = [[]].obs;
   late Rx<Future<List<CandleData>>> futureListCandledata = init().obs;
@@ -60,19 +61,21 @@ class MainPresenter extends GetxController {
     //     close: 72.55,
     //     volume: 60735500),
   ].obs;
+  ValueNotifier<bool> showAverage = ValueNotifier<bool>(true);
 
+  /* Listing-related */
   RxInt listingDownloadTime = 0.obs;
   RxList<List<dynamic>> symbolAndNameListList = [[]].obs;
+  RxList<SymbolAndName> listSymbolAndName =
+      [const SymbolAndName(symbol: '', name: '')].obs;
+  ValueNotifier<int> searchCount = ValueNotifier<int>(0);
+  RxInt aiResponseTime = 0.obs;
 
-  RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
-  RxInt cloudSubsequentAnalysisTime = 0.obs;
-
-  RxInt selectedPeriod = 5.obs;
-  RxList<double> selectedPeriodPercentDifferencesList =
-      [0.0].obs; // The root selected period here
+  /* Trend match */
+  RxInt selectedPeriod = 5.obs; // The root selected period here
+  RxList<double> selectedPeriodPercentDifferencesList = [0.0].obs;
   RxList<double> selectedPeriodActualDifferencesList = [0.0].obs;
   RxList<double> selectedPeriodActualPricesList = [0.0].obs;
-
   RxList<List<double>> comparePeriodPercentDifferencesListList = [
     [0.0]
   ].obs;
@@ -82,7 +85,6 @@ class MainPresenter extends GetxController {
   RxList<List<double>> comparePeriodActualPricesListList = [
     [0.0]
   ].obs;
-
   RxList<List<double>> matchPercentDifferencesListList = [
     [0.0]
   ].obs;
@@ -92,14 +94,13 @@ class MainPresenter extends GetxController {
   RxList<List<double>> matchActualPricesListList = [
     [0.0]
   ].obs;
-
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
   RxList<int> matchRows = [0].obs;
+  Rx<bool> trendMatched = false.obs;
 
-  Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
-  List<Map<String, dynamic>> lastJson = [];
-  RxInt lastCandleDataLength = 0.obs;
-
+  /* Subsequent analysis */
+  RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
+  RxInt cloudSubsequentAnalysisTime = 0.obs;
   RxBool hasSubsequentAnalysis = false.obs;
   Rx<Uint8List> img1Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img2Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
@@ -110,15 +111,13 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   RxString subsequentAnalysisErr = ''.obs;
 
-  RxList<SymbolAndName> listSymbolAndName =
-      [const SymbolAndName(symbol: '', name: '')].obs;
-  RxInt aiResponseTime = 0.obs;
-  ValueNotifier<int> searchCount = ValueNotifier<int>(0);
+  Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
+  List<Map<String, dynamic>> lastJson = [];
+  RxInt lastCandleDataLength = 0.obs;
 
   @override
   void onInit() async {
     super.onInit();
-    Listing().init();
     showAverage.addListener(() {
       // Perform actions based on the new value of showAverage
       if (showAverage.value) {
@@ -131,7 +130,7 @@ class MainPresenter extends GetxController {
     });
     devMode.addListener(() {
       if (devMode.value) {
-        showSnackBar(Func.devMode);
+        showSnackBar(func: Func.devMode);
       }
     });
     isEn.addListener(() {
@@ -142,7 +141,7 @@ class MainPresenter extends GetxController {
       }
     });
     searchCount.addListener(() {
-      init();
+      futureListCandledata.value = init();
     });
   }
 
@@ -157,14 +156,25 @@ class MainPresenter extends GetxController {
     if (showAverage.value) {
       Candle().computeTrendLines();
     }
+    TrendMatch().init(init: true);
+    SubsequentAnalysis().init();
     return listCandledata;
   }
 
-  void routeTo(String path) {
+  /* Route */
+  void route(String path) {
     Get.toNamed(path);
   }
 
-  void showSnackBar(Func func) {
+  void back() {
+    Get.back();
+  }
+
+  /* UI */
+  void showSnackBar({Func? func, String? title, String? msg}) {
+    if (title != null && msg != null) {
+      Get.snackbar(title, msg);
+    }
     if (func == Func.devMode) {
       Get.snackbar("Information", 'Developer mode is on');
     } else {
@@ -172,73 +182,71 @@ class MainPresenter extends GetxController {
     }
   }
 
+  List<Widget> showListingRelatedIcons() {
+    Listing().init();
+    return [
+      IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () {
+          MainPresenter.to.route(RouteName.searchView.path);
+        },
+      ),
+      IconButton(
+        icon: const Icon(Icons.contact_support),
+        onPressed: () {
+          MainPresenter.to.route(RouteName.chatView.path);
+        },
+      ),
+    ];
+  }
+
   Widget showTm() {
-    TrendMatch().init(init: true);
-    if (matchRows.isNotEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Selected trend with matched historical trends',
-            style: const TextTheme().sp5,
-          ),
-          Text(
-            '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-            style: const TextTheme().sp3,
-          ),
-          Text(
-            'and their subsequent trends',
-            style: const TextTheme().sp5,
-          ),
-          Text(
-            '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-            style: const TextTheme().sp3,
-          ),
-          AdjustedLineChart()
-        ],
-      );
-    } else if (matchRows.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Obx(() {
+      if (trendMatched.value) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.error_outline,
-              color: AppColor.errorColor,
-              size: 40.w,
+            Text(
+              'Selected trend with matched historical trends',
+              style: const TextTheme().sp5,
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.h),
-              child: Text(
-                'Error: matchRows.isEmpty',
-                style: const TextTheme().sp7,
+            Text(
+              '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
+              style: const TextTheme().sp3,
+            ),
+            Text(
+              'and their subsequent trends',
+              style: const TextTheme().sp5,
+            ),
+            Text(
+              '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
+              style: const TextTheme().sp3,
+            ),
+            AdjustedLineChart()
+          ],
+        );
+      } else {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 40.w,
+                height: 40.h,
+                child: const CircularProgressIndicator(),
               ),
-            ),
-          ],
-        ),
-      );
-    } else {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 40.w,
-              height: 40.h,
-              child: const CircularProgressIndicator(),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: Text('Trend matching...', style: const TextTheme().sp5),
-            ),
-          ],
-        ),
-      );
-    }
+              Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: Text('Trend matching...', style: const TextTheme().sp5),
+              ),
+            ],
+          ),
+        );
+      }
+    });
   }
 
   Widget showSa(BuildContext context) {
-    SubsequentAnalysis().init();
     return Obx(() {
       if (hasSubsequentAnalysis.value) {
         if (subsequentAnalysisErr.value == '') {

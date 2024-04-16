@@ -24,13 +24,15 @@ class ListingAdapter {
     MainPresenter.to.symbolAndNameListList.value = listList;
     List<SymbolAndName> listSymbolAndName;
 
-    listList = [];
+    listList.removeAt(0); // Remove CSV column titles
+
     listSymbolAndName = listList
         .map((row) => SymbolAndName(
               symbol: row[0].toString(),
               name: row[1].toString(),
             ))
         .toList();
+    // print(listSymbolAndName);
     return listSymbolAndName;
   }
 }

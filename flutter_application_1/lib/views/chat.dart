@@ -28,11 +28,6 @@ class _ChatViewState extends State<ChatView> {
   bool isWaitingForReply = false;
   final _scrollController = ScrollController();
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';
 

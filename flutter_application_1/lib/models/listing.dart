@@ -9,10 +9,12 @@ class Listing {
   Listing._();
 
   void init() async {
+    MainPresenter.to.listSymbolAndName.value = [];
     List<SymbolAndName> symbolAndNameList = await ListingAdapter()
         .listListToSymbolAndName(
             ListingAdapter().csvToListList(getListingCSV()));
     MainPresenter.to.listSymbolAndName.value = symbolAndNameList;
+    // print(symbolAndNameList);
   }
 
   Future<String> getListingCSV() async {

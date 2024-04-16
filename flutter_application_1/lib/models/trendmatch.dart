@@ -16,6 +16,8 @@ class TrendMatch {
   TrendMatch._();
 
   init({required bool init}) {
+    MainPresenter.to.trendMatched.value = false;
+
     List<CandleData> listCandledata = MainPresenter.to.listCandledata;
     // logger.d(listCandledata.length.toString());
 
@@ -329,6 +331,8 @@ class TrendMatch {
       logger.d('4: An error occurred: $e');
     }
 
+    MainPresenter.to.trendMatched.value = true;
+
     // logger.d('True${MainPresenter.to.trendMatchOutput[0]}');
     // logger.d('False${MainPresenter.to.trendMatchOutput[1]}');
     // logger.d('executionTime${MainPresenter.to.trendMatchOutput[2]}');
@@ -390,7 +394,7 @@ class TrendMatch {
   List<FlSpot> getSimplelineBarsData(int index, bool normalized) {
     List<FlSpot> flsportList = [];
 
-// Whether to normalize
+    // Whether to normalize
     if (normalized) {
       List<double> closePrices = [];
 

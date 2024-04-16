@@ -7,7 +7,6 @@ import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/views/views.dart';
 import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/services/services.dart';
 
 class MainView extends StatefulWidget {
   // const MainView({Key? key}) : super(key: key);
@@ -43,57 +42,47 @@ class _MainViewState extends State<MainView> {
           'app_name'.tr,
           style: const TextTheme().sp7.w700,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              MainPresenter.to.routeTo(RouteName.searchView.path);
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.contact_support),
-            onPressed: () {
-              MainPresenter.to.routeTo(RouteName.chatView.path);
-            },
-          ),
-          IconButton(
-            icon: Icon(MainPresenter.to.darkMode.value
-                ? Icons.dark_mode
-                : Icons.light_mode),
-            onPressed: () => MainPresenter.to.darkMode.toggle(),
-          ),
-          (MainPresenter.to.devMode.value
-              ? IconButton(
-                  icon: Icon(MainPresenter.to.showAverage.value
-                      ? Icons.show_chart
-                      : Icons.bar_chart_outlined),
-                  onPressed: () {
-                    setState(() {
-                      MainPresenter.to.showAverage.value =
-                          !MainPresenter.to.showAverage.value;
-                    });
-                  },
-                )
-              : const SizedBox.shrink()),
-          IconButton(
-            icon: Icon(
-                MainPresenter.to.devMode.value ? Icons.code : Icons.code_off),
-            onPressed: () {
-              setState(() {
-                MainPresenter.to.devMode.value =
-                    !MainPresenter.to.devMode.value;
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(MainPresenter.to.isEn.value
-                ? Icons.g_translate
-                : Icons.translate),
-            onPressed: () {
-              MainPresenter.to.isEn.value = !MainPresenter.to.isEn.value;
-            },
-          ),
-        ],
+        actions: MainPresenter.to.showListingRelatedIcons() +
+            [
+              IconButton(
+                icon: Icon(MainPresenter.to.darkMode.value
+                    ? Icons.dark_mode
+                    : Icons.light_mode),
+                onPressed: () => MainPresenter.to.darkMode.toggle(),
+              ),
+              (MainPresenter.to.devMode.value
+                  ? IconButton(
+                      icon: Icon(MainPresenter.to.showAverage.value
+                          ? Icons.show_chart
+                          : Icons.bar_chart_outlined),
+                      onPressed: () {
+                        setState(() {
+                          MainPresenter.to.showAverage.value =
+                              !MainPresenter.to.showAverage.value;
+                        });
+                      },
+                    )
+                  : const SizedBox.shrink()),
+              IconButton(
+                icon: Icon(MainPresenter.to.devMode.value
+                    ? Icons.code
+                    : Icons.code_off),
+                onPressed: () {
+                  setState(() {
+                    MainPresenter.to.devMode.value =
+                        !MainPresenter.to.devMode.value;
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(MainPresenter.to.isEn.value
+                    ? Icons.g_translate
+                    : Icons.translate),
+                onPressed: () {
+                  MainPresenter.to.isEn.value = !MainPresenter.to.isEn.value;
+                },
+              ),
+            ],
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(5.0),
@@ -460,7 +449,6 @@ class _MainViewState extends State<MainView> {
                               SizedBox(height: 10.h),
                             ])
                           : const SizedBox.shrink()),
-                      SizedBox(height: 10.h),
                       TrendMatchView(),
                       (MainPresenter.to.devMode.value
                           ? Column(children: [
