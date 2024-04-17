@@ -7,6 +7,7 @@ import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/views/views.dart';
 import 'package:flutter_application_1/styles/styles.dart';
+import 'package:flutter_application_1/services/services.dart';
 
 class MainView extends StatefulWidget {
   // const MainView({Key? key}) : super(key: key);
@@ -49,7 +50,12 @@ class _MainViewState extends State<MainView> {
                       icon: Icon(MainPresenter.to.darkMode.value
                           ? Icons.dark_mode
                           : Icons.light_mode),
-                      onPressed: () => MainPresenter.to.darkMode.toggle(),
+                      onPressed: () {
+                        MainPresenter.to.darkMode.toggle();
+                        PrefsService.to.prefs.setBool(
+                            SharedPreferencesConstant.darkMode,
+                            MainPresenter.to.darkMode.value);
+                      },
                     ),
                     (MainPresenter.to.devMode.value
                         ? IconButton(
@@ -82,6 +88,9 @@ class _MainViewState extends State<MainView> {
                       onPressed: () {
                         MainPresenter.to.isEn.value =
                             !MainPresenter.to.isEn.value;
+                        PrefsService.to.prefs.setBool(
+                            SharedPreferencesConstant.isEn,
+                            MainPresenter.to.isEn.value);
                       },
                     ),
                   ]

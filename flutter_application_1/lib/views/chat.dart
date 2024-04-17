@@ -145,7 +145,7 @@ class _ChatViewState extends State<ChatView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat with News AI'),
+        title: const Text('Chat with News AI 📰🤖'),
       ),
       body: Obx(
         () => Column(
@@ -193,7 +193,7 @@ class _ChatViewState extends State<ChatView> {
                     controller: textEditingController,
                     focusNode: focusNode,
                     decoration: const InputDecoration(
-                      hintText: "Type your interested stock and select ^_^",
+                      hintText: "Type and select your interest 😊",
                     ),
                     enabled: !MainPresenter.to.isWaitingForReply
                         .value, // Disable text field when waiting for a reply,

@@ -1,6 +1,6 @@
-import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
+
+// import 'package:flutter_application_1/utils/utils.dart';
 
 class ListingAdapter {
   // Singleton implementation
@@ -8,28 +8,33 @@ class ListingAdapter {
   factory ListingAdapter() => _instance;
   ListingAdapter._();
 
-  Future<List<List<dynamic>>> csvToListList(Future<String> futureCsv) async {
-    String csv = await futureCsv;
+  List<Map<String, dynamic>> jsonsToJson(
+      List<Map<String, dynamic>> parsedResponses) {
+    List<Map<String, dynamic>> json = [];
 
-    List<List<dynamic>> rowsAsListOfValues =
-        const CsvToListConverter().convert(csv, eol: '\n');
-
-    // print(rowsAsListOfValues);
-    return rowsAsListOfValues;
+    for (var parsedResponse in parsedResponses) {
+      var rows = parsedResponse['data']['table']['rows'];
+      if (rows is List) {
+        for (var row in rows) {
+          if (row is Map<String, dynamic>) {
+            json.add(row);
+          }
+        }
+      }
+    }
+    // log(json.toString());
+    return json;
   }
 
-  Future<List<SymbolAndName>> listListToSymbolAndName(
-      Future<List<List<dynamic>>> futureListList) async {
-    List<List<dynamic>> listList = await futureListList;
-    MainPresenter.to.symbolAndNameListList.value = listList;
+  Future<List<SymbolAndName>> jsonToSymbolAndName(
+      Future<List<Map<String, dynamic>>> futureJson) async {
+    List<Map<String, dynamic>> json = await futureJson;
     List<SymbolAndName> listSymbolAndName;
 
-    listList.removeAt(0); // Remove CSV column titles
-
-    listSymbolAndName = listList
+    listSymbolAndName = json
         .map((row) => SymbolAndName(
-              symbol: row[0].toString(),
-              name: row[1].toString(),
+              symbol: row['symbol'],
+              name: row['name'],
             ))
         .toList();
     // print(listSymbolAndName);

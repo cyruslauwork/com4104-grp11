@@ -22,9 +22,13 @@ class MainPresenter extends GetxController {
   static MainPresenter get to => Get.find();
 
   /* Preference */
-  RxBool darkMode = true.obs;
+  RxBool darkMode =
+      (PrefsService.to.prefs.getBool(SharedPreferencesConstant.darkMode) ??
+              true)
+          .obs;
   ValueNotifier<bool> devMode = ValueNotifier<bool>(false);
-  ValueNotifier<bool> isEn = ValueNotifier<bool>(true);
+  ValueNotifier<bool> isEn = ValueNotifier<bool>(
+      (PrefsService.to.prefs.getBool(SharedPreferencesConstant.isEn) ?? true));
 
   /* Candlestick-related */
   RxInt candledownloadTime = 0.obs;
@@ -64,7 +68,6 @@ class MainPresenter extends GetxController {
 
   /* Listing */
   RxInt listingDownloadTime = 0.obs;
-  RxList<List<dynamic>> symbolAndNameListList = [[]].obs;
   RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
 

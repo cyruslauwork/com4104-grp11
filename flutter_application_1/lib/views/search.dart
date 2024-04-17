@@ -31,6 +31,7 @@ class _SearchViewState extends State<SearchView> {
       PrefsService.to.prefs.getDouble(SharedPreferencesConstant.dateRange) ?? 5;
   TextEditingController _textEditingController = TextEditingController();
   bool _autocomplete = true;
+  List<SymbolAndName> listSymbolAndName = MainPresenter.to.listSymbolAndName;
 
   // @override
   // void dispose() {
@@ -53,7 +54,7 @@ class _SearchViewState extends State<SearchView> {
     bool hasText = _textEditingController.text != '' ? true : false;
     final text = _textEditingController.text.toUpperCase();
     if (hasText) {
-      bool textMatchesSymbol = MainPresenter.to.listSymbolAndName
+      bool textMatchesSymbol = listSymbolAndName
           .any((SymbolAndName symbolAndName) => symbolAndName.symbol == text);
       if (textMatchesSymbol) {
         PrefsService.to.prefs.setString(
@@ -109,7 +110,7 @@ class _SearchViewState extends State<SearchView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Search',
+          'Search 🔍',
           style: const TextTheme().sp7,
         ),
       ),
@@ -232,10 +233,10 @@ class _SearchViewState extends State<SearchView> {
                     _SearchViewState._displayStringForOption,
                 optionsBuilder: (TextEditingValue textEditingValue) {
                   if (textEditingValue.text == '') {
-                    return MainPresenter.to.listSymbolAndName;
+                    return listSymbolAndName;
                   }
                   if (_autocomplete) {
-                    return MainPresenter.to.listSymbolAndName
+                    return listSymbolAndName
                         .where((SymbolAndName symbolAndName) {
                       return symbolAndName
                           .toString()
@@ -271,7 +272,7 @@ class _SearchViewState extends State<SearchView> {
                     focusNode: focusNode,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: "Type your interested stock and select ^_^",
+                      labelText: "Type what you're interested in 😊",
                     ),
                   );
                 },

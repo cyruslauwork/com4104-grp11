@@ -27,12 +27,12 @@ class Candle {
         Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
   }
 
-  Future<String> getCSV(int callbackTime, {required String stockSymbol}) async {
+  Future<String> getCsv(int callbackTime, {required String stockSymbol}) async {
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
 
     final response = await HTTPService()
-        .fetchCandleCSV(callbackTime, stockSymbol: stockSymbol);
+        .fetchCandleCsv(callbackTime, stockSymbol: stockSymbol);
 
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
@@ -115,7 +115,7 @@ class Candle {
   Future<List<List<dynamic>>> checkAPIProvider(
       {required bool init, required String stockSymbol}) {
     if (FlavorService.to.srcFileType == SrcFileType.csv) {
-      return CandleAdapter().csvToListList(getCSV(0, stockSymbol: stockSymbol));
+      return CandleAdapter().csvToListList(getCsv(0, stockSymbol: stockSymbol));
     } else if (FlavorService.to.srcFileType == SrcFileType.json) {
       return CandleAdapter().jsonToListList(getJSON(init: init));
     } else {

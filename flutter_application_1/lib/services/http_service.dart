@@ -16,7 +16,7 @@ class HTTPService extends GetxService {
     return this;
   }
 
-  Future<http.Response> fetchCandleCSV(int callbackTime,
+  Future<http.Response> fetchCandleCsv(int callbackTime,
       {required String stockSymbol}) async {
     /* 
     US exchanges – such as the NYSE or NASDAQ – which are open Monday through Friday from 9:30 am to 4:00 pm Eastern Daylight Time (GMT-04:00) i.e. 14:30 to 21:00 (UTC).
@@ -100,9 +100,12 @@ class HTTPService extends GetxService {
   }
 
   Future<Map<String, dynamic>> getFetchJson(String url) async {
+    // Modify the request headers to accept JSON data
+    final headers = {'Accept': 'text/json'};
+
     // Make an HTTP GET request to retrieve the JSON response
     var thisUrl = Uri.parse(url);
-    var response = await http.get(thisUrl);
+    var response = await http.get(thisUrl, headers: headers);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var parsedResponse =
@@ -119,10 +122,14 @@ class HTTPService extends GetxService {
 
   Future<Map<String, dynamic>> postFetchJson(
       String url, Map<String, dynamic> body) async {
+    // Modify the request headers to accept JSON data
+    final headers = {'Accept': 'text/json'};
+
     // Make an HTTP GET request to retrieve the JSON response
     var thisUrl = Uri.parse(url);
     var response = await http.post(
       thisUrl,
+      headers: headers,
       body: body,
     );
 
@@ -140,9 +147,12 @@ class HTTPService extends GetxService {
   }
 
   Future<String> getFetchString(String url) async {
+    // Modify the request headers to accept plain text
+    final headers = {'Accept': 'text/plain'};
+
     // Make an HTTP GET request to retrieve the String response
     var thisUrl = Uri.parse(url);
-    var response = await http.get(thisUrl);
+    var response = await http.get(thisUrl, headers: headers);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // print(response.body.runtimeType);
@@ -170,15 +180,22 @@ class HTTPService extends GetxService {
     }
   }
 
-  Future<http.Response> fetchListingCSV() async {
+  Stream<http.Response> fetchListingJsons() async* {
     final url = Uri.parse(
-        'https://r2.datahub.io/clt98kj4f0005ia08b4a7ergo/master/raw/data/nasdaq-listed-symbols.csv');
+        'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nasdaq');
+    final url2 = Uri.parse(
+        'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nyse');
+    final url3 = Uri.parse(
+        'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=amex');
 
     // Modify the request headers to accept CSV data
-    final headers = {'Accept': 'text/csv'};
+    final headers = {'Accept': 'text/json'};
 
     // Send the HTTP GET request with the updated URL and headers
-    return http.get(url, headers: headers);
+    var urls = [url, url2, url3];
+    for (var url in urls) {
+      yield await http.get(url, headers: headers);
+    }
   }
 }
 
