@@ -165,7 +165,7 @@ class _ChatViewState extends State<ChatView> {
             ),
             _buildChatOptions(),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: Autocomplete<SymbolAndName>(
                 displayStringForOption: _ChatViewState._displayStringForOption,
                 optionsBuilder: (TextEditingValue textEditingValue) {

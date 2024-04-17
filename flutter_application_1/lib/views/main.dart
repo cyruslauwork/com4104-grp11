@@ -88,7 +88,7 @@ class _MainViewState extends State<MainView> {
               : null,
         ),
         body: SafeArea(
-          minimum: const EdgeInsets.all(5.0),
+          minimum: EdgeInsets.all(1.w),
           child: FutureBuilder<List<CandleData>>(
             future: MainPresenter.to.futureListCandledata.value,
             builder: (BuildContext context,

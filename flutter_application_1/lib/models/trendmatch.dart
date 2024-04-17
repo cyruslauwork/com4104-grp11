@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter_application_1/services/prefs/prefs_const.dart';
 import 'dart:math';
 
 import 'package:interactive_chart/interactive_chart.dart';
@@ -7,6 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/styles/styles.dart';
+import 'package:flutter_application_1/services/services.dart';
 
 import 'package:flutter_application_1/utils/utils.dart';
 
@@ -45,7 +45,10 @@ class TrendMatch {
     int trueCount = 0;
     int falseCount = 0;
     // int selectedCount = MainPresenter.to.selectedPeriod.value;
-    int selectedCount = SharedPreferencesConstant.dateRange.toInt();
+    int selectedCount =
+        (PrefsService.to.prefs.getDouble(SharedPreferencesConstant.dateRange) ??
+                5)
+            .toInt();
 
     if (selectedCount <= 1) {
       throw ArgumentError('Selected period must greater than 1 time unit.');
@@ -385,7 +388,9 @@ class TrendMatch {
       double difference = comList[i] - selList[i];
       double percentageDifference = (difference / selList[i]) * 100;
 
-      if (percentageDifference.abs() >= SharedPreferencesConstant.tolerance) {
+      if (percentageDifference.abs() >=
+          (PrefsService.to.prefs.getInt(SharedPreferencesConstant.tolerance) ??
+              100)) {
         return (false, []); // Difference is larger than or equal to certain %
       }
     }

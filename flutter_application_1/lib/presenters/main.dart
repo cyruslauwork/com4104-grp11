@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/styles/styles.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:flutter_application_1/models/models.dart';
@@ -137,7 +138,12 @@ class MainPresenter extends GetxController {
     });
     devMode.addListener(() {
       if (devMode.value) {
-        showSnackBar(func: Func.devMode);
+        Get.snackbar(
+            'System Info',
+            colorText: AppColor.whiteColor,
+            backgroundColor: AppColor.greyColor,
+            icon: const Icon(Icons.settings),
+            'Developer mode is on');
       }
     });
     isEn.addListener(() {
@@ -177,18 +183,7 @@ class MainPresenter extends GetxController {
     Get.back();
   }
 
-  /* UI */
-  void showSnackBar({Func? func, String? title, String? msg}) {
-    if (title != null && msg != null) {
-      Get.snackbar(title, msg);
-    }
-    if (func == Func.devMode) {
-      Get.snackbar("Information", 'Developer mode is on');
-    } else {
-      throw ArgumentError('Error: Failed to get function name.');
-    }
-  }
-
+  /* UI Logic*/
   List<Widget> showListingRelatedIcons() {
     Listing().init();
     return [
