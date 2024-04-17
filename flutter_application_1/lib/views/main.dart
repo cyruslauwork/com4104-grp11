@@ -240,50 +240,48 @@ class _MainViewState extends State<MainView> {
               color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
           children: [
             TableRow(children: [
-              Column(children: [
-                Text('CSV DL (ms)', style: const TextTheme().sp3)
-              ]),
+              Column(children: [Text('DL (ms)', style: const TextTheme().sp4)]),
               Column(
-                  children: [Text('CSV rows', style: const TextTheme().sp3)]),
+                  children: [Text('CSV rows', style: const TextTheme().sp4)]),
               Column(
-                  children: [Text('Sel count', style: const TextTheme().sp3)]),
-              Column(children: [Text('TM rows', style: const TextTheme().sp3)]),
+                  children: [Text('Sel count', style: const TextTheme().sp4)]),
+              Column(children: [Text('TM rows', style: const TextTheme().sp4)]),
               Column(
-                  children: [Text('Exe (ms)', style: const TextTheme().sp3)]),
-              Column(children: [Text('True', style: const TextTheme().sp3)]),
-              Column(children: [Text('False', style: const TextTheme().sp3)])
+                  children: [Text('Exe (ms)', style: const TextTheme().sp4)]),
+              Column(children: [Text('True', style: const TextTheme().sp4)]),
+              Column(children: [Text('False', style: const TextTheme().sp4)])
             ]),
             TableRow(children: [
               Column(children: [
                 Text(MainPresenter.to.candledownloadTime.toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.trendMatchOutput[3].toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.trendMatchOutput[4].toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(
                     (MainPresenter.to.trendMatchOutput[3] -
                             MainPresenter.to.trendMatchOutput[4])
                         .toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.trendMatchOutput[2].toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.trendMatchOutput[0].toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.trendMatchOutput[1].toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
             ]),
           ],
@@ -299,36 +297,36 @@ class _MainViewState extends State<MainView> {
           children: [
             TableRow(children: [
               Column(children: [
-                Text('Listing CSV DL (ms)', style: const TextTheme().sp3)
+                Text('Listing DL (ms)', style: const TextTheme().sp4)
               ]),
               Column(children: [
-                Text('SA prep (ms)', style: const TextTheme().sp3)
+                Text('SA prep (ms)', style: const TextTheme().sp4)
               ]),
               Column(children: [
-                Text('Cloud SA (ms)', style: const TextTheme().sp3)
+                Text('Cloud SA (ms)', style: const TextTheme().sp4)
               ]),
               Column(children: [
-                Text('AI res (ms)', style: const TextTheme().sp3)
+                Text('AI res (ms)', style: const TextTheme().sp4)
               ]),
             ]),
             TableRow(children: [
               Column(children: [
                 Text(MainPresenter.to.listingDownloadTime.toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(
                     MainPresenter.to.lastClosePriceAndSubsequentTrendsExeTime
                         .toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.cloudSubsequentAnalysisTime.toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text(MainPresenter.to.aiResponseTime.toString(),
-                    style: const TextTheme().sp3)
+                    style: const TextTheme().sp4)
               ]),
             ]),
           ],
@@ -349,7 +347,7 @@ class _MainViewState extends State<MainView> {
               .mapIndexed((i, e) => DataColumn(
                       label: Text(
                     'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                    style: const TextTheme().sp3,
+                    style: const TextTheme().sp4,
                   )))
               .toList(),
           rows: [
@@ -357,7 +355,7 @@ class _MainViewState extends State<MainView> {
               cells: MainPresenter.to.selectedPeriodPercentDifferencesList
                   .map((e) => DataCell(Text(
                         e.toString(),
-                        style: const TextTheme().sp3,
+                        style: const TextTheme().sp4,
                       )))
                   .toList(),
             ),
@@ -379,7 +377,7 @@ class _MainViewState extends State<MainView> {
               .mapIndexed((i, e) => DataColumn(
                       label: Text(
                     'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
-                    style: const TextTheme().sp3,
+                    style: const TextTheme().sp4,
                   )))
               .toList(),
           rows: [
@@ -387,7 +385,7 @@ class _MainViewState extends State<MainView> {
               cells: MainPresenter.to.selectedPeriodActualDifferencesList
                   .map((e) => DataCell(Text(
                         e.toString(),
-                        style: const TextTheme().sp3,
+                        style: const TextTheme().sp4,
                       )))
                   .toList(),
             ),
@@ -409,7 +407,7 @@ class _MainViewState extends State<MainView> {
               .mapIndexed((i, e) => DataColumn(
                       label: Text(
                     'Close Price ${(i + 1).toString()}',
-                    style: const TextTheme().sp3,
+                    style: const TextTheme().sp4,
                   )))
               .toList(),
           rows: [
@@ -417,7 +415,7 @@ class _MainViewState extends State<MainView> {
               cells: MainPresenter.to.selectedPeriodActualPricesList
                   .map((e) => DataCell(Text(
                         e.toString(),
-                        style: const TextTheme().sp3,
+                        style: const TextTheme().sp4,
                       )))
                   .toList(),
             ),
@@ -434,10 +432,10 @@ class _MainViewState extends State<MainView> {
               scrollDirection: Axis.horizontal,
               child: Text(
                 MainPresenter.to.matchRows.toString(),
-                style: const TextTheme().sp3,
+                style: const TextTheme().sp4,
               ),
             )
-          : Text('0', style: const TextTheme().sp3)),
+          : Text('0', style: const TextTheme().sp4)),
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend(s)',
@@ -467,10 +465,10 @@ class _MainViewState extends State<MainView> {
               scrollDirection: Axis.horizontal,
               child: Text(
                 '${MainPresenter.to.matchPercentDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchPercentDifferencesListList.length > 10 ? MainPresenter.to.matchPercentDifferencesListList.length - 10 : 0)} rows left',
-                style: const TextTheme().sp3,
+                style: const TextTheme().sp4,
               ),
             )
-          : Text('0', style: const TextTheme().sp3)),
+          : Text('0', style: const TextTheme().sp4)),
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend(s) Actual Differences',
@@ -481,10 +479,10 @@ class _MainViewState extends State<MainView> {
               scrollDirection: Axis.horizontal,
               child: Text(
                 '${MainPresenter.to.matchActualDifferencesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualDifferencesListList.length > 10 ? MainPresenter.to.matchActualDifferencesListList.length - 10 : 0)} rows left',
-                style: const TextTheme().sp3,
+                style: const TextTheme().sp4,
               ),
             )
-          : Text('0', style: const TextTheme().sp3)),
+          : Text('0', style: const TextTheme().sp4)),
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend(s) Actual Prices',
@@ -495,10 +493,10 @@ class _MainViewState extends State<MainView> {
               scrollDirection: Axis.horizontal,
               child: Text(
                 '${MainPresenter.to.matchActualPricesListList.mapIndexed((i, e) => '${MainPresenter.to.matchRows[i]}:$e\n').take(10).toList().toString()}...${(MainPresenter.to.matchActualPricesListList.length > 10 ? MainPresenter.to.matchActualPricesListList.length - 10 : 0)} rows left',
-                style: const TextTheme().sp3,
+                style: const TextTheme().sp4,
               ),
             )
-          : Text('0', style: const TextTheme().sp3)),
+          : Text('0', style: const TextTheme().sp4)),
       SizedBox(height: 10.h),
       Text(
         'Comparison Historical Trends Percentage Differences',
@@ -508,7 +506,7 @@ class _MainViewState extends State<MainView> {
         scrollDirection: Axis.horizontal,
         child: Text(
           '${MainPresenter.to.comparePeriodPercentDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodPercentDifferencesListList.length - 10} rows left',
-          style: const TextTheme().sp3,
+          style: const TextTheme().sp4,
         ),
       ),
       SizedBox(height: 10.h),
@@ -520,7 +518,7 @@ class _MainViewState extends State<MainView> {
         scrollDirection: Axis.horizontal,
         child: Text(
           '${MainPresenter.to.comparePeriodActualDifferencesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualDifferencesListList.length - 10} rows left',
-          style: const TextTheme().sp3,
+          style: const TextTheme().sp4,
         ),
       ),
       SizedBox(height: 10.h),
@@ -532,7 +530,7 @@ class _MainViewState extends State<MainView> {
         scrollDirection: Axis.horizontal,
         child: Text(
           '${MainPresenter.to.comparePeriodActualPricesListList.mapIndexed((i, e) => '$i:$e\n').take(10).toList()}...${MainPresenter.to.comparePeriodActualPricesListList.length - 10} rows left',
-          style: const TextTheme().sp3,
+          style: const TextTheme().sp4,
         ),
       ),
       SizedBox(height: 10.h),

@@ -31,7 +31,7 @@ class TrendMatchView extends StatelessWidget {
         ),
         Text(
           '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
-          style: const TextTheme().sp3,
+          style: const TextTheme().sp4,
         ),
         Text(
           'and their subsequent trends',
@@ -39,7 +39,7 @@ class TrendMatchView extends StatelessWidget {
         ),
         Text(
           '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
-          style: const TextTheme().sp3,
+          style: const TextTheme().sp4,
         ),
         AdjustedLineChart()
       ],

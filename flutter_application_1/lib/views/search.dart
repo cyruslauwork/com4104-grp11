@@ -152,23 +152,23 @@ class _SearchViewState extends State<SearchView> {
                       children: [
                         Text(
                           '5%',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                         Text(
                           '50%',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                         Text(
                           '100%',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                         Text(
                           '150%',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                         Text(
                           '200 %',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                       ],
                     ),
@@ -208,19 +208,19 @@ class _SearchViewState extends State<SearchView> {
                       children: [
                         Text(
                           '2 Days',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                         // Text(
                         //   '10 Days',
-                        //   style: const TextTheme().sp3,
+                        //   style: const TextTheme().sp4,
                         // ),
                         // Text(
                         //   '15 Days',
-                        //   style: const TextTheme().sp3,
+                        //   style: const TextTheme().sp4,
                         // ),
                         Text(
                           '20 Days',
-                          style: const TextTheme().sp3,
+                          style: const TextTheme().sp4,
                         ),
                       ],
                     ),
@@ -228,54 +228,60 @@ class _SearchViewState extends State<SearchView> {
                 )),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 4.w),
-              child: Autocomplete<SymbolAndName>(
-                displayStringForOption:
-                    _SearchViewState._displayStringForOption,
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text == '') {
-                    return listSymbolAndName;
-                  }
-                  if (_autocomplete) {
-                    return listSymbolAndName
-                        .where((SymbolAndName symbolAndName) {
-                      return symbolAndName
-                          .toString()
-                          .toLowerCase()
-                          .contains(textEditingValue.text.toLowerCase());
-                    });
-                  } else {
-                    return const Iterable<SymbolAndName>.empty();
-                  }
-                },
-                onSelected: (SymbolAndName selection) {
-                  _autocomplete = false;
-                  _textEditingController.text = selection.symbol;
-                },
-                fieldViewBuilder: (BuildContext context,
-                    TextEditingController textEditingController,
-                    FocusNode focusNode,
-                    VoidCallback onFieldSubmitted) {
-                  _textEditingController = textEditingController;
-                  // focusNode.addListener(() {
-                  //   if (!focusNode.hasFocus) {
-                  //     // Clear the text field when losing focus if no selection was made
-                  //     if (_autocomplete) {
-                  //       _textEditingController.text = '';
-                  //     }
-                  //   }
-                  // });
-                  return TextField(
-                    onChanged: (String value) {
-                      _autocomplete = true;
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Autocomplete<SymbolAndName>(
+                    displayStringForOption:
+                        _SearchViewState._displayStringForOption,
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text == '') {
+                        return listSymbolAndName;
+                      }
+                      if (_autocomplete) {
+                        return listSymbolAndName
+                            .where((SymbolAndName symbolAndName) {
+                          return symbolAndName
+                              .toString()
+                              .toLowerCase()
+                              .contains(textEditingValue.text.toLowerCase());
+                        });
+                      } else {
+                        return const Iterable<SymbolAndName>.empty();
+                      }
                     },
-                    controller: textEditingController,
-                    focusNode: focusNode,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Type what you're interested in 😊",
-                    ),
-                  );
-                },
+                    onSelected: (SymbolAndName selection) {
+                      _autocomplete = false;
+                      _textEditingController.text = selection.symbol;
+                    },
+                    fieldViewBuilder: (BuildContext context,
+                        TextEditingController textEditingController,
+                        FocusNode focusNode,
+                        VoidCallback onFieldSubmitted) {
+                      _textEditingController = textEditingController;
+                      // focusNode.addListener(() {
+                      //   if (!focusNode.hasFocus) {
+                      //     // Clear the text field when losing focus if no selection was made
+                      //     if (_autocomplete) {
+                      //       _textEditingController.text = '';
+                      //     }
+                      //   }
+                      // });
+                      return TextField(
+                        onChanged: (String value) {
+                          _autocomplete = true;
+                        },
+                        controller: textEditingController,
+                        focusNode: focusNode,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: "Type what you're interested in 😊",
+                        ),
+                      );
+                    },
+                  ),
+                  buildRichTextWithImage(),
+                ],
               ),
             ),
             // Padding(
@@ -329,6 +335,47 @@ class _SearchViewState extends State<SearchView> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildRichTextWithImage() {
+    final imageSpan = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Image.asset(
+          'images/nasdaq.png',
+          height: 7.h, // Adjust the height as needed
+        ),
+      ),
+    );
+    final imageSpan2 = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Image.asset(
+          'images/nyse.png',
+          height: 7.h, // Adjust the height as needed
+        ),
+      ),
+    );
+    final imageSpan3 = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Transform.translate(
+          offset: Offset(0.0, 3.h),
+          child: Image.asset(
+            'images/amex.png',
+            height: 13.h, // Adjust the height as needed
+          ),
+        ),
+      ),
+    );
+
+    return RichText(
+      text: TextSpan(
+        text: 'Latest listings on',
+        children: [imageSpan, imageSpan2, imageSpan3],
+        style: const TextTheme().sp4.greyColor,
       ),
     );
   }

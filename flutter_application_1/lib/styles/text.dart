@@ -5,9 +5,9 @@ import 'package:flutter_application_1/styles/styles.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 
 extension CustomStyles on TextTheme {
-  TextStyle get sp3 => TextStyle(
+  TextStyle get sp4 => TextStyle(
         color: ThemeColor.primary.value,
-        fontSize: 3.sp,
+        fontSize: 4.sp,
         fontFamily: font,
       );
   TextStyle get sp5 => TextStyle(
@@ -49,6 +49,6 @@ extension CustomTextStyle on TextStyle {
   // TextStyle get editTextColor => copyWith(color: AppColor.editTextColor);
   // TextStyle get editTextErrorColor =>
   //     copyWith(color: AppColor.editTextErrorColor);
-  // TextStyle get greyColor => copyWith(color: AppColor.greyColor);
+  TextStyle get greyColor => copyWith(color: AppColor.greyColor);
   TextStyle get underline => copyWith(decoration: TextDecoration.underline);
 }
