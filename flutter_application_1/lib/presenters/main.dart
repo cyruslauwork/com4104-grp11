@@ -351,6 +351,29 @@ class MainPresenter extends GetxController {
     );
   }
 
+  Widget buildCloudFunctionRichText() {
+    final imageSpan = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Transform.translate(
+          offset: Offset(0.0, 3.h),
+          child: Image.asset(
+            'images/cloudfunction.png',
+            height: 20.h, // Adjust the height as needed
+          ),
+        ),
+      ),
+    );
+
+    return RichText(
+      text: TextSpan(
+        text: 'Powered by',
+        children: [imageSpan],
+        style: const TextTheme().sp4.greyColor,
+      ),
+    );
+  }
+
   void changeAppearance() {
     darkMode.toggle();
     if (darkMode.value) {

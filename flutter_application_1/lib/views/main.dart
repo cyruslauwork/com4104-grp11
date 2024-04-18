@@ -172,6 +172,7 @@ class _MainViewState extends State<MainView> {
                           : const SizedBox.shrink()),
                       SizedBox(height: 10.h),
                       SubsequentAnalysisView(context: context),
+                      MainPresenter.to.buildCloudFunctionRichText(),
                     ],
                   ),
                 );
