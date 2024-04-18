@@ -73,6 +73,8 @@ flutter:
     - images/nasdaq.png
     - images/nyse.png
     - images/amex.png
+    - images/google.png
+    - images/gemini.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

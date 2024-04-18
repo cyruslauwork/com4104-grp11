@@ -26,19 +26,15 @@ class TrendMatchView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Selected trend with matched historical trends',
-          style: const TextTheme().sp5,
+          'Last ${MainPresenter.to.range.toString()}-day(s) trend with matched historical trend(s) and their subsequent trend(s)',
+          style: const TextTheme().sp5.w700,
         ),
         Text(
           '(adjusted last prices to be the same as the last selected price and apply to previous prices)',
           style: const TextTheme().sp4,
         ),
         Text(
-          'and their subsequent trends',
-          style: const TextTheme().sp5,
-        ),
-        Text(
-          '(adjusted first prices to be the same as the last selected price and apply to subsequent prices)',
+          '(adjusted first prices to be the same as the last selected price and apply to subsequent prices) Tolerance is ${MainPresenter.to.tolerance.toString()}%',
           style: const TextTheme().sp4,
         ),
         AdjustedLineChart()

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
@@ -230,21 +231,19 @@ class _MainViewState extends State<MainView> {
       Column(children: [
         Text(
           'Trend Match',
-          style: const TextTheme().sp5,
+          style: const TextTheme().sp5.w700,
         ),
         Table(
           border: TableBorder.all(
               color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
           children: [
             TableRow(children: [
-              Column(children: [Text('DL (ms)', style: const TextTheme().sp4)]),
-              Column(
-                  children: [Text('CSV rows', style: const TextTheme().sp4)]),
+              Column(children: [Text('DL(ms)', style: const TextTheme().sp4)]),
+              Column(children: [Text('rows', style: const TextTheme().sp4)]),
               Column(
                   children: [Text('Sel count', style: const TextTheme().sp4)]),
               Column(children: [Text('TM rows', style: const TextTheme().sp4)]),
-              Column(
-                  children: [Text('Exe (ms)', style: const TextTheme().sp4)]),
+              Column(children: [Text('Exe(ms)', style: const TextTheme().sp4)]),
               Column(children: [Text('True', style: const TextTheme().sp4)]),
               Column(children: [Text('False', style: const TextTheme().sp4)])
             ]),
@@ -286,7 +285,7 @@ class _MainViewState extends State<MainView> {
         SizedBox(height: 10.h),
         Text(
           'Misc',
-          style: const TextTheme().sp5,
+          style: const TextTheme().sp5.w700,
         ),
         Table(
           border: TableBorder.all(
@@ -294,18 +293,17 @@ class _MainViewState extends State<MainView> {
           children: [
             TableRow(children: [
               Column(children: [
-                Text('Listing DL (ms)', style: const TextTheme().sp4)
+                Text('Listing DL(ms)', style: const TextTheme().sp4)
               ]),
               Column(children: [
-                Text('SA prep (ms)', style: const TextTheme().sp4)
+                Text('SA prep(ms)', style: const TextTheme().sp4)
               ]),
-              Column(children: [Text('SA (ms)', style: const TextTheme().sp4)]),
+              Column(children: [Text('SA(ms)', style: const TextTheme().sp4)]),
               Column(children: [
                 Text('SA Cluster(s)', style: const TextTheme().sp4)
               ]),
-              Column(children: [
-                Text('AI res (ms)', style: const TextTheme().sp4)
-              ]),
+              Column(
+                  children: [Text('AI res(ms)', style: const TextTheme().sp4)]),
             ]),
             TableRow(children: [
               Column(children: [
@@ -337,7 +335,7 @@ class _MainViewState extends State<MainView> {
       ]),
       Text(
         'Percentage differences between selected period',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -367,7 +365,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Actual differences between selected period',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -397,7 +395,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Selected period Actual Prices',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -427,7 +425,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend Row(s)',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchRows.isNotEmpty
           ? SingleChildScrollView(
@@ -441,13 +439,13 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend(s)',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SimpleLineChart(),
       SizedBox(height: 10.h),
       Text(
         'Normalized Matched Historical Trend(s)',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SimpleLineChart(
         normalized: true,
@@ -460,7 +458,7 @@ class _MainViewState extends State<MainView> {
     return Column(children: [
       Text(
         'Matched Historical Trend(s) Percentage Differences',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchPercentDifferencesListList.isNotEmpty
           ? SingleChildScrollView(
@@ -474,7 +472,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend(s) Actual Differences',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchActualDifferencesListList.isNotEmpty
           ? SingleChildScrollView(
@@ -488,7 +486,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Matched Historical Trend(s) Actual Prices',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchActualPricesListList.isNotEmpty
           ? SingleChildScrollView(
@@ -502,7 +500,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Comparison Historical Trends Percentage Differences',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -514,7 +512,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Comparison Historical Trends Actual Differences',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -526,7 +524,7 @@ class _MainViewState extends State<MainView> {
       SizedBox(height: 10.h),
       Text(
         'Comparison Historical Trends Actual Prices',
-        style: const TextTheme().sp5,
+        style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,

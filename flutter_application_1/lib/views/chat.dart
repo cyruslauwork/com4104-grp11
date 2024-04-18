@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'package:get/get.dart';
-
 import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
-import 'package:flutter_application_1/models/listing_adapter.dart';
-import 'package:flutter_application_1/presenters/main.dart';
+
+import 'package:flutter_application_1/models/models.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/utils/screen_utils.dart';
+import 'package:flutter_application_1/utils/utils.dart';
+import 'package:flutter_application_1/styles/styles.dart';
 
 class ChatView extends StatefulWidget {
   // const ChatView({Key? key}) : super(key: key);
@@ -145,7 +147,49 @@ class _ChatViewState extends State<ChatView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat with News AI 📰🤖'),
+        title: Row(
+          children: [
+            Text(
+              'Chat with News AI',
+              style: const TextTheme().sp7,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 3.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Powered by',
+                    style: const TextTheme().sp4.greyColor,
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: AppColor.imageDefaultBgColor,
+                    ),
+                    child: Row(
+                      children: [
+                        Transform.translate(
+                          offset: Offset(0.0, 1.h),
+                          child: Image.asset(
+                            'images/google.png',
+                            height: 6.h, // Adjust the height as needed
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 3.w),
+                          child: Image.asset(
+                            'images/gemini.png',
+                            height: 6.h, // Adjust the height as needed
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       body: Obx(
         () => Column(

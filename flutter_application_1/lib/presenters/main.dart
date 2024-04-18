@@ -33,6 +33,10 @@ class MainPresenter extends GetxController {
   bool isEnListenerAdded = false;
 
   /* Candlestick-related */
+  RxString financialInstrumentSymbol = (PrefsService.to.prefs
+              .getString(SharedPreferencesConstant.financialInstrumentSymbol) ??
+          'SPY')
+      .obs;
   RxInt candledownloadTime = 0.obs;
   RxList<List<dynamic>> candleListList = [[]].obs;
   late Rx<Future<List<CandleData>>> futureListCandledata = init().obs;
@@ -88,7 +92,11 @@ class MainPresenter extends GetxController {
   RxDouble thisScrollExtent = 0.0.obs;
 
   /* Trend match */
-  RxInt selectedPeriod = 5.obs; // The root selected period here
+  RxInt range =
+      (PrefsService.to.prefs.getInt(SharedPreferencesConstant.range) ?? 5).obs;
+  RxInt tolerance =
+      (PrefsService.to.prefs.getInt(SharedPreferencesConstant.tolerance) ?? 100)
+          .obs;
   RxList<double> selectedPeriodPercentDifferencesList = [0.0].obs;
   RxList<double> selectedPeriodActualDifferencesList = [0.0].obs;
   RxList<double> selectedPeriodActualPricesList = [0.0].obs;
@@ -130,74 +138,64 @@ class MainPresenter extends GetxController {
 
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
-  RxInt lastCandleDataLength = 0.obs;
+  RxInt lastCandledataLength = 0.obs;
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
     if (!isShowAverageListenerAdded) {
-      void showAverageListener() {
-        print('not ok3');
-        // Perform actions based on the new value of showAverage
-        if (showAverage.value) {
-          // Show the average
-          Candle().computeTrendLines();
-        } else {
-          // Hide the average
-          Candle().removeTrendLines();
-        }
-      }
-
       showAverage.addListener(showAverageListener);
       isShowAverageListenerAdded = true;
     }
 
     if (!isDevModeListenerAdded) {
-      void devModeListener() {
-        print('not ok4');
-        if (devMode.value) {
-          Get.snackbar(
-              'System Info',
-              colorText: AppColor.whiteColor,
-              backgroundColor: AppColor.greyColor,
-              icon: const Icon(Icons.settings),
-              'Developer mode is on');
-        }
-      }
-
       devMode.addListener(devModeListener);
       isDevModeListenerAdded = true;
     }
 
     if (!isEnListenerAdded) {
-      void isEnListener() {
-        print('not ok');
-        if (isEn.value) {
-          LangService.to.changeLanguage(Lang.en);
-        } else {
-          LangService.to.changeLanguage(Lang.zh);
-        }
-      }
-
       isEn.addListener(isEnListener);
       isEnListenerAdded = true;
     }
 
     if (!isSearchCountListenerAdded) {
-      void isSearchCountListener() {
-        print('not ok2');
-        futureListCandledata.value = init();
-      }
-
       searchCount.addListener(isSearchCountListener);
       isSearchCountListenerAdded = true;
     }
+  }
 
-    if (MainPresenter.to.darkMode.value) {
-      AppColor.primaryTextColor = Colors.white;
+  void showAverageListener() {
+    // Perform actions based on the new value of showAverage
+    if (showAverage.value) {
+      // Show the average
+      Candle().computeTrendLines();
     } else {
-      AppColor.primaryTextColor = Colors.black;
+      // Hide the average
+      Candle().removeTrendLines();
     }
+  }
+
+  void devModeListener() {
+    if (devMode.value) {
+      Get.snackbar(
+          'System Info',
+          colorText: AppColor.whiteColor,
+          backgroundColor: AppColor.greyColor,
+          icon: const Icon(Icons.settings),
+          'Developer mode is on');
+    }
+  }
+
+  void isEnListener() {
+    if (isEn.value) {
+      LangService.to.changeLanguage(Lang.en);
+    } else {
+      LangService.to.changeLanguage(Lang.zh);
+    }
+  }
+
+  void isSearchCountListener() {
+    futureListCandledata.value = init();
   }
 
   void reload() {

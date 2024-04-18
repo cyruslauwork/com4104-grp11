@@ -6,7 +6,6 @@ import 'package:fl_chart/fl_chart.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/services/services.dart';
 
 import 'package:flutter_application_1/utils/utils.dart';
 
@@ -44,13 +43,9 @@ class TrendMatch {
 
     int trueCount = 0;
     int falseCount = 0;
-    // int selectedCount = MainPresenter.to.selectedPeriod.value;
-    int selectedCount =
-        (PrefsService.to.prefs.getDouble(SharedPreferencesConstant.dateRange) ??
-                5)
-            .toInt();
+    int range = MainPresenter.to.range.value;
 
-    if (selectedCount <= 1) {
+    if (range <= 1) {
       throw ArgumentError('Selected period must greater than 1 time unit.');
     }
 
@@ -70,7 +65,7 @@ class TrendMatch {
 
         // Loop selected data
         try {
-          for (int i = selectedCount; i > 1; i--) {
+          for (int i = range; i > 1; i--) {
             try {
               double percentage =
                   (listCandledata[listCandledata.length - (i - 1)].close! -
@@ -92,7 +87,7 @@ class TrendMatch {
           logger.d('1.2: An error occurred: $e');
         }
         try {
-          for (int i = selectedCount; i > 0; i--) {
+          for (int i = range; i > 0; i--) {
             try {
               selectedPeriodActualPricesList
                   .add(listCandledata[listCandledata.length - i].close!);
@@ -142,14 +137,14 @@ class TrendMatch {
       for (int l = 0;
           l <
               (init
-                  ? listCandledata.length - selectedCount * 2
+                  ? listCandledata.length - range * 2
                   : listCandledata.length -
-                      MainPresenter.to.lastCandleDataLength
+                      MainPresenter.to.lastCandledataLength
                           .value); // init is false if and only if added new JSON data
           l++) {
         try {
           // Minus selectedCount to avoid counting selected data as a same match
-          for (int i = 0; i < selectedCount - 1; i++) {
+          for (int i = 0; i < range - 1; i++) {
             try {
               double percentage = (listCandledata[l + (i + 1)].close! -
                       listCandledata[l + i].close!) /
@@ -170,7 +165,7 @@ class TrendMatch {
           logger.d('2.1: An error occurred: $e');
         }
         try {
-          for (int i = 0; i < selectedCount; i++) {
+          for (int i = 0; i < range; i++) {
             try {
               comparePeriodActualPricesList.add(listCandledata[l + i].close!);
             } catch (e) {
@@ -318,7 +313,7 @@ class TrendMatch {
     //   }
     // }
     try {
-      MainPresenter.to.lastCandleDataLength.value = listCandledata.length;
+      MainPresenter.to.lastCandledataLength.value = listCandledata.length;
 
       DateTime endTime = DateTime.now(); // Record the end time
       // Calculate the time difference
@@ -330,7 +325,7 @@ class TrendMatch {
         falseCount,
         executionTime,
         listCandledata.length,
-        selectedCount,
+        range,
       ];
     } catch (e) {
       logger.d('4: An error occurred: $e');
@@ -388,9 +383,7 @@ class TrendMatch {
       double difference = comList[i] - selList[i];
       double percentageDifference = (difference / selList[i]) * 100;
 
-      if (percentageDifference.abs() >=
-          (PrefsService.to.prefs.getInt(SharedPreferencesConstant.tolerance) ??
-              100)) {
+      if (percentageDifference.abs() >= MainPresenter.to.tolerance.value) {
         return (false, []); // Difference is larger than or equal to certain %
       }
     }

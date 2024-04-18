@@ -1,8 +1,8 @@
 import 'dart:async';
-
-import 'package:interactive_chart/interactive_chart.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
+
+import 'package:interactive_chart/interactive_chart.dart';
 
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/presenters/presenters.dart';
@@ -19,9 +19,7 @@ class Candle {
   Future<List<CandleData>> init({String? stockSymbol}) {
     // PrefsService.to.prefs
     //     .setString(SharedPreferencesConstant.stockSymbol, 'SPY');
-    stockSymbol ??= PrefsService.to.prefs
-            .getString(SharedPreferencesConstant.stockSymbol) ??
-        'SPY';
+    stockSymbol ??= MainPresenter.to.financialInstrumentSymbol.value;
     // print(stockSymbol);
     return CandleAdapter().listListTolistCandledata(
         Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));

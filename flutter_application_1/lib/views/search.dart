@@ -25,11 +25,11 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
   // DateTimeRange? selectedDateRange;
   // final TextEditingController _dateRangeController = TextEditingController();
-  double _currentSliderValue =
+  double _currentTolerance =
       (PrefsService.to.prefs.getInt(SharedPreferencesConstant.tolerance) ?? 100)
           .toDouble();
-  double _currentDateValue =
-      PrefsService.to.prefs.getDouble(SharedPreferencesConstant.dateRange) ?? 5;
+  int _currentRange =
+      PrefsService.to.prefs.getInt(SharedPreferencesConstant.range) ?? 5;
   TextEditingController _textEditingController = TextEditingController();
   bool _autocomplete = true;
   List<SymbolAndName> listSymbolAndName = MainPresenter.to.listSymbolAndName;
@@ -45,8 +45,8 @@ class _SearchViewState extends State<SearchView> {
 
   void _resetForm() {
     setState(() {
-      _currentSliderValue = 100;
-      _currentDateValue = 5;
+      _currentTolerance = 100;
+      _currentRange = 5;
       _textEditingController.clear();
     });
   }
@@ -58,12 +58,17 @@ class _SearchViewState extends State<SearchView> {
       bool textMatchesSymbol = listSymbolAndName
           .any((SymbolAndName symbolAndName) => symbolAndName.symbol == text);
       if (textMatchesSymbol) {
+        String newSymbol = text;
         PrefsService.to.prefs.setString(
-            SharedPreferencesConstant.stockSymbol, _textEditingController.text);
+            SharedPreferencesConstant.financialInstrumentSymbol, newSymbol);
+        MainPresenter.to.financialInstrumentSymbol.value = newSymbol;
+        int newRange = _currentRange;
+        PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, newRange);
+        MainPresenter.to.range.value = newRange;
+        int newTolerance = _currentTolerance.toInt();
         PrefsService.to.prefs
-            .setDouble(SharedPreferencesConstant.dateRange, _currentDateValue);
-        PrefsService.to.prefs.setInt(
-            SharedPreferencesConstant.tolerance, _currentSliderValue.toInt());
+            .setInt(SharedPreferencesConstant.tolerance, newTolerance);
+        MainPresenter.to.tolerance.value = newTolerance;
         MainPresenter.to.searchCount.value++;
         MainPresenter.to.back();
       } else {
@@ -72,12 +77,18 @@ class _SearchViewState extends State<SearchView> {
             .where((SymbolAndName symbolAndName) =>
                 symbolAndName.name.toUpperCase().contains(text));
         if (textMatchesName.length == 1) {
-          PrefsService.to.prefs.setString(SharedPreferencesConstant.stockSymbol,
-              textMatchesName.first.symbol);
-          PrefsService.to.prefs.setDouble(
-              SharedPreferencesConstant.dateRange, _currentDateValue);
-          PrefsService.to.prefs.setInt(
-              SharedPreferencesConstant.tolerance, _currentSliderValue.toInt());
+          String newSymbol = textMatchesName.first.symbol;
+          PrefsService.to.prefs.setString(
+              SharedPreferencesConstant.financialInstrumentSymbol, newSymbol);
+          MainPresenter.to.financialInstrumentSymbol.value = newSymbol;
+          int newRange = _currentRange;
+          PrefsService.to.prefs
+              .setInt(SharedPreferencesConstant.range, newRange);
+          MainPresenter.to.range.value = newRange;
+          int newTolerance = _currentTolerance.toInt();
+          PrefsService.to.prefs
+              .setInt(SharedPreferencesConstant.tolerance, newTolerance);
+          MainPresenter.to.tolerance.value = newTolerance;
           MainPresenter.to.searchCount.value++;
           MainPresenter.to.back();
         } else if (textMatchesName.length > 1) {
@@ -135,14 +146,14 @@ class _SearchViewState extends State<SearchView> {
                           overlayShape: SliderComponentShape.noOverlay,
                         ),
                         child: Slider(
-                          value: _currentSliderValue,
+                          value: _currentTolerance,
                           max: 200,
                           min: 5,
                           divisions: 39,
-                          label: '${_currentSliderValue.round().toString()}%',
+                          label: '${_currentTolerance.round().toString()}%',
                           onChanged: (double value) {
                             setState(() {
-                              _currentSliderValue = value;
+                              _currentTolerance = value;
                             });
                           },
                         ),
@@ -191,14 +202,14 @@ class _SearchViewState extends State<SearchView> {
                           overlayShape: SliderComponentShape.noOverlay,
                         ),
                         child: Slider(
-                          value: _currentDateValue,
+                          value: _currentRange.toDouble(),
                           max: 20,
                           min: 2,
                           divisions: 18,
-                          label: _currentDateValue.round().toString(),
+                          label: _currentRange.round().toString(),
                           onChanged: (double value) {
                             setState(() {
-                              _currentDateValue = value;
+                              _currentRange = value.toInt();
                             });
                           },
                         ),
