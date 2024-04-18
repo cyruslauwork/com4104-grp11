@@ -42,11 +42,11 @@ class CandleAdapter {
       listCandledata = listList
           .map((row) => CandleData(
                 timestamp: TimeService().convertToUnixTimestamp(row[0]) * 1000,
-                open: row[1],
-                high: row[2],
-                low: row[3],
-                close: row[4],
-                volume: row[6].toDouble(),
+                open: (row[1] == 'null' ? 0.0 : row[1]),
+                high: (row[2] == 'null' ? 0.0 : row[2]),
+                low: (row[3] == 'null' ? 0.0 : row[3]),
+                close: (row[4] == 'null' ? 0.0 : row[4]),
+                volume: (row[6] == 'null' ? 0.0 : row[6].toDouble()),
               ))
           .toList();
       MainPresenter.to.listCandledata.value = listCandledata;
@@ -55,11 +55,21 @@ class CandleAdapter {
       listCandledata = listList
           .map((row) => CandleData(
                 timestamp: row[6],
-                open: double.parse(row[2].toString()),
-                high: double.parse(row[4].toString()),
-                low: double.parse(row[5].toString()),
-                close: double.parse(row[3].toString()),
-                volume: double.parse(row[0].toString()),
+                open: (row[2].toString() == 'null'
+                    ? 0.0
+                    : double.parse(row[2].toString())),
+                high: (row[4].toString() == 'null'
+                    ? 0.0
+                    : double.parse(row[4].toString())),
+                low: (row[5].toString() == 'null'
+                    ? 0.0
+                    : double.parse(row[5].toString())),
+                close: (row[3].toString() == 'null'
+                    ? 0.0
+                    : double.parse(row[3].toString())),
+                volume: (row[0].toString() == 'null'
+                    ? 0.0
+                    : double.parse(row[0].toString())),
               ))
           .toList();
       MainPresenter.to.listCandledata.value = listCandledata;

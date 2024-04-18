@@ -209,6 +209,8 @@ class MainPresenter extends GetxController {
   }
 
   Future<List<CandleData>> init() async {
+    // PrefsService.to.prefs
+    //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
     await Candle().init();
     if (showAverage.value) {
       Candle().computeTrendLines();

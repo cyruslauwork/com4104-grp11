@@ -42,6 +42,9 @@ class ListingAdapter {
               symbol: row['symbol'],
               name: row['name'],
             ))
+        .where((symbolAndName) =>
+            !symbolAndName.symbol.contains('/') &&
+            !symbolAndName.symbol.contains('^'))
         .toList();
     // print(listSymbolAndName);
     return listSymbolAndName;
