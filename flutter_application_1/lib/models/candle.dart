@@ -49,7 +49,8 @@ class Candle {
       //   return getCSV(callbackTime + 1);
       // }
     } else {
-      throw ArgumentError('Failed to fetch CSV data: ${response.statusCode}');
+      throw ArgumentError(
+          'Failed to fetch market data from Yahoo Finance: ${response.statusCode}');
     }
   }
 

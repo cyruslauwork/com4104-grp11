@@ -70,6 +70,7 @@ class MainPresenter extends GetxController {
   RxInt listingDownloadTime = 0.obs;
   RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
+  RxString listingErr = ''.obs;
 
   /* Search */
   ValueNotifier<int> searchCount = ValueNotifier<int>(0);

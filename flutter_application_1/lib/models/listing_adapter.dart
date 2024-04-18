@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
 
 // import 'package:flutter_application_1/utils/utils.dart';
 
@@ -12,15 +13,20 @@ class ListingAdapter {
       List<Map<String, dynamic>> parsedResponses) {
     List<Map<String, dynamic>> json = [];
 
-    for (var parsedResponse in parsedResponses) {
-      var rows = parsedResponse['data']['table']['rows'];
-      if (rows is List) {
-        for (var row in rows) {
-          if (row is Map<String, dynamic>) {
-            json.add(row);
+    try {
+      for (var parsedResponse in parsedResponses) {
+        var rows = parsedResponse['data']['table']['rows'];
+        if (rows is List) {
+          for (var row in rows) {
+            if (row is Map<String, dynamic>) {
+              json.add(row);
+            }
           }
         }
       }
+    } catch (e) {
+      MainPresenter.to.listingErr.value =
+          'Unable to fetch listings from api.nasdaq.com due to maintenance: $e';
     }
     // log(json.toString());
     return json;

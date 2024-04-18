@@ -274,9 +274,11 @@ class _SearchViewState extends State<SearchView> {
                         },
                         controller: textEditingController,
                         focusNode: focusNode,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: "Type what you're interested in 😊",
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: (MainPresenter.to.listingErr.value != ''
+                              ? MainPresenter.to.listingErr.value
+                              : "Type what you're interested in 😊"),
                         ),
                       );
                     },

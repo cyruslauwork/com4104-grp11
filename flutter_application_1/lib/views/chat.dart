@@ -196,8 +196,10 @@ class _ChatViewState extends State<ChatView> {
                       return TextField(
                         controller: textEditingController,
                         focusNode: focusNode,
-                        decoration: const InputDecoration(
-                          hintText: "Type and select your interest 😊",
+                        decoration: InputDecoration(
+                          hintText: (MainPresenter.to.listingErr.value != ''
+                              ? MainPresenter.to.listingErr.value
+                              : "Type and select your interest 😊"),
                         ),
                         enabled: !MainPresenter.to.isWaitingForReply
                             .value, // Disable text field when waiting for a reply,
