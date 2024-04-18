@@ -159,6 +159,11 @@ class MainPresenter extends GetxController {
     searchCount.addListener(() {
       futureListCandledata.value = init();
     });
+    if (MainPresenter.to.darkMode.value) {
+      AppColor.primaryTextColor = Colors.white;
+    } else {
+      AppColor.primaryTextColor = Colors.black;
+    }
   }
 
   void reload() {
@@ -312,5 +317,16 @@ class MainPresenter extends GetxController {
         style: const TextTheme().sp4.greyColor,
       ),
     );
+  }
+
+  void changeAppearance() {
+    darkMode.toggle();
+    if (darkMode.value) {
+      AppColor.primaryTextColor = Colors.white;
+    } else {
+      AppColor.primaryTextColor = Colors.black;
+    }
+    PrefsService.to.prefs
+        .setBool(SharedPreferencesConstant.darkMode, darkMode.value);
   }
 }

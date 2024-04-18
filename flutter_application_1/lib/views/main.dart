@@ -50,17 +50,7 @@ class _MainViewState extends State<MainView> {
                       icon: Icon(MainPresenter.to.darkMode.value
                           ? Icons.dark_mode
                           : Icons.light_mode),
-                      onPressed: () {
-                        MainPresenter.to.darkMode.toggle();
-                        if (MainPresenter.to.darkMode.value) {
-                          AppColor.primaryTextColor = Colors.white;
-                        } else {
-                          AppColor.primaryTextColor = Colors.black;
-                        }
-                        PrefsService.to.prefs.setBool(
-                            SharedPreferencesConstant.darkMode,
-                            MainPresenter.to.darkMode.value);
-                      },
+                      onPressed: () => MainPresenter.to.changeAppearance(),
                     ),
                     (MainPresenter.to.devMode.value
                         ? IconButton(
