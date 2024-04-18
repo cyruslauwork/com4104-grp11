@@ -199,8 +199,15 @@ class _MainViewState extends State<MainView> {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.network(
-                      'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
+                    // Image.network(
+                    //   'https://storage.googleapis.com/fplsblog/1/2020/04/line-graph.png',
+                    //   fit: BoxFit.cover,
+                    //   opacity: const AlwaysStoppedAnimation(.9),
+                    //   color: ThemeColor.primary.value,
+                    //   colorBlendMode: BlendMode.color,
+                    // ),
+                    Image(
+                      image: const AssetImage('images/line-graph.png'),
                       fit: BoxFit.cover,
                       opacity: const AlwaysStoppedAnimation(.9),
                       color: ThemeColor.primary.value,
