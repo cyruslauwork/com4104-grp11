@@ -99,99 +99,102 @@ class _MainViewState extends State<MainView> {
             builder: (BuildContext context,
                 AsyncSnapshot<List<CandleData>> snapshot) {
               if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        MainPresenter.to.financialInstrumentName.value,
-                        style: const TextTheme().sp7.primaryTextColor.w700,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        '(${MainPresenter.to.financialInstrumentSymbol.value})',
-                        style: const TextTheme().sp5.primaryTextColor,
-                      ),
-                      Text(
-                        '\$${MainPresenter.to.candleListList.last[4].toString()}',
-                        style: const TextTheme().sp10.primaryTextColor.w700,
-                      ),
-                      Text(
-                        'As of ${MainPresenter.to.candleListList.last[0].toString()}.',
-                        style: const TextTheme().sp4.greyColor,
-                      ),
-                      Center(
-                        child: Text(
-                          'candle_chart'.tr,
-                          style: const TextTheme().sp5,
+                return RefreshIndicator(
+                  onRefresh: () => MainPresenter.to.init(),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          MainPresenter.to.financialInstrumentName.value,
+                          style: const TextTheme().sp7.primaryTextColor.w700,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      SizedBox(
-                        width: 393.w,
-                        height: 100.h,
-                        child: InteractiveChart(
-                          candles: (snapshot.data!.length > 1000
-                              ? snapshot.data!.sublist(
-                                  snapshot.data!.length - 999,
-                                  snapshot.data!.length)
-                              : snapshot.data!),
-                          style: ChartStyle(
-                            trendLineStyles: [
-                              Paint()
-                                ..strokeWidth = 1.0
-                                ..strokeCap = StrokeCap.round
-                                ..color = Colors.orange,
-                              Paint()
-                                ..strokeWidth = 1.0
-                                ..strokeCap = StrokeCap.round
-                                ..color = Colors.lightBlue,
-                              Paint()
-                                ..strokeWidth = 1.0
-                                ..strokeCap = StrokeCap.round
-                                ..color = Colors.purple[300]!,
-                              Paint()
-                                ..strokeWidth = 1.0
-                                ..strokeCap = StrokeCap.round
-                                ..color = Colors.pink[300]!,
-                              Paint()
-                                ..strokeWidth = 1.0
-                                ..strokeCap = StrokeCap.round
-                                ..color = Colors.blue[700]!,
-                              Paint()
-                                ..strokeWidth = 1.0
-                                ..strokeCap = StrokeCap.round
-                                ..color = Colors.green,
-                              // Paint()
-                              //   ..strokeWidth = 1.0
-                              //   ..strokeCap = StrokeCap.round
-                              //   ..color = Colors.yellow,
-                            ],
-                            selectionHighlightColor:
-                                Colors.red.withOpacity(0.75),
-                            overlayBackgroundColor:
-                                Colors.red.withOpacity(0.75),
-                            overlayTextStyle:
-                                const TextStyle(color: AppColor.whiteColor),
+                        Text(
+                          '(${MainPresenter.to.financialInstrumentSymbol.value})',
+                          style: const TextTheme().sp5.primaryTextColor,
+                        ),
+                        Text(
+                          '\$${MainPresenter.to.candleListList.last[4].toString()}',
+                          style: const TextTheme().sp10.primaryTextColor.w700,
+                        ),
+                        Text(
+                          'As of ${MainPresenter.to.candleListList.last[0].toString()}.',
+                          style: const TextTheme().sp4.greyColor,
+                        ),
+                        Center(
+                          child: Text(
+                            'candle_chart'.tr,
+                            style: const TextTheme().sp5,
                           ),
-                          /** Callbacks */
-                          // onTap: (candle) => print("user tapped on $candle"),
                         ),
-                      ),
-                      MainPresenter.to.buildMktDataProviderRichText(),
-                      SizedBox(height: 10.h),
-                      (MainPresenter.to.devMode.value
-                          ? devModeViewOne()
-                          : const SizedBox.shrink()),
-                      TrendMatchView(),
-                      (MainPresenter.to.devMode.value
-                          ? devModeViewTwo()
-                          : const SizedBox.shrink()),
-                      SizedBox(height: 10.h),
-                      SubsequentAnalysisView(context: context),
-                      MainPresenter.to.buildCloudFunctionRichText(),
-                    ],
+                        SizedBox(
+                          width: 393.w,
+                          height: 100.h,
+                          child: InteractiveChart(
+                            candles: (snapshot.data!.length > 1000
+                                ? snapshot.data!.sublist(
+                                    snapshot.data!.length - 999,
+                                    snapshot.data!.length)
+                                : snapshot.data!),
+                            style: ChartStyle(
+                              trendLineStyles: [
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.orange,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.lightBlue,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.purple[300]!,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.pink[300]!,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.blue[700]!,
+                                Paint()
+                                  ..strokeWidth = 1.0
+                                  ..strokeCap = StrokeCap.round
+                                  ..color = Colors.green,
+                                // Paint()
+                                //   ..strokeWidth = 1.0
+                                //   ..strokeCap = StrokeCap.round
+                                //   ..color = Colors.yellow,
+                              ],
+                              selectionHighlightColor:
+                                  Colors.red.withOpacity(0.75),
+                              overlayBackgroundColor:
+                                  Colors.red.withOpacity(0.75),
+                              overlayTextStyle:
+                                  const TextStyle(color: AppColor.whiteColor),
+                            ),
+                            /** Callbacks */
+                            // onTap: (candle) => print("user tapped on $candle"),
+                          ),
+                        ),
+                        MainPresenter.to.buildMktDataProviderRichText(),
+                        SizedBox(height: 10.h),
+                        (MainPresenter.to.devMode.value
+                            ? devModeViewOne()
+                            : const SizedBox.shrink()),
+                        TrendMatchView(),
+                        (MainPresenter.to.devMode.value
+                            ? devModeViewTwo()
+                            : const SizedBox.shrink()),
+                        SizedBox(height: 10.h),
+                        SubsequentAnalysisView(context: context),
+                        MainPresenter.to.buildCloudFunctionRichText(),
+                      ],
+                    ),
                   ),
                 );
               } else if (snapshot.hasError) {
