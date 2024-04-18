@@ -1,14 +1,14 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/styles/styles.dart';
+
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
+
+import 'package:flutter_application_1/styles/styles.dart';
+import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/views/views.dart';
-
-// import 'package:flutter_application_1/utils/utils.dart';
 
 class MainPresenter extends GetxController {
   // Singleton implementation
@@ -24,7 +24,7 @@ class MainPresenter extends GetxController {
   /* Preference */
   RxBool darkMode =
       (PrefsService.to.prefs.getBool(SharedPreferencesConstant.darkMode) ??
-              true)
+              false)
           .obs;
   ValueNotifier<bool> devMode = ValueNotifier<bool>(false);
   ValueNotifier<bool> isEn = ValueNotifier<bool>(
@@ -187,7 +187,7 @@ class MainPresenter extends GetxController {
   }
 
   /* UI Logic*/
-  List<Widget> showListingRelatedIcons() {
+  List<Widget> buildListingRelatedIcons() {
     Listing().init();
     return [
       IconButton(
@@ -227,5 +227,90 @@ class MainPresenter extends GetxController {
         return SubsequentAnalysisView().showCircularProgressIndicator();
       }
     });
+  }
+
+  Widget buildListingSourceRichText() {
+    if (listSymbolAndName.length > 1) {
+      final imageSpan = WidgetSpan(
+        child: Padding(
+          padding: EdgeInsets.only(left: 3.w),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: AppColor.imageDefaultBgColor,
+            ),
+            child: Image.asset(
+              'images/nasdaq.png',
+              height: 6.h,
+            ),
+          ),
+        ),
+      );
+      final imageSpan2 = WidgetSpan(
+        child: Padding(
+          padding: EdgeInsets.only(left: 3.w),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: AppColor.imageDefaultBgColor,
+            ),
+            child: Image.asset(
+              'images/nyse.png',
+              height: 7.h,
+            ),
+          ),
+        ),
+      );
+      final imageSpan3 = WidgetSpan(
+        child: Padding(
+          padding: EdgeInsets.only(left: 3.w),
+          child: Transform.translate(
+            offset: Offset(0.0, 3.h),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: AppColor.imageDefaultBgColor,
+              ),
+              child: Image.asset(
+                'images/amex.png',
+                height: 12.h,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      return RichText(
+        text: TextSpan(
+          text: 'Latest listings on',
+          children: [imageSpan, imageSpan2, imageSpan3],
+          style: const TextTheme().sp4.greyColor,
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
+  Widget buildMktDataProviderRichText() {
+    final imageSpan = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColor.imageDefaultBgColor,
+          ),
+          child: Image.asset(
+            'images/yahoofinance.png',
+            height: 6.h, // Adjust the height as needed
+          ),
+        ),
+      ),
+    );
+
+    return RichText(
+      text: TextSpan(
+        text: 'Market data provided by',
+        children: [imageSpan],
+        style: const TextTheme().sp4.greyColor,
+      ),
+    );
   }
 }

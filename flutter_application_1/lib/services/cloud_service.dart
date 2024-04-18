@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 
 import 'package:flutter_application_1/services/services.dart';
+
 // import 'package:flutter_application_1/utils/utils.dart';
 
 class CloudService extends GetxService {

@@ -6,16 +6,15 @@ class AppColor {
   factory AppColor() => _instance;
   AppColor._();
 
-  static const primaryTextColor = Colors.black;
-  // static const secondaryTextColor = Color(0xff000000);
-  // static const editTextColor = Color(0xff000000);
-  // static const editTextErrorColor = Color(0xff000000);
+  static var primaryTextColor = Colors.black;
+  // static var secondaryTextColor = Color(0xff000000);
+  // static var editTextColor = Color(0xff000000);
   static const whiteColor = Colors.white;
   static const blackColor = Colors.black;
   static const greyColor = Color(0xff909090);
   // static const backgroundColor = Color(0xff000000);
   static const errorColor = Colors.red;
-  // static const imageDefaultBgColor = Color(0xff000000);
+  static const imageDefaultBgColor = Color(0xffffffff);
   // static const transparentColor = Colors.transparent;
   // static const borderColor = Color(0xff000000);
 }

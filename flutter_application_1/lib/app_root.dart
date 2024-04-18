@@ -101,8 +101,8 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
             secondary: ThemeColor.secondary.value,
             tertiary: ThemeColor.tertiary.value,
             brightness: Get.find<MainPresenter>().darkMode.value
-                ? Brightness.light
-                : Brightness.dark,
+                ? Brightness.dark
+                : Brightness.light,
           ),
         ),
         translations: Msg(),

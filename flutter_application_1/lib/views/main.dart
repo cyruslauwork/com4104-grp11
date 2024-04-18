@@ -44,7 +44,7 @@ class _MainViewState extends State<MainView> {
             style: const TextTheme().sp7.w700,
           ),
           actions: MainPresenter.to.listCandledata.length > 1
-              ? MainPresenter.to.showListingRelatedIcons() +
+              ? MainPresenter.to.buildListingRelatedIcons() +
                   [
                     IconButton(
                       icon: Icon(MainPresenter.to.darkMode.value
@@ -52,6 +52,11 @@ class _MainViewState extends State<MainView> {
                           : Icons.light_mode),
                       onPressed: () {
                         MainPresenter.to.darkMode.toggle();
+                        if (MainPresenter.to.darkMode.value) {
+                          AppColor.primaryTextColor = Colors.white;
+                        } else {
+                          AppColor.primaryTextColor = Colors.black;
+                        }
                         PrefsService.to.prefs.setBool(
                             SharedPreferencesConstant.darkMode,
                             MainPresenter.to.darkMode.value);
@@ -106,11 +111,13 @@ class _MainViewState extends State<MainView> {
                 return SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Column(
-                    mainAxisSize: MainAxisSize.min, // Set mainAxisSize to min
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'candle_chart'.tr,
-                        style: const TextTheme().sp5,
+                      Center(
+                        child: Text(
+                          'candle_chart'.tr,
+                          style: const TextTheme().sp5,
+                        ),
                       ),
                       SizedBox(
                         width: 393.w,
@@ -163,6 +170,7 @@ class _MainViewState extends State<MainView> {
                           // onTap: (candle) => print("user tapped on $candle"),
                         ),
                       ),
+                      MainPresenter.to.buildMktDataProviderRichText(),
                       SizedBox(height: 10.h),
                       (MainPresenter.to.devMode.value
                           ? devModeViewOne()

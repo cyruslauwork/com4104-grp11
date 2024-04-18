@@ -181,18 +181,19 @@ class HTTPService extends GetxService {
   }
 
   Stream<http.Response> fetchListingJsons() async* {
-    final url = Uri.parse(
-        'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nasdaq');
-    final url2 = Uri.parse(
-        'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nyse');
-    final url3 = Uri.parse(
-        'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=amex');
+    var urls = [
+      Uri.parse(
+          'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nasdaq'),
+      Uri.parse(
+          'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nyse'),
+      Uri.parse(
+          'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=amex')
+    ];
 
     // Modify the request headers to accept CSV data
     final headers = {'Accept': 'text/json'};
 
     // Send the HTTP GET request with the updated URL and headers
-    var urls = [url, url2, url3];
     for (var url in urls) {
       yield await http.get(url, headers: headers);
     }

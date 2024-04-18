@@ -164,41 +164,48 @@ class _ChatViewState extends State<ChatView> {
               ),
             ),
             _buildChatOptions(),
-            Container(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: Autocomplete<SymbolAndName>(
-                displayStringForOption: _ChatViewState._displayStringForOption,
-                optionsBuilder: (TextEditingValue textEditingValue) {
-                  if (textEditingValue.text == '') {
-                    return const Iterable<SymbolAndName>.empty();
-                  }
-                  return MainPresenter.to.listSymbolAndName
-                      .where((SymbolAndName option) {
-                    return option
-                        .toString()
-                        .toLowerCase()
-                        .contains(textEditingValue.text.toLowerCase());
-                  });
-                },
-                onSelected: (SymbolAndName selection) {
-                  _sendMessage('${selection.symbol} ${selection.name}');
-                  _controller.clear();
-                },
-                fieldViewBuilder: (BuildContext context,
-                    TextEditingController textEditingController,
-                    FocusNode focusNode,
-                    VoidCallback onFieldSubmitted) {
-                  _controller = textEditingController;
-                  return TextField(
-                    controller: textEditingController,
-                    focusNode: focusNode,
-                    decoration: const InputDecoration(
-                      hintText: "Type and select your interest 😊",
-                    ),
-                    enabled: !MainPresenter.to.isWaitingForReply
-                        .value, // Disable text field when waiting for a reply,
-                  );
-                },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Autocomplete<SymbolAndName>(
+                    displayStringForOption:
+                        _ChatViewState._displayStringForOption,
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text == '') {
+                        return const Iterable<SymbolAndName>.empty();
+                      }
+                      return MainPresenter.to.listSymbolAndName
+                          .where((SymbolAndName option) {
+                        return option
+                            .toString()
+                            .toLowerCase()
+                            .contains(textEditingValue.text.toLowerCase());
+                      });
+                    },
+                    onSelected: (SymbolAndName selection) {
+                      _sendMessage('${selection.symbol} ${selection.name}');
+                      _controller.clear();
+                    },
+                    fieldViewBuilder: (BuildContext context,
+                        TextEditingController textEditingController,
+                        FocusNode focusNode,
+                        VoidCallback onFieldSubmitted) {
+                      _controller = textEditingController;
+                      return TextField(
+                        controller: textEditingController,
+                        focusNode: focusNode,
+                        decoration: const InputDecoration(
+                          hintText: "Type and select your interest 😊",
+                        ),
+                        enabled: !MainPresenter.to.isWaitingForReply
+                            .value, // Disable text field when waiting for a reply,
+                      );
+                    },
+                  ),
+                  MainPresenter.to.buildListingSourceRichText(),
+                ],
               ),
             ),
             SizedBox(height: 50.h)

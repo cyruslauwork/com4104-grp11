@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:flutter_application_1/models/models.dart';
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/styles/styles.dart';
 import 'package:flutter_application_1/utils/utils.dart';
-import 'package:get/get.dart';
 
 class SearchView extends StatefulWidget {
   // const SearchView({Key? key}) : super(key: key);
@@ -280,7 +281,7 @@ class _SearchViewState extends State<SearchView> {
                       );
                     },
                   ),
-                  buildRichTextWithImage(),
+                  MainPresenter.to.buildListingSourceRichText(),
                 ],
               ),
             ),
@@ -335,47 +336,6 @@ class _SearchViewState extends State<SearchView> {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildRichTextWithImage() {
-    final imageSpan = WidgetSpan(
-      child: Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: Image.asset(
-          'images/nasdaq.png',
-          height: 7.h, // Adjust the height as needed
-        ),
-      ),
-    );
-    final imageSpan2 = WidgetSpan(
-      child: Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: Image.asset(
-          'images/nyse.png',
-          height: 7.h, // Adjust the height as needed
-        ),
-      ),
-    );
-    final imageSpan3 = WidgetSpan(
-      child: Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: Transform.translate(
-          offset: Offset(0.0, 3.h),
-          child: Image.asset(
-            'images/amex.png',
-            height: 13.h, // Adjust the height as needed
-          ),
-        ),
-      ),
-    );
-
-    return RichText(
-      text: TextSpan(
-        text: 'Latest listings on',
-        children: [imageSpan, imageSpan2, imageSpan3],
-        style: const TextTheme().sp4.greyColor,
       ),
     );
   }
