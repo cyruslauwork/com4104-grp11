@@ -20,7 +20,7 @@ class SubsequentAnalysisView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainPresenter.to.showSa();
+    return Center(child: MainPresenter.to.showSa());
   }
 
   Widget showSaChart() {
@@ -173,7 +173,6 @@ class SubsequentAnalysisView extends StatelessWidget {
 
   Widget showCircularProgressIndicator() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
           width: 40.w,

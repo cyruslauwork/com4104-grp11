@@ -103,5 +103,7 @@ class SubsequentAnalysis {
     MainPresenter.to.img5Bytes.value = base64Decode(img5);
     MainPresenter.to.img6Bytes.value = base64Decode(img6);
     MainPresenter.to.img7Bytes.value = base64Decode(img7);
+
+    MainPresenter.to.numOfClusters.value = csvPngFiles['num_of_clusters'];
   }
 }

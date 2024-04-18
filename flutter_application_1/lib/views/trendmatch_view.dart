@@ -18,7 +18,7 @@ class TrendMatchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainPresenter.to.showTm();
+    return Center(child: MainPresenter.to.showTm());
   }
 
   Widget showAdjustedLineChart() {

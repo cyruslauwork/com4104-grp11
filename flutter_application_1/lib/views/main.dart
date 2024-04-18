@@ -177,7 +177,6 @@ class _MainViewState extends State<MainView> {
               } else if (snapshot.hasError) {
                 return Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.error_outline,
@@ -300,8 +299,9 @@ class _MainViewState extends State<MainView> {
               Column(children: [
                 Text('SA prep (ms)', style: const TextTheme().sp4)
               ]),
+              Column(children: [Text('SA (ms)', style: const TextTheme().sp4)]),
               Column(children: [
-                Text('Cloud SA (ms)', style: const TextTheme().sp4)
+                Text('SA Cluster(s)', style: const TextTheme().sp4)
               ]),
               Column(children: [
                 Text('AI res (ms)', style: const TextTheme().sp4)
@@ -320,6 +320,10 @@ class _MainViewState extends State<MainView> {
               ]),
               Column(children: [
                 Text(MainPresenter.to.cloudSubsequentAnalysisTime.toString(),
+                    style: const TextTheme().sp4)
+              ]),
+              Column(children: [
+                Text(MainPresenter.to.numOfClusters.toString(),
                     style: const TextTheme().sp4)
               ]),
               Column(children: [
