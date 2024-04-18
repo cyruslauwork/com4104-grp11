@@ -53,12 +53,19 @@ class _SearchViewState extends State<SearchView> {
 
   void _submitForm() {
     bool hasText = _textEditingController.text != '' ? true : false;
-    final text = _textEditingController.text.toUpperCase();
+    final symbol = _textEditingController.text.toUpperCase();
     if (hasText) {
       bool textMatchesSymbol = listSymbolAndName
-          .any((SymbolAndName symbolAndName) => symbolAndName.symbol == text);
+          .any((SymbolAndName symbolAndName) => symbolAndName.symbol == symbol);
       if (textMatchesSymbol) {
-        String newSymbol = text;
+        String newName = listSymbolAndName
+            .firstWhere(
+                (SymbolAndName symbolAndName) => symbolAndName.symbol == symbol)
+            .name;
+        PrefsService.to.prefs.setString(
+            SharedPreferencesConstant.financialInstrumentName, newName);
+        MainPresenter.to.financialInstrumentName.value = newName;
+        String newSymbol = symbol;
         PrefsService.to.prefs.setString(
             SharedPreferencesConstant.financialInstrumentSymbol, newSymbol);
         MainPresenter.to.financialInstrumentSymbol.value = newSymbol;
@@ -75,12 +82,16 @@ class _SearchViewState extends State<SearchView> {
         Iterable<SymbolAndName> textMatchesName = MainPresenter
             .to.listSymbolAndName
             .where((SymbolAndName symbolAndName) =>
-                symbolAndName.name.toUpperCase().contains(text));
+                symbolAndName.name.toUpperCase().contains(symbol));
         if (textMatchesName.length == 1) {
           String newSymbol = textMatchesName.first.symbol;
           PrefsService.to.prefs.setString(
               SharedPreferencesConstant.financialInstrumentSymbol, newSymbol);
           MainPresenter.to.financialInstrumentSymbol.value = newSymbol;
+          String newName = textMatchesName.first.name;
+          PrefsService.to.prefs.setString(
+              SharedPreferencesConstant.financialInstrumentName, newName);
+          MainPresenter.to.financialInstrumentName.value = newName;
           int newRange = _currentRange;
           PrefsService.to.prefs
               .setInt(SharedPreferencesConstant.range, newRange);

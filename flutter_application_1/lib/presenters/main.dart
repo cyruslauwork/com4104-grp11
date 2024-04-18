@@ -37,6 +37,10 @@ class MainPresenter extends GetxController {
               .getString(SharedPreferencesConstant.financialInstrumentSymbol) ??
           'SPY')
       .obs;
+  RxString financialInstrumentName = (PrefsService.to.prefs
+              .getString(SharedPreferencesConstant.financialInstrumentName) ??
+          'SPDR S&P 500 ETF Trust')
+      .obs;
   RxInt candledownloadTime = 0.obs;
   RxList<List<dynamic>> candleListList = [[]].obs;
   late Rx<Future<List<CandleData>>> futureListCandledata = init().obs;

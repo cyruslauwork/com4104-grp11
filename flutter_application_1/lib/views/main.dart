@@ -104,6 +104,24 @@ class _MainViewState extends State<MainView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        MainPresenter.to.financialInstrumentName.value,
+                        style: const TextTheme().sp7.primaryTextColor.w700,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        '(${MainPresenter.to.financialInstrumentSymbol.value})',
+                        style: const TextTheme().sp5.primaryTextColor,
+                      ),
+                      Text(
+                        '\$${MainPresenter.to.candleListList.last[4].toString()}',
+                        style: const TextTheme().sp10.primaryTextColor.w700,
+                      ),
+                      Text(
+                        'As of ${MainPresenter.to.candleListList.last[0].toString()}.',
+                        style: const TextTheme().sp4.greyColor,
+                      ),
                       Center(
                         child: Text(
                           'candle_chart'.tr,
