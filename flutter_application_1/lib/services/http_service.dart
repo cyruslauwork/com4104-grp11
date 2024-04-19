@@ -123,7 +123,7 @@ class HTTPService extends GetxService {
   Future<Map<String, dynamic>> postFetchJson(
       String url, Map<String, dynamic> body) async {
     // Modify the request headers to accept JSON data
-    final headers = {'Accept': 'text/json'};
+    final headers = {'Accept': 'text/json', 'Connection': 'keep-alive'};
 
     // Make an HTTP GET request to retrieve the JSON response
     var thisUrl = Uri.parse(url);
