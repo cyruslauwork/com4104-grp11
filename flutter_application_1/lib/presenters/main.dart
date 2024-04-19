@@ -125,6 +125,7 @@ class MainPresenter extends GetxController {
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
   RxList<int> matchRows = [0].obs;
   Rx<bool> trendMatched = false.obs;
+  Rx<bool> showAnalysis = false.obs;
 
   /* Subsequent analysis */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
@@ -211,6 +212,7 @@ class MainPresenter extends GetxController {
   Future<List<CandleData>> init() async {
     // PrefsService.to.prefs
     //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
+    showAnalysis.value = false;
     await Candle().init();
     if (showAverage.value) {
       Candle().computeTrendLines();
@@ -250,25 +252,52 @@ class MainPresenter extends GetxController {
 
   Widget showTm() {
     return Obx(() {
-      if (trendMatched.value) {
+      if (trendMatched.value && showAnalysis.value) {
         return TrendMatchView().showAdjustedLineChart();
-      } else {
+      } else if (showAnalysis.value) {
         return TrendMatchView().showCircularProgressIndicator();
+      }
+      return const SizedBox.shrink();
+    });
+  }
+
+  Widget showStartBtn() {
+    return Obx(() {
+      if (showAnalysis.value) {
+        return const SizedBox.shrink();
+      } else {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 2.w),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              MainPresenter.to.showAnalysis.value = true;
+            },
+            icon: Icon(
+              Icons.analytics_outlined,
+              size: 20.h,
+            ),
+            label: Text(
+              'Start historical trend matching and their subsequent trend(s) analysis based on the recent ${MainPresenter.to.range.toString()}-day(s) trend',
+              style: const TextTheme().sp5.w700,
+            ),
+          ),
+        );
       }
     });
   }
 
   Widget showSa() {
     return Obx(() {
-      if (hasSubsequentAnalysis.value) {
+      if (hasSubsequentAnalysis.value && showAnalysis.value) {
         if (subsequentAnalysisErr.value == '') {
           return SubsequentAnalysisView().showSaChart();
         } else {
           return SubsequentAnalysisView().showError();
         }
-      } else {
+      } else if (showAnalysis.value) {
         return SubsequentAnalysisView().showCircularProgressIndicator();
       }
+      return const SizedBox.shrink();
     });
   }
 
@@ -371,11 +400,13 @@ class MainPresenter extends GetxController {
       ),
     );
 
-    return RichText(
-      text: TextSpan(
-        text: 'Powered by',
-        children: [imageSpan],
-        style: const TextTheme().sp4.greyColor,
+    return Center(
+      child: RichText(
+        text: TextSpan(
+          text: 'Computing power comes from',
+          children: [imageSpan],
+          style: const TextTheme().sp4.greyColor,
+        ),
       ),
     );
   }

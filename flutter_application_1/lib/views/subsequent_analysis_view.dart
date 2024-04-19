@@ -8,7 +8,7 @@ import 'package:flutter_application_1/views/herophotoview_routewrapper.dart';
 class SubsequentAnalysisView extends StatelessWidget {
   final BuildContext? context;
 
-  // const SubsequentAnalysisView({super.key, required this.c});
+  // const SubsequentAnalysisView({super.key, required this.context});
 
   // Singleton implementation
   static SubsequentAnalysisView? _instance;

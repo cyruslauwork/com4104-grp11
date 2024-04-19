@@ -8,6 +8,13 @@ void main() {
 }
 
 class MyHttpOverrides extends HttpOverrides {
+  // Singleton implementation
+  static final MyHttpOverrides _instance = MyHttpOverrides._internal();
+  factory MyHttpOverrides() {
+    return _instance;
+  }
+  MyHttpOverrides._internal();
+
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)

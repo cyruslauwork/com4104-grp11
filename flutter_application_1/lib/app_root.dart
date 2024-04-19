@@ -10,7 +10,14 @@ import 'package:flutter_application_1/styles/styles.dart';
 var logger = Logger();
 
 class AppRoot extends StatefulWidget {
-  const AppRoot({Key? key}) : super(key: key);
+  // const AppRoot({Key? key}) : super(key: key);
+
+  // Singleton implementation
+  static const AppRoot _instance = AppRoot._internal();
+  factory AppRoot() {
+    return _instance;
+  }
+  const AppRoot._internal();
 
   @override
   State<AppRoot> createState() => _AppRootWidgetState();

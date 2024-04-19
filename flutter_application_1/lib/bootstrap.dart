@@ -22,7 +22,7 @@ Future<void> bootstrap(Flavor flavor, APIProvider apiProvider) async {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    runApp(const AppRoot());
+    runApp(AppRoot());
   }, (error, stackTrace) {});
 }
 

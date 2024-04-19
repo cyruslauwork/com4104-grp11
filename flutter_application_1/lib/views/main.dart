@@ -23,26 +23,33 @@ class MainView extends StatefulWidget {
   // always marked "final".
 
   // Singleton implementation
-  static MainView? _instance;
-  factory MainView({Key? key}) {
-    _instance ??= MainView._(key: key);
-    return _instance!;
+  static const MainView _instance = MainView._internal();
+  factory MainView() {
+    return _instance;
   }
-  const MainView._({Key? key}) : super(key: key);
+  const MainView._internal();
 
   @override
   State<MainView> createState() => _MainViewState();
 }
 
 class _MainViewState extends State<MainView> {
+  final ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text(
-            'app_name'.tr,
-            style: const TextTheme().sp7.w700,
+          title: GestureDetector(
+            onTap: () => scrollController.animateTo(
+              0.0,
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeInOut,
+            ),
+            child: Text(
+              'app_name'.tr,
+              style: const TextTheme().sp7.w700,
+            ),
           ),
           actions: MainPresenter.to.listCandledata.length > 1
               ? MainPresenter.to.buildListingRelatedIcons() +
@@ -102,19 +109,27 @@ class _MainViewState extends State<MainView> {
                 return RefreshIndicator(
                   onRefresh: () => MainPresenter.to.init(),
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     scrollDirection: Axis.vertical,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          MainPresenter.to.financialInstrumentName.value,
-                          style: const TextTheme().sp7.primaryTextColor.w700,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          '(${MainPresenter.to.financialInstrumentSymbol.value})',
-                          style: const TextTheme().sp5.primaryTextColor,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                MainPresenter.to.financialInstrumentName.value,
+                                style:
+                                    const TextTheme().sp7.primaryTextColor.w700,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Text(
+                              '(${MainPresenter.to.financialInstrumentSymbol.value})',
+                              style: const TextTheme().sp5.primaryTextColor,
+                            ),
+                          ],
                         ),
                         Text(
                           '\$${MainPresenter.to.candleListList.last[4].toString()}',

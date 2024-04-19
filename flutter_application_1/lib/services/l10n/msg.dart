@@ -1,6 +1,13 @@
 import 'package:get/get.dart';
 
 class Msg extends Translations {
+  // Singleton implementation
+  static final Msg _instance = Msg._internal();
+  factory Msg() {
+    return _instance;
+  }
+  Msg._internal();
+
   @override
   Map<String, Map<String, String>> get keys => {
         'en_UK': {
