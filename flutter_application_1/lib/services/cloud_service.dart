@@ -35,12 +35,25 @@ class CloudService extends GetxService {
     return parsedResponse;
   }
 
-  Future<String> getNewsAnalysis(String symbolAndName) async {
-    /* GET method */
-    String urlEncodedSymbolAndName = Uri.encodeComponent(symbolAndName);
-    // log(urlEncodedSymbolAndName);
-    String response = await HTTPService().getFetchString(
-        'http://35.221.170.30/?func=gemini-pro-news&symbol_and_name=$urlEncodedSymbolAndName');
-    return response;
+  Future<String> getNewsAnalysis(
+      {String? symbolAndName, String? symbols, String? question}) async {
+    if (symbolAndName != null) {
+      /* GET method */
+      String urlEncodedSymbolAndName = Uri.encodeComponent(symbolAndName);
+      // log(urlEncodedSymbolAndName);
+      String response = await HTTPService().getFetchString(
+          'http://35.221.170.30/?func=gemini-pro-news&symbol_and_name=$urlEncodedSymbolAndName');
+      return response;
+    } else if (symbols != null && question != null) {
+      /* GET method */
+      String urlEncodedSymbols = Uri.encodeComponent(symbols);
+      String urlEncodedQuestion = Uri.encodeComponent(question);
+      // log(urlEncodedSymbolAndName);
+      String response = await HTTPService().getFetchString(
+          'http://35.221.170.30/?func=gemini-pro-news-custom&symbols=$urlEncodedSymbols&question=$urlEncodedQuestion');
+      return response;
+    } else {
+      throw ArgumentError('Must have a passing value to fetch news analysis.');
+    }
   }
 }

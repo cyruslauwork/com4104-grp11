@@ -54,7 +54,8 @@ class _ChatViewState extends State<ChatView> {
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
-    String newsAnalysis = await CloudService().getNewsAnalysis(message);
+    String newsAnalysis =
+        await CloudService().getNewsAnalysis(symbolAndName: message);
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
@@ -82,7 +83,8 @@ class _ChatViewState extends State<ChatView> {
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
-    String newsAnalysis = await CloudService().getNewsAnalysis(option);
+    String newsAnalysis = await CloudService()
+        .getNewsAnalysis(symbols: 'AAPL MSFT GOOG', question: option);
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
