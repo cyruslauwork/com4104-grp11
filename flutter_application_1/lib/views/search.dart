@@ -76,7 +76,7 @@ class _SearchViewState extends State<SearchView> {
         PrefsService.to.prefs
             .setInt(SharedPreferencesConstant.tolerance, newTolerance);
         MainPresenter.to.tolerance.value = newTolerance;
-        MainPresenter.to.searchCount.value++;
+        MainPresenter.to.searchCountNotifier.value++;
         MainPresenter.to.back();
       } else {
         Iterable<SymbolAndName> textMatchesName = MainPresenter
@@ -100,7 +100,7 @@ class _SearchViewState extends State<SearchView> {
           PrefsService.to.prefs
               .setInt(SharedPreferencesConstant.tolerance, newTolerance);
           MainPresenter.to.tolerance.value = newTolerance;
-          MainPresenter.to.searchCount.value++;
+          MainPresenter.to.searchCountNotifier.value++;
           MainPresenter.to.back();
         } else if (textMatchesName.length > 1) {
           Get.snackbar(

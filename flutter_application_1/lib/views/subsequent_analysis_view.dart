@@ -13,7 +13,10 @@ class SubsequentAnalysisView extends StatelessWidget {
   // Singleton implementation
   static SubsequentAnalysisView? _instance;
   factory SubsequentAnalysisView({Key? key, BuildContext? context}) {
-    _instance ??= SubsequentAnalysisView._(key: key, context: context);
+    _instance ??= SubsequentAnalysisView._(
+      key: key,
+      context: context,
+    );
     return _instance!;
   }
   const SubsequentAnalysisView._({super.key, this.context});
@@ -103,6 +106,14 @@ class SubsequentAnalysisView extends StatelessWidget {
               tag: 'img4',
               child: Image.memory(MainPresenter.to.img4Bytes.value)),
         ),
+        SizedBox(height: 10.h),
+      ],
+    );
+  }
+
+  Widget showSaDevChart() {
+    return Column(
+      children: [
         GestureDetector(
           onTap: () {
             showDialog(
@@ -160,6 +171,7 @@ class SubsequentAnalysisView extends StatelessWidget {
               tag: 'img7',
               child: Image.memory(MainPresenter.to.img7Bytes.value)),
         ),
+        SizedBox(height: 10.h),
       ],
     );
   }
@@ -184,6 +196,7 @@ class SubsequentAnalysisView extends StatelessWidget {
           child: Text('Awaiting subsequent trend analysis result...',
               style: const TextTheme().sp5),
         ),
+        SizedBox(height: 10.h),
       ],
     );
   }

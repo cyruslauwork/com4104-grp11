@@ -27,9 +27,10 @@ class MainPresenter extends GetxController {
               false)
           .obs;
   bool isDarkModeInit = false;
-  ValueNotifier<bool> devMode = ValueNotifier<bool>(false);
+  RxBool devMode = false.obs;
+  ValueNotifier<bool> devModeNotifier = ValueNotifier<bool>(false);
   bool isDevModeListenerAdded = false;
-  ValueNotifier<bool> isEn = ValueNotifier<bool>(
+  ValueNotifier<bool> isEnNotifier = ValueNotifier<bool>(
       (PrefsService.to.prefs.getBool(SharedPreferencesConstant.isEn) ?? true));
   bool isEnListenerAdded = false;
 
@@ -75,7 +76,7 @@ class MainPresenter extends GetxController {
     //     close: 72.55,
     //     volume: 60735500),
   ].obs;
-  ValueNotifier<bool> showAverage = ValueNotifier<bool>(true);
+  ValueNotifier<bool> showAverageNotifier = ValueNotifier<bool>(true);
   bool isShowAverageListenerAdded = false;
 
   /* Listing */
@@ -86,7 +87,7 @@ class MainPresenter extends GetxController {
   RxBool isListingInit = false.obs;
 
   /* Search */
-  ValueNotifier<int> searchCount = ValueNotifier<int>(0);
+  ValueNotifier<int> searchCountNotifier = ValueNotifier<int>(0);
   bool isSearchCountListenerAdded = false;
 
   /* Chat */
@@ -160,22 +161,22 @@ class MainPresenter extends GetxController {
     }
 
     if (!isShowAverageListenerAdded) {
-      showAverage.addListener(showAverageListener);
+      showAverageNotifier.addListener(showAverageListener);
       isShowAverageListenerAdded = true;
     }
 
     if (!isDevModeListenerAdded) {
-      devMode.addListener(devModeListener);
+      devModeNotifier.addListener(devModeListener);
       isDevModeListenerAdded = true;
     }
 
     if (!isEnListenerAdded) {
-      isEn.addListener(isEnListener);
+      isEnNotifier.addListener(isEnListener);
       isEnListenerAdded = true;
     }
 
     if (!isSearchCountListenerAdded) {
-      searchCount.addListener(isSearchCountListener);
+      searchCountNotifier.addListener(isSearchCountListener);
       isSearchCountListenerAdded = true;
     }
 
@@ -188,7 +189,7 @@ class MainPresenter extends GetxController {
 
   void showAverageListener() {
     // Perform actions based on the new value of showAverage
-    if (showAverage.value) {
+    if (showAverageNotifier.value) {
       // Show the average
       Candle().computeTrendLines();
     } else {
@@ -198,18 +199,20 @@ class MainPresenter extends GetxController {
   }
 
   void devModeListener() {
-    if (devMode.value) {
+    devMode.toggle();
+    if (devModeNotifier.value) {
       Get.snackbar(
           'System Info',
           colorText: AppColor.whiteColor,
           backgroundColor: AppColor.greyColor,
           icon: const Icon(Icons.settings),
           'Developer mode is on');
+      showAnalysis.value = true;
     }
   }
 
   void isEnListener() {
-    if (isEn.value) {
+    if (isEnNotifier.value) {
       LangService.to.changeLanguage(Lang.en);
     } else {
       LangService.to.changeLanguage(Lang.zh);
@@ -231,7 +234,7 @@ class MainPresenter extends GetxController {
     //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
     showAnalysis.value = false;
     await Candle().init();
-    if (showAverage.value) {
+    if (showAverageNotifier.value) {
       Candle().computeTrendLines();
     }
     TrendMatch().init(init: true);
@@ -306,9 +309,36 @@ class MainPresenter extends GetxController {
     });
   }
 
+  Widget showDevModeViewOne(bool devMode) {
+    if (devMode) {
+      return MainView().devModeViewOne();
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
+  Widget showDevModeViewTwo(bool devMode) {
+    if (devMode) {
+      return MainView().devModeViewTwo();
+    } else {
+      return const SizedBox.shrink();
+    }
+  }
+
   Widget showSa() {
     return Obx(() {
-      if (hasSubsequentAnalysis.value && showAnalysis.value) {
+      if (hasSubsequentAnalysis.value && showAnalysis.value && devMode.value) {
+        if (subsequentAnalysisErr.value == '') {
+          return Column(
+            children: [
+              SubsequentAnalysisView().showSaChart(),
+              SubsequentAnalysisView().showSaDevChart(),
+            ],
+          );
+        } else {
+          return SubsequentAnalysisView().showError();
+        }
+      } else if (hasSubsequentAnalysis.value && showAnalysis.value) {
         if (subsequentAnalysisErr.value == '') {
           return SubsequentAnalysisView().showSaChart();
         } else {
