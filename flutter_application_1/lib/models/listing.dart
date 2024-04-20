@@ -10,11 +10,11 @@ class Listing {
   factory Listing() => _instance;
   Listing._();
 
-  void init() async {
+  void init() {
     MainPresenter.to.listSymbolAndName.value = [];
-    List<SymbolAndName> symbolAndNameList =
-        await ListingAdapter().jsonToSymbolAndName(getListingJson());
-    MainPresenter.to.listSymbolAndName.value = symbolAndNameList;
+    ListingAdapter().jsonToSymbolAndName(getListingJson()).then(
+        (symbolAndNameList) =>
+            MainPresenter.to.listSymbolAndName.value = symbolAndNameList);
     // print(symbolAndNameList);
   }
 

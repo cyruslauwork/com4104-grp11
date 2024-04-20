@@ -26,6 +26,7 @@ class MainPresenter extends GetxController {
       (PrefsService.to.prefs.getBool(SharedPreferencesConstant.darkMode) ??
               false)
           .obs;
+  bool isDarkModeInit = false;
   ValueNotifier<bool> devMode = ValueNotifier<bool>(false);
   bool isDevModeListenerAdded = false;
   ValueNotifier<bool> isEn = ValueNotifier<bool>(
@@ -82,6 +83,7 @@ class MainPresenter extends GetxController {
   RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
   RxString listingErr = ''.obs;
+  RxBool isListingInit = false.obs;
 
   /* Search */
   ValueNotifier<int> searchCount = ValueNotifier<int>(0);
@@ -89,7 +91,7 @@ class MainPresenter extends GetxController {
 
   /* Chat */
   RxList<String> messages = [
-    "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred financial instruments! ^_^"
+    "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred stocks/ETFs! ^_^"
   ].obs;
   RxBool isWaitingForReply = false.obs;
   RxInt aiResponseTime = 0.obs;
@@ -148,6 +150,15 @@ class MainPresenter extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (!isDarkModeInit) {
+      if (darkMode.value) {
+        AppColor.primaryTextColor = Colors.white;
+      } else {
+        AppColor.primaryTextColor = Colors.black;
+      }
+      isDarkModeInit = true;
+    }
+
     if (!isShowAverageListenerAdded) {
       showAverage.addListener(showAverageListener);
       isShowAverageListenerAdded = true;
@@ -166,6 +177,12 @@ class MainPresenter extends GetxController {
     if (!isSearchCountListenerAdded) {
       searchCount.addListener(isSearchCountListener);
       isSearchCountListenerAdded = true;
+    }
+
+    if (!isListingInit.value) {
+      isListingInit.value =
+          true; // Must set the value to true before invoking the method
+      Listing().init();
     }
   }
 
@@ -233,21 +250,24 @@ class MainPresenter extends GetxController {
 
   /* UI Logic*/
   List<Widget> buildListingRelatedIcons() {
-    Listing().init();
-    return [
-      IconButton(
-        icon: const Icon(Icons.search),
-        onPressed: () {
-          MainPresenter.to.route(RouteName.searchView.path);
-        },
-      ),
-      IconButton(
-        icon: const Icon(Icons.contact_support),
-        onPressed: () {
-          MainPresenter.to.route(RouteName.chatView.path);
-        },
-      ),
-    ];
+    if (isListingInit.value) {
+      return [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            MainPresenter.to.route(RouteName.searchView.path);
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.contact_support),
+          onPressed: () {
+            MainPresenter.to.route(RouteName.chatView.path);
+          },
+        ),
+      ];
+    } else {
+      return [];
+    }
   }
 
   Widget showTm() {
@@ -302,63 +322,59 @@ class MainPresenter extends GetxController {
   }
 
   Widget buildListingSourceRichText() {
-    if (listSymbolAndName.length > 1) {
-      final imageSpan = WidgetSpan(
-        child: Padding(
-          padding: EdgeInsets.only(left: 3.w),
+    final imageSpan = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColor.imageDefaultBgColor,
+          ),
+          child: Image.asset(
+            'images/nasdaq.png',
+            height: 6.h,
+          ),
+        ),
+      ),
+    );
+    final imageSpan2 = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: AppColor.imageDefaultBgColor,
+          ),
+          child: Image.asset(
+            'images/nyse.png',
+            height: 7.h,
+          ),
+        ),
+      ),
+    );
+    final imageSpan3 = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Transform.translate(
+          offset: Offset(0.0, 3.h),
           child: Container(
             decoration: const BoxDecoration(
               color: AppColor.imageDefaultBgColor,
             ),
             child: Image.asset(
-              'images/nasdaq.png',
-              height: 6.h,
+              'images/amex.png',
+              height: 12.h,
             ),
           ),
         ),
-      );
-      final imageSpan2 = WidgetSpan(
-        child: Padding(
-          padding: EdgeInsets.only(left: 3.w),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: AppColor.imageDefaultBgColor,
-            ),
-            child: Image.asset(
-              'images/nyse.png',
-              height: 7.h,
-            ),
-          ),
-        ),
-      );
-      final imageSpan3 = WidgetSpan(
-        child: Padding(
-          padding: EdgeInsets.only(left: 3.w),
-          child: Transform.translate(
-            offset: Offset(0.0, 3.h),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: AppColor.imageDefaultBgColor,
-              ),
-              child: Image.asset(
-                'images/amex.png',
-                height: 12.h,
-              ),
-            ),
-          ),
-        ),
-      );
+      ),
+    );
 
-      return RichText(
-        text: TextSpan(
-          text: 'Latest listings on',
-          children: [imageSpan, imageSpan2, imageSpan3],
-          style: const TextTheme().sp4.greyColor,
-        ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
+    return RichText(
+      text: TextSpan(
+        text: 'Latest listings on',
+        children: [imageSpan, imageSpan2, imageSpan3],
+        style: const TextTheme().sp4.greyColor,
+      ),
+    );
   }
 
   Widget buildMktDataProviderRichText() {
@@ -386,7 +402,7 @@ class MainPresenter extends GetxController {
     );
   }
 
-  Widget buildCloudFunctionRichText() {
+  Widget buildCloudFunctionCol() {
     final imageSpan = WidgetSpan(
       child: Padding(
         padding: EdgeInsets.only(left: 3.w),
@@ -394,20 +410,51 @@ class MainPresenter extends GetxController {
           offset: Offset(0.0, 3.h),
           child: Image.asset(
             'images/cloudfunction.png',
-            height: 20.h, // Adjust the height as needed
+            height: 18.h, // Adjust the height as needed
+          ),
+        ),
+      ),
+    );
+    final textSpan = WidgetSpan(
+      child: Padding(
+          padding: EdgeInsets.only(left: 3.w),
+          child: Text(
+            'x',
+            style: const TextTheme().sp10.greyColor,
+          )),
+    );
+    final imageSpan2 = WidgetSpan(
+      child: Padding(
+        padding: EdgeInsets.only(left: 3.w),
+        child: Transform.translate(
+          offset: Offset(0.0, 3.h),
+          child: Image.asset(
+            'images/hsuhk_cs_dept.png',
+            height: 18.h, // Adjust the height as needed
           ),
         ),
       ),
     );
 
-    return Center(
-      child: RichText(
-        text: TextSpan(
-          text: 'Computing power comes from',
-          children: [imageSpan],
-          style: const TextTheme().sp4.greyColor,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          child: Text(
+            'Computing power comes from',
+            style: const TextTheme().sp4.greyColor,
+          ),
         ),
-      ),
+        Center(
+          child: RichText(
+            text: TextSpan(
+              children: [imageSpan, textSpan, imageSpan2],
+              style: const TextTheme().sp4.greyColor,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

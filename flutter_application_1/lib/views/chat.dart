@@ -128,17 +128,17 @@ class _ChatViewState extends State<ChatView> {
             onPressed: MainPresenter.to.isWaitingForReply.value
                 ? null
                 : () => _handleOptionSelected(
-                    'Are there any recent market news that may affecting the prices of stocks in my watchlist?'),
+                    'Are there any recent news that may affecting the prices of stocks/ETFs in my watchlist?'),
             child: const Text(
-                'Are there any recent market news that may affecting the prices of stocks in my watchlist?'),
+                'Are there any recent news that may affecting the prices of stocks/ETFs in my watchlist?'),
           ),
           ElevatedButton(
             onPressed: MainPresenter.to.isWaitingForReply.value
                 ? null
                 : () => _handleOptionSelected(
-                    'What are the major challenges facing the stocks in my watchlist?'),
+                    'What are the major challenges facing the stocks/ETFs in my watchlist?'),
             child: const Text(
-                'What are the major challenges facing the stocks in my watchlist?'),
+                'What are the major challenges facing the stocks/ETFs in my watchlist?'),
           ),
         ],
       ),
