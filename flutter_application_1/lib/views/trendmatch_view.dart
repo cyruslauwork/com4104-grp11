@@ -47,7 +47,7 @@ class TrendMatchView extends StatelessWidget {
               ),
             ),
             Transform.translate(
-              offset: Offset(-9.w, 2.h),
+              offset: Offset(-5.w, 2.h),
               child: SizedBox(
                 height: 10.h,
                 child: Container(

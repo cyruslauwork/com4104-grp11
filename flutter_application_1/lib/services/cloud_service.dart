@@ -48,12 +48,14 @@ class CloudService extends GetxService {
       /* GET method */
       String urlEncodedSymbols = Uri.encodeComponent(symbols);
       String urlEncodedQuestion = Uri.encodeComponent(question);
-      // log(urlEncodedSymbolAndName);
+      // log(urlEncodedSymbols);
+      // log(urlEncodedQuestion);
       String response = await HTTPService().getFetchString(
           'http://35.221.170.30/?func=gemini-pro-news-custom&symbols=$urlEncodedSymbols&question=$urlEncodedQuestion');
       return response;
     } else {
-      throw ArgumentError('Must have a passing value to fetch news analysis.');
+      throw ArgumentError(
+          'Must have correct passing parameter value(s) to fetch news analysis.');
     }
   }
 }

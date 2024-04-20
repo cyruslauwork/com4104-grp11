@@ -95,7 +95,7 @@ class MainPresenter extends GetxController {
   ].obs;
   RxBool isWaitingForReply = false.obs;
   RxInt aiResponseTime = 0.obs;
-  RxDouble thisScrollExtent = 0.0.obs;
+  RxBool firstQuestion = true.obs;
 
   /* Trend match */
   RxInt range =
@@ -126,8 +126,8 @@ class MainPresenter extends GetxController {
   ].obs;
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
   RxList<int> matchRows = [0].obs;
-  Rx<bool> trendMatched = false.obs;
-  Rx<bool> showAnalysis = false.obs;
+  RxBool trendMatched = false.obs;
+  RxBool showAnalysis = false.obs;
 
   /* Subsequent analysis */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
@@ -370,7 +370,7 @@ class MainPresenter extends GetxController {
 
     return RichText(
       text: TextSpan(
-        text: 'Latest listings on',
+        text: 'Latest stock listings on',
         children: [imageSpan, imageSpan2, imageSpan3],
         style: const TextTheme().sp4.greyColor,
       ),

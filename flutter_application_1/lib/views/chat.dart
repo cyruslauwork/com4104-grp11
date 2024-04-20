@@ -34,13 +34,13 @@ class _ChatViewState extends State<ChatView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // To run codes after the UI is built
-      MainPresenter.to.thisScrollExtent.value +=
-          _scrollController.position.maxScrollExtent;
-      _scrollController.animateTo(
-        MainPresenter.to.thisScrollExtent.value,
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeInOut,
-      );
+      if (!MainPresenter.to.firstQuestion.value) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent + 20.h,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOut,
+        );
+      }
     });
   }
 
@@ -51,6 +51,15 @@ class _ChatViewState extends State<ChatView> {
     MainPresenter.to.messages.add(message);
     MainPresenter.to.isWaitingForReply.value =
         true; // Set the flag to true when the SymbolAndName sends a message
+    if (MainPresenter.to.firstQuestion.value) {
+      MainPresenter.to.firstQuestion.value = false;
+    } else {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 20.h,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
@@ -63,11 +72,9 @@ class _ChatViewState extends State<ChatView> {
     MainPresenter.to.aiResponseTime.value = downloadTime;
 
     MainPresenter.to.messages.add(newsAnalysis);
-    Timer(const Duration(milliseconds: 1000), () {
-      MainPresenter.to.thisScrollExtent.value +=
-          _scrollController.position.maxScrollExtent;
+    Timer(const Duration(milliseconds: 500), () {
       _scrollController.animateTo(
-        MainPresenter.to.thisScrollExtent.value,
+        _scrollController.position.maxScrollExtent + 20.h,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
@@ -80,6 +87,15 @@ class _ChatViewState extends State<ChatView> {
     MainPresenter.to.messages.add(option);
     MainPresenter.to.isWaitingForReply.value =
         true; // Set the flag to true when the SymbolAndName sends a message
+    if (MainPresenter.to.firstQuestion.value) {
+      MainPresenter.to.firstQuestion.value = false;
+    } else {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 20.h,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
@@ -93,10 +109,8 @@ class _ChatViewState extends State<ChatView> {
 
     MainPresenter.to.messages.add(newsAnalysis);
     Timer(const Duration(milliseconds: 500), () {
-      MainPresenter.to.thisScrollExtent.value +=
-          _scrollController.position.maxScrollExtent;
       _scrollController.animateTo(
-        MainPresenter.to.thisScrollExtent.value,
+        _scrollController.position.maxScrollExtent + 20.h,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
