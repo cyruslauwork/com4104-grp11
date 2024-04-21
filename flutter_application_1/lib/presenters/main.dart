@@ -96,7 +96,7 @@ class MainPresenter extends GetxController {
 
   /* Chat */
   RxList<String> messages = [
-    "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred stocks/ETFs! ^_^"
+    "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred stocks or ETFs! ^_^"
   ].obs;
   RxBool isWaitingForReply = false.obs;
   RxInt aiResponseTime = 0.obs;

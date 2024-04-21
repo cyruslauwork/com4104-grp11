@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'package:get/get.dart';
 
-import 'package:flutter_application_1/utils/utils.dart';
+import 'time_service.dart';
+
+// import 'package:flutter_application_1/utils/utils.dart';
 
 class HTTPService extends GetxService {
   // Singleton implementation
@@ -33,7 +36,7 @@ class HTTPService extends GetxService {
         (now.hour == 13 && now.minute <= 30 && now.second <= 50)) {
       endTimestamp = 9999999999;
     } else {
-      if (isEasternDaylightTime(now)) {
+      if (TimeService().isEasternDaylightTime(now)) {
         // Check if current UTC time is greater than or equal to 20:00 in Eastern Daylight Time (USA summer and spring seasons)
         if (now.hour >= 20) {
           endTimestamp = 9999999999;
@@ -105,7 +108,10 @@ class HTTPService extends GetxService {
 
     // Make an HTTP GET request to retrieve the JSON response
     var thisUrl = Uri.parse(url);
-    var response = await http.get(thisUrl, headers: headers);
+    var response = await http.get(
+      thisUrl,
+      headers: headers,
+    );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       var parsedResponse =
@@ -115,7 +121,7 @@ class HTTPService extends GetxService {
     } else {
       var parsedErrorResponse =
           await jsonDecode(response.body); // Parse the JSON error response
-      logger.d('${response.statusCode}, $parsedErrorResponse');
+      // logger.d('${response.statusCode}, $parsedErrorResponse');
       return parsedErrorResponse;
     }
   }
@@ -148,7 +154,7 @@ class HTTPService extends GetxService {
     } else {
       var parsedErrorResponse =
           await jsonDecode(response.body); // Parse the JSON error response
-      logger.d('${response.statusCode}, $parsedErrorResponse');
+      // logger.d('${response.statusCode}, $parsedErrorResponse');
       return parsedErrorResponse;
     }
   }
@@ -159,35 +165,45 @@ class HTTPService extends GetxService {
 
     // Make an HTTP GET request to retrieve the String response
     var thisUrl = Uri.parse(url);
-    var response = await http.get(thisUrl, headers: headers);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // print(response.body.runtimeType);
-      return response.body;
-    } else {
-      logger.d('${response.statusCode}, $response.body');
-      return response.body;
-    }
-  }
-
-  Future<String> postFetchString(String url, Map<String, dynamic> body) async {
-    // Make an HTTP GET request to retrieve the String response
-    var thisUrl = Uri.parse(url);
-    var response = await http.post(
+    var response = await http.get(
       thisUrl,
-      body: body,
+      headers: headers,
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       // print(response.body.runtimeType);
       return response.body;
     } else {
-      logger.d('${response.statusCode}, $response.body');
+      // logger.d('${response.statusCode}, ${response.body}');
+      return response.body;
+    }
+  }
+
+  Future<String> postFetchString(String url, Map<String, dynamic> body) async {
+    // Modify the request headers to accept plain text
+    final headers = {'Accept': 'text/plain'};
+
+    // Make an HTTP GET request to retrieve the String response
+    var thisUrl = Uri.parse(url);
+    var response = await http.post(
+      thisUrl,
+      body: body,
+      headers: headers,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // print(response.body.runtimeType);
+      return response.body;
+    } else {
+      // logger.d('${response.statusCode}, ${response.body}');
       return response.body;
     }
   }
 
   Stream<http.Response> fetchListingJsons() async* {
+    // Modify the request headers to accept CSV data
+    final headers = {'Accept': 'text/json'};
+
     var urls = [
       Uri.parse(
           'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=nasdaq'),
@@ -197,23 +213,12 @@ class HTTPService extends GetxService {
           'https://api.nasdaq.com/api/screener/stocks?tableonly=true&limit=99999&exchange=amex')
     ];
 
-    // Modify the request headers to accept CSV data
-    final headers = {'Accept': 'text/json'};
-
     // Send the HTTP GET request with the updated URL and headers
     for (var url in urls) {
-      yield await http.get(url, headers: headers);
+      yield await http.get(
+        url,
+        headers: headers,
+      );
     }
   }
-}
-
-bool isEasternDaylightTime(DateTime dateTime) {
-  int year = dateTime.year;
-  DateTime startDst = DateTime.utc(year, 3, (14 - (5 * year ~/ 4 + 1) % 7), 2);
-  DateTime endDst = DateTime.utc(year, 11, (7 - (5 * year ~/ 4 + 1) % 7), 2);
-  return dateTime.isAfter(startDst) && dateTime.isBefore(endDst);
-}
-
-bool isEasternStandardTime(DateTime dateTime) {
-  return !isEasternDaylightTime(dateTime);
 }

@@ -75,3 +75,14 @@ enum SrcFileType {
 enum Func {
   devMode;
 }
+
+enum Question {
+  affecting(
+      'Are there any recent news that may affecting the prices of stocks or ETFs in my watchlist?'),
+  challenges(
+      'What are the major challenges facing the stocks or ETFs in my watchlist?');
+
+  const Question(this.question);
+
+  final String question;
+}

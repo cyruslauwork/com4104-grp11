@@ -85,6 +85,13 @@ class _ChatViewState extends State<ChatView> {
 
   void _handleOptionSelected(String option) async {
     MainPresenter.to.messages.add(option);
+
+    if (option == Question.affecting.question) {
+      option = 'Are there any recent news that may affecting the prices of ';
+    } else if (option == Question.challenges.question) {
+      option = 'What are the major challenges facing the ';
+    }
+
     MainPresenter.to.isWaitingForReply.value =
         true; // Set the flag to true when the SymbolAndName sends a message
     if (MainPresenter.to.firstQuestion.value) {
@@ -141,18 +148,14 @@ class _ChatViewState extends State<ChatView> {
           ElevatedButton(
             onPressed: MainPresenter.to.isWaitingForReply.value
                 ? null
-                : () => _handleOptionSelected(
-                    'Are there any recent news that may affecting the prices of stocks/ETFs in my watchlist?'),
-            child: const Text(
-                'Are there any recent news that may affecting the prices of stocks/ETFs in my watchlist?'),
+                : () => _handleOptionSelected(Question.affecting.question),
+            child: Text(Question.affecting.question),
           ),
           ElevatedButton(
             onPressed: MainPresenter.to.isWaitingForReply.value
                 ? null
-                : () => _handleOptionSelected(
-                    'What are the major challenges facing the stocks/ETFs in my watchlist?'),
-            child: const Text(
-                'What are the major challenges facing the stocks/ETFs in my watchlist?'),
+                : () => _handleOptionSelected(Question.challenges.question),
+            child: Text(Question.challenges.question),
           ),
         ],
       ),
