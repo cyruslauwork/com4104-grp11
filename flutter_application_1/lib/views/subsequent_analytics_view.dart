@@ -5,21 +5,21 @@ import 'package:flutter_application_1/styles/styles.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 import 'package:flutter_application_1/views/herophotoview_routewrapper.dart';
 
-class SubsequentAnalysisView extends StatelessWidget {
+class SubsequentAnalyticsView extends StatelessWidget {
   final BuildContext? context;
 
-  // const SubsequentAnalysisView({super.key, required this.context});
+  // const SubsequentAnalyticsView({super.key, required this.context});
 
   // Singleton implementation
-  static SubsequentAnalysisView? _instance;
-  factory SubsequentAnalysisView({Key? key, BuildContext? context}) {
-    _instance ??= SubsequentAnalysisView._(
+  static SubsequentAnalyticsView? _instance;
+  factory SubsequentAnalyticsView({Key? key, BuildContext? context}) {
+    _instance ??= SubsequentAnalyticsView._(
       key: key,
       context: context,
     );
     return _instance!;
   }
-  const SubsequentAnalysisView._({super.key, this.context});
+  const SubsequentAnalyticsView._({super.key, this.context});
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +178,7 @@ class SubsequentAnalysisView extends StatelessWidget {
 
   Widget showError() {
     return Text(
-      MainPresenter.to.subsequentAnalysisErr.value,
+      MainPresenter.to.subsequentAnalyticsErr.value,
       style: const TextTheme().sp5,
     );
   }
@@ -193,7 +193,7 @@ class SubsequentAnalysisView extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
-          child: Text('Awaiting subsequent trend analysis result...',
+          child: Text('Awaiting subsequent trend analytics result...',
               style: const TextTheme().sp5),
         ),
         SizedBox(height: 10.h),

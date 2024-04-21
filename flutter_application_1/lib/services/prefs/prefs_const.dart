@@ -14,4 +14,5 @@ class SharedPreferencesConstant {
   static String tolerance = 'tolerance';
   static String darkMode = 'darkMode';
   static String isEn = 'isEn';
+  static String alwaysShowAnalytics = 'alwaysShowAnalytics';
 }

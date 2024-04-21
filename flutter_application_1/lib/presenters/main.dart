@@ -33,6 +33,10 @@ class MainPresenter extends GetxController {
   ValueNotifier<bool> isEnNotifier = ValueNotifier<bool>(
       (PrefsService.to.prefs.getBool(SharedPreferencesConstant.isEn) ?? true));
   bool isEnListenerAdded = false;
+  RxBool alwaysShowAnalytics = (PrefsService.to.prefs
+              .getBool(SharedPreferencesConstant.alwaysShowAnalytics) ??
+          false)
+      .obs;
 
   /* Candlestick-related */
   RxString financialInstrumentSymbol = (PrefsService.to.prefs
@@ -128,12 +132,12 @@ class MainPresenter extends GetxController {
   RxList<int> trendMatchOutput = [0, 0, 0, 0, 0].obs;
   RxList<int> matchRows = [0].obs;
   RxBool trendMatched = false.obs;
-  RxBool showAnalysis = false.obs;
+  RxBool showAnalytics = false.obs;
 
-  /* Subsequent analysis */
+  /* Subsequent analytics */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
-  RxInt cloudSubsequentAnalysisTime = 0.obs;
-  RxBool hasSubsequentAnalysis = false.obs;
+  RxInt cloudSubsequentAnalyticsTime = 0.obs;
+  RxBool hasSubsequentAnalytics = false.obs;
   Rx<Uint8List> img1Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img2Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img3Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
@@ -141,7 +145,7 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img5Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img6Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
-  RxString subsequentAnalysisErr = ''.obs;
+  RxString subsequentAnalyticsErr = ''.obs;
   RxInt numOfClusters = 0.obs;
 
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
@@ -207,7 +211,7 @@ class MainPresenter extends GetxController {
           backgroundColor: AppColor.greyColor,
           icon: const Icon(Icons.settings),
           'Developer mode is on');
-      showAnalysis.value = true;
+      showAnalytics.value = true;
     }
   }
 
@@ -230,15 +234,19 @@ class MainPresenter extends GetxController {
   }
 
   Future<List<CandleData>> init() async {
+    if (!alwaysShowAnalytics.value) {
+      showAnalytics.value = false;
+    } else {
+      showAnalytics.value = true;
+    }
     // PrefsService.to.prefs
     //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
-    showAnalysis.value = false;
     await Candle().init();
     if (showAverageNotifier.value) {
       Candle().computeTrendLines();
     }
     TrendMatch().init(init: true);
-    SubsequentAnalysis().init();
+    SubsequentAnalytics().init();
     return listCandledata;
   }
 
@@ -275,9 +283,9 @@ class MainPresenter extends GetxController {
 
   Widget showTm() {
     return Obx(() {
-      if (trendMatched.value && showAnalysis.value) {
+      if (trendMatched.value && showAnalytics.value) {
         return TrendMatchView().showAdjustedLineChart();
-      } else if (showAnalysis.value) {
+      } else if (showAnalytics.value) {
         return TrendMatchView().showCircularProgressIndicator();
       }
       return const SizedBox.shrink();
@@ -286,21 +294,21 @@ class MainPresenter extends GetxController {
 
   Widget showStartBtn() {
     return Obx(() {
-      if (showAnalysis.value) {
+      if (showAnalytics.value) {
         return const SizedBox.shrink();
       } else {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 2.w),
           child: ElevatedButton.icon(
             onPressed: () {
-              MainPresenter.to.showAnalysis.value = true;
+              MainPresenter.to.showAnalytics.value = true;
             },
             icon: Icon(
               Icons.analytics_outlined,
               size: 20.h,
             ),
             label: Text(
-              'Start historical trend matching and their subsequent trend(s) analysis based on the recent ${MainPresenter.to.range.toString()}-day(s) trend',
+              'Start historical trend matching and their subsequent trend(s) analytics based on the recent ${MainPresenter.to.range.toString()}-day(s) trend',
               style: const TextTheme().sp5.w700,
             ),
           ),
@@ -327,25 +335,27 @@ class MainPresenter extends GetxController {
 
   Widget showSa() {
     return Obx(() {
-      if (hasSubsequentAnalysis.value && showAnalysis.value && devMode.value) {
-        if (subsequentAnalysisErr.value == '') {
+      if (hasSubsequentAnalytics.value &&
+          showAnalytics.value &&
+          devMode.value) {
+        if (subsequentAnalyticsErr.value == '') {
           return Column(
             children: [
-              SubsequentAnalysisView().showSaChart(),
-              SubsequentAnalysisView().showSaDevChart(),
+              SubsequentAnalyticsView().showSaChart(),
+              SubsequentAnalyticsView().showSaDevChart(),
             ],
           );
         } else {
-          return SubsequentAnalysisView().showError();
+          return SubsequentAnalyticsView().showError();
         }
-      } else if (hasSubsequentAnalysis.value && showAnalysis.value) {
-        if (subsequentAnalysisErr.value == '') {
-          return SubsequentAnalysisView().showSaChart();
+      } else if (hasSubsequentAnalytics.value && showAnalytics.value) {
+        if (subsequentAnalyticsErr.value == '') {
+          return SubsequentAnalyticsView().showSaChart();
         } else {
-          return SubsequentAnalysisView().showError();
+          return SubsequentAnalyticsView().showError();
         }
-      } else if (showAnalysis.value) {
-        return SubsequentAnalysisView().showCircularProgressIndicator();
+      } else if (showAnalytics.value) {
+        return SubsequentAnalyticsView().showCircularProgressIndicator();
       }
       return const SizedBox.shrink();
     });

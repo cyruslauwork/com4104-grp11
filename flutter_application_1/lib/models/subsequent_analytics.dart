@@ -4,14 +4,14 @@ import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 
-class SubsequentAnalysis {
+class SubsequentAnalytics {
   // Singleton implementation
-  static final SubsequentAnalysis _instance = SubsequentAnalysis._();
-  factory SubsequentAnalysis() => _instance;
-  SubsequentAnalysis._();
+  static final SubsequentAnalytics _instance = SubsequentAnalytics._();
+  factory SubsequentAnalytics() => _instance;
+  SubsequentAnalytics._();
 
   void init() {
-    MainPresenter.to.hasSubsequentAnalysis.value = false;
+    MainPresenter.to.hasSubsequentAnalytics.value = false;
 
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
@@ -36,24 +36,24 @@ class SubsequentAnalysis {
         // Calculate the time difference
         exeDuration = exeEndTime.difference(exeStartTime);
         exeTime = exeDuration.inMilliseconds;
-        MainPresenter.to.cloudSubsequentAnalysisTime.value = exeTime;
+        MainPresenter.to.cloudSubsequentAnalyticsTime.value = exeTime;
         try {
           Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
-          MainPresenter.to.subsequentAnalysisErr.value = '';
+          MainPresenter.to.subsequentAnalyticsErr.value = '';
           parseJson(csvPngFiles);
         } catch (e) {
           String err = parsedResponse['error'];
-          MainPresenter.to.subsequentAnalysisErr.value = err;
+          MainPresenter.to.subsequentAnalyticsErr.value = err;
         }
-        MainPresenter.to.hasSubsequentAnalysis.value = true;
+        MainPresenter.to.hasSubsequentAnalytics.value = true;
       }).catchError((error) {
         // Handle any errors during the asynchronous operation
         // ...
       });
     } else {
-      MainPresenter.to.subsequentAnalysisErr.value =
+      MainPresenter.to.subsequentAnalyticsErr.value =
           'The number of subsequent trends must be equal to or greater than 4.';
-      MainPresenter.to.hasSubsequentAnalysis.value = true;
+      MainPresenter.to.hasSubsequentAnalytics.value = true;
     }
   }
 

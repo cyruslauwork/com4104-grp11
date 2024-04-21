@@ -35,7 +35,7 @@ class CloudService extends GetxService {
     return parsedResponse;
   }
 
-  Future<String> getNewsAnalysis(
+  Future<String> getNewsAnalytics(
       {String? symbolAndName, String? symbols, String? question}) async {
     if (symbolAndName != null) {
       /* GET method */
@@ -55,7 +55,7 @@ class CloudService extends GetxService {
       return response;
     } else {
       throw ArgumentError(
-          'Must have correct passing parameter value(s) to fetch news analysis.');
+          'Must have correct passing parameter value(s) to fetch news analytics.');
     }
   }
 }

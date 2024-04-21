@@ -63,15 +63,15 @@ class _ChatViewState extends State<ChatView> {
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
-    String newsAnalysis =
-        await CloudService().getNewsAnalysis(symbolAndName: message);
+    String newsAnalytics =
+        await CloudService().getNewsAnalytics(symbolAndName: message);
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
     MainPresenter.to.aiResponseTime.value = downloadTime;
 
-    MainPresenter.to.messages.add(newsAnalysis);
+    MainPresenter.to.messages.add(newsAnalytics);
     Timer(const Duration(milliseconds: 500), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 20.h,
@@ -99,15 +99,15 @@ class _ChatViewState extends State<ChatView> {
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
-    String newsAnalysis = await CloudService()
-        .getNewsAnalysis(symbols: 'AAPL MSFT GOOG', question: option);
+    String newsAnalytics = await CloudService()
+        .getNewsAnalytics(symbols: 'AAPL MSFT GOOG', question: option);
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
     MainPresenter.to.aiResponseTime.value = downloadTime;
 
-    MainPresenter.to.messages.add(newsAnalysis);
+    MainPresenter.to.messages.add(newsAnalytics);
     Timer(const Duration(milliseconds: 500), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 20.h,

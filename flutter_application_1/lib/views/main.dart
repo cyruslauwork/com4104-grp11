@@ -36,106 +36,145 @@ class MainView extends StatefulWidget {
           'Trend Match',
           style: const TextTheme().sp5.w700,
         ),
-        Table(
-          border: TableBorder.all(
-              color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
-          children: [
-            TableRow(children: [
-              Column(children: [Text('DL(ms)', style: const TextTheme().sp4)]),
-              Column(children: [Text('rows', style: const TextTheme().sp4)]),
-              Column(
-                  children: [Text('Sel count', style: const TextTheme().sp4)]),
-              Column(children: [Text('TM rows', style: const TextTheme().sp4)]),
-              Column(children: [Text('Exe(ms)', style: const TextTheme().sp4)]),
-              Column(children: [Text('True', style: const TextTheme().sp4)]),
-              Column(children: [Text('False', style: const TextTheme().sp4)])
-            ]),
-            TableRow(children: [
-              Column(children: [
-                Text(MainPresenter.to.candledownloadTime.toString(),
-                    style: const TextTheme().sp4)
+        Obx(
+          () => Table(
+            border: TableBorder.all(
+                color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
+            children: [
+              TableRow(children: [
+                Column(
+                    children: [Text('DL(ms)', style: const TextTheme().sp4)]),
+                Column(children: [Text('rows', style: const TextTheme().sp4)]),
+                Column(children: [
+                  Text('Sel count', style: const TextTheme().sp4)
+                ]),
+                Column(
+                    children: [Text('TM rows', style: const TextTheme().sp4)]),
+                Column(
+                    children: [Text('Exe(ms)', style: const TextTheme().sp4)]),
+                Column(children: [Text('True', style: const TextTheme().sp4)]),
+                Column(children: [Text('False', style: const TextTheme().sp4)])
               ]),
-              Column(children: [
-                Text(MainPresenter.to.trendMatchOutput[3].toString(),
-                    style: const TextTheme().sp4)
+              TableRow(children: [
+                Column(children: [
+                  Text(MainPresenter.to.candledownloadTime.toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.trendMatchOutput[3].toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.trendMatchOutput[4].toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(
+                      (MainPresenter.to.trendMatchOutput[3] -
+                              MainPresenter.to.trendMatchOutput[4])
+                          .toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.trendMatchOutput[2].toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.trendMatchOutput[0].toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.trendMatchOutput[1].toString(),
+                      style: const TextTheme().sp4)
+                ]),
               ]),
-              Column(children: [
-                Text(MainPresenter.to.trendMatchOutput[4].toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(
-                    (MainPresenter.to.trendMatchOutput[3] -
-                            MainPresenter.to.trendMatchOutput[4])
-                        .toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(MainPresenter.to.trendMatchOutput[2].toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(MainPresenter.to.trendMatchOutput[0].toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(MainPresenter.to.trendMatchOutput[1].toString(),
-                    style: const TextTheme().sp4)
-              ]),
-            ]),
-          ],
+            ],
+          ),
         ),
         SizedBox(height: 10.h),
         Text(
           'Misc',
           style: const TextTheme().sp5.w700,
         ),
-        Table(
-          border: TableBorder.all(
-              color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
-          children: [
-            TableRow(children: [
-              Column(children: [
-                Text('Listing DL(ms)', style: const TextTheme().sp4)
+        Obx(
+          () => Table(
+            border: TableBorder.all(
+                color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
+            children: [
+              TableRow(children: [
+                Column(children: [
+                  Text('Listing DL(ms)', style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text('SA prep(ms)', style: const TextTheme().sp4)
+                ]),
+                Column(
+                    children: [Text('SA(ms)', style: const TextTheme().sp4)]),
+                Column(children: [
+                  Text('SA Cluster(s)', style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text('AI res(ms)', style: const TextTheme().sp4)
+                ]),
               ]),
-              Column(children: [
-                Text('SA prep(ms)', style: const TextTheme().sp4)
+              TableRow(children: [
+                Column(children: [
+                  Text(MainPresenter.to.listingDownloadTime.toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(
+                      MainPresenter.to.lastClosePriceAndSubsequentTrendsExeTime
+                          .toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.cloudSubsequentAnalyticsTime.toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.numOfClusters.toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text(MainPresenter.to.aiResponseTime.toString(),
+                      style: const TextTheme().sp4)
+                ]),
               ]),
-              Column(children: [Text('SA(ms)', style: const TextTheme().sp4)]),
-              Column(children: [
-                Text('SA Cluster(s)', style: const TextTheme().sp4)
-              ]),
-              Column(
-                  children: [Text('AI res(ms)', style: const TextTheme().sp4)]),
-            ]),
-            TableRow(children: [
-              Column(children: [
-                Text(MainPresenter.to.listingDownloadTime.toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(
-                    MainPresenter.to.lastClosePriceAndSubsequentTrendsExeTime
-                        .toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(MainPresenter.to.cloudSubsequentAnalysisTime.toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(MainPresenter.to.numOfClusters.toString(),
-                    style: const TextTheme().sp4)
-              ]),
-              Column(children: [
-                Text(MainPresenter.to.aiResponseTime.toString(),
-                    style: const TextTheme().sp4)
-              ]),
-            ]),
-          ],
+            ],
+          ),
         ),
         SizedBox(height: 10.h),
       ]),
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 2.w),
+        child: Column(
+          children: [
+            const Divider(),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Always show analytics',
+                    style: const TextTheme().sp5.w700,
+                  ),
+                ),
+                Switch(
+                  value: MainPresenter.to.alwaysShowAnalytics.value,
+                  activeColor: Colors.red,
+                  onChanged: (bool value) {
+                    MainPresenter.to.alwaysShowAnalytics.toggle();
+                    PrefsService.to.prefs.setBool(
+                        SharedPreferencesConstant.alwaysShowAnalytics, value);
+                  },
+                ),
+              ],
+            ),
+            const Divider(),
+            SizedBox(height: 10.h),
+          ],
+        ),
+      ),
       Text(
         'Percentage differences between selected period',
         style: const TextTheme().sp5.w700,
@@ -518,7 +557,7 @@ class _MainViewState extends State<MainView> {
                         MainPresenter.to.showDevModeViewTwo(
                             MainPresenter.to.devModeNotifier.value),
                         SizedBox(height: 10.h),
-                        SubsequentAnalysisView(context: context),
+                        SubsequentAnalyticsView(context: context),
                         MainPresenter.to.buildCloudFunctionCol(),
                       ],
                     ),
