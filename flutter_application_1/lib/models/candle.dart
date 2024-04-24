@@ -45,8 +45,9 @@ class Candle {
       //   return getCSV(callbackTime + 1);
       // }
     } else {
-      throw ArgumentError(
-          'Failed to fetch market data from Yahoo Finance: ${response.statusCode}');
+      MainPresenter.to.marketDataProvider.value =
+          '${response.statusCode} Failed to fetch market data from';
+      return 'Date,Open,High,Low,Close,Adj Close,Volume\n1993-01-29,43.968750,43.968750,43.750000,43.937500,24.763748,1003200\n1993-02-01,43.968750,44.250000,43.968750,44.250000,24.939869,480500\n1993-02-02,44.218750,44.375000,44.125000,44.343750,24.992701,201300';
     }
   }
 
@@ -71,26 +72,32 @@ class Candle {
               days:
                   7))); // Each call has a maximum of 5,000 rows, which is approximately 7 days of data
       final String endDate = DateFormat('yyyy-MM-dd').format(currentDate);
-      final response = await HTTPService().fetchCandleJSON(startDate, endDate);
 
-      if (response.statusCode == 200) {
-        // init is false if and only if added new JSON data
-        if (init) {
-          for (var map in jsonDecode(response.body)['results']) {
-            if (map is Map<String, dynamic>) {
-              json.add(map);
+      try {
+        final response =
+            await HTTPService().fetchCandleJSON(startDate, endDate);
+        if (response.statusCode == 200) {
+          // init is false if and only if added new JSON data
+          if (init) {
+            for (var map in jsonDecode(response.body)['results']) {
+              if (map is Map<String, dynamic>) {
+                json.add(map);
+              }
+            }
+          } else {
+            for (var map in jsonDecode(response.body)['results'].reversed) {
+              if (map is Map<String, dynamic>) {
+                json.insert(0, map);
+              }
             }
           }
         } else {
-          for (var map in jsonDecode(response.body)['results'].reversed) {
-            if (map is Map<String, dynamic>) {
-              json.insert(0, map);
-            }
-          }
+          throw ArgumentError(
+              'Failed to fetch JSON data in loop ${i.toString()}: ${response.statusCode}');
         }
-      } else {
-        throw ArgumentError(
-            'Failed to fetch JSON data in loop ${i.toString()}: ${response.statusCode}');
+      } catch (e) {
+        MainPresenter.to.marketDataProvider.value =
+            'Failed to fetch market data from';
       }
       // Subtract 7 from the current date to get the next end date
       currentDate = currentDate.subtract(const Duration(days: 7));

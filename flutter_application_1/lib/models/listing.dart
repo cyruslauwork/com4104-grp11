@@ -30,17 +30,21 @@ class Listing {
     int downloadTime = downloadDuration.inMilliseconds;
     MainPresenter.to.listingDownloadTime.value = downloadTime;
 
-    await for (var response in responses) {
-      // process each response
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // print(response.body);
-        // JSON object received, store the data
-        var parsedResponse = await jsonDecode(response.body);
-        parsedResponses.add(parsedResponse);
-      } else {
-        throw ArgumentError(
-            'Failed to fetch listing JSON data: ${response.statusCode}');
+    try {
+      await for (var response in responses) {
+        // process each response
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // print(response.body);
+          // JSON object received, store the data
+          var parsedResponse = await jsonDecode(response.body);
+          parsedResponses.add(parsedResponse);
+        } else {
+          throw ArgumentError(
+              'Failed to fetch listing JSON data: ${response.statusCode}');
+        }
       }
+    } catch (e) {
+      return ListingAdapter().jsonsToJson(parsedResponses);
     }
     return ListingAdapter().jsonsToJson(parsedResponses);
   }

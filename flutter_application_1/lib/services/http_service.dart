@@ -106,23 +106,27 @@ class HTTPService extends GetxService {
     // Modify the request headers to accept JSON data
     final headers = {'Accept': 'text/json'};
 
-    // Make an HTTP GET request to retrieve the JSON response
-    var thisUrl = Uri.parse(url);
-    var response = await http.get(
-      thisUrl,
-      headers: headers,
-    );
+    try {
+      // Make an HTTP GET request to retrieve the JSON response
+      var thisUrl = Uri.parse(url);
+      var response = await http.get(
+        thisUrl,
+        headers: headers,
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var parsedResponse =
-          await jsonDecode(response.body); // Parse the JSON response
-      // print(response.body.runtimeType);
-      return parsedResponse; // Return the parsed JSON
-    } else {
-      var parsedErrorResponse =
-          await jsonDecode(response.body); // Parse the JSON error response
-      // logger.d('${response.statusCode}, $parsedErrorResponse');
-      return parsedErrorResponse;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var parsedResponse =
+            await jsonDecode(response.body); // Parse the JSON response
+        // print(response.body.runtimeType);
+        return parsedResponse; // Return the parsed JSON
+      } else {
+        var parsedErrorResponse =
+            await jsonDecode(response.body); // Parse the JSON error response
+        // logger.d('${response.statusCode}, $parsedErrorResponse');
+        return parsedErrorResponse;
+      }
+    } catch (e) {
+      return {'error': 'Unable to connect to web server'};
     }
   }
 
@@ -138,24 +142,30 @@ class HTTPService extends GetxService {
       'keep-alive': 'timeout=5, max=1000'
     };
 
-    // Make an HTTP GET request to retrieve the JSON response
-    var thisUrl = Uri.parse(url);
-    var response = await http.post(
-      thisUrl,
-      headers: headers,
-      body: body,
-    );
+    try {
+      // Make an HTTP GET request to retrieve the JSON response
+      var thisUrl = Uri.parse(url);
+      var response = await http.post(
+        thisUrl,
+        headers: headers,
+        body: body,
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      var parsedResponse =
-          await jsonDecode(response.body); // Parse the JSON response
-      // print(response.body.runtimeType);
-      return parsedResponse; // Return the parsed JSON
-    } else {
-      var parsedErrorResponse =
-          await jsonDecode(response.body); // Parse the JSON error response
-      // logger.d('${response.statusCode}, $parsedErrorResponse');
-      return parsedErrorResponse;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // log(response.body);
+        var parsedResponse =
+            await jsonDecode(response.body); // Parse the JSON response
+        // print(response.body.runtimeType);
+        return parsedResponse; // Return the parsed JSON
+      } else {
+        // log(response.body);
+        var parsedErrorResponse =
+            await jsonDecode(response.body); // Parse the JSON error response
+        // logger.d('${response.statusCode}, $parsedErrorResponse');
+        return parsedErrorResponse;
+      }
+    } catch (e) {
+      return {'error': 'Unable to connect to web server'};
     }
   }
 
@@ -163,19 +173,23 @@ class HTTPService extends GetxService {
     // Modify the request headers to accept plain text
     final headers = {'Accept': 'text/plain'};
 
-    // Make an HTTP GET request to retrieve the String response
-    var thisUrl = Uri.parse(url);
-    var response = await http.get(
-      thisUrl,
-      headers: headers,
-    );
+    try {
+      // Make an HTTP GET request to retrieve the String response
+      var thisUrl = Uri.parse(url);
+      var response = await http.get(
+        thisUrl,
+        headers: headers,
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // print(response.body.runtimeType);
-      return response.body;
-    } else {
-      // logger.d('${response.statusCode}, ${response.body}');
-      return response.body;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // print(response.body.runtimeType);
+        return response.body;
+      } else {
+        // logger.d('${response.statusCode}, ${response.body}');
+        return response.body;
+      }
+    } catch (e) {
+      return 'Unable to connect to web server';
     }
   }
 
@@ -183,20 +197,24 @@ class HTTPService extends GetxService {
     // Modify the request headers to accept plain text
     final headers = {'Accept': 'text/plain'};
 
-    // Make an HTTP GET request to retrieve the String response
-    var thisUrl = Uri.parse(url);
-    var response = await http.post(
-      thisUrl,
-      body: body,
-      headers: headers,
-    );
+    try {
+      // Make an HTTP GET request to retrieve the String response
+      var thisUrl = Uri.parse(url);
+      var response = await http.post(
+        thisUrl,
+        body: body,
+        headers: headers,
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      // print(response.body.runtimeType);
-      return response.body;
-    } else {
-      // logger.d('${response.statusCode}, ${response.body}');
-      return response.body;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // print(response.body.runtimeType);
+        return response.body;
+      } else {
+        // logger.d('${response.statusCode}, ${response.body}');
+        return response.body;
+      }
+    } catch (e) {
+      return 'Unable to connect to web server';
     }
   }
 

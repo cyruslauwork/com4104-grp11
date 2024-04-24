@@ -82,6 +82,7 @@ class MainPresenter extends GetxController {
   ].obs;
   ValueNotifier<bool> showAverageNotifier = ValueNotifier<bool>(true);
   bool isShowAverageListenerAdded = false;
+  RxString marketDataProvider = 'Market data provided by'.obs;
 
   /* Listing */
   RxInt listingDownloadTime = 0.obs;
@@ -154,13 +155,13 @@ class MainPresenter extends GetxController {
 
   @override
   void onInit() {
-    // PrefsService.to.prefs
-    //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
-    // PrefsService.to.prefs.setString(
-    //     SharedPreferencesConstant.financialInstrumentName,
-    //     'SPDR S&P 500 ETF Trust');
-    // PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, 5);
-    // PrefsService.to.prefs.setInt(SharedPreferencesConstant.tolerance, 100);
+    PrefsService.to.prefs
+        .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
+    PrefsService.to.prefs.setString(
+        SharedPreferencesConstant.financialInstrumentName,
+        'SPDR S&P 500 ETF Trust');
+    PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, 5);
+    PrefsService.to.prefs.setInt(SharedPreferencesConstant.tolerance, 100);
 
     super.onInit();
     if (!isDarkModeInit) {
@@ -252,6 +253,7 @@ class MainPresenter extends GetxController {
       Candle().computeTrendLines();
     }
     TrendMatch().init(init: true);
+    // print(matchRows.length);
     SubsequentAnalytics().init();
     return listCandledata;
   }
@@ -314,7 +316,7 @@ class MainPresenter extends GetxController {
               size: 20.h,
             ),
             label: Text(
-              'Start historical trend matching and their subsequent trend(s) analytics based on the recent ${MainPresenter.to.range.toString()}-day(s) trend',
+              'Historical trend matching and analytics',
               style: const TextTheme().sp5.w700,
             ),
           ),
@@ -439,13 +441,13 @@ class MainPresenter extends GetxController {
       ),
     );
 
-    return RichText(
-      text: TextSpan(
-        text: 'Market data provided by',
-        children: [imageSpan],
-        style: const TextTheme().sp4.greyColor,
-      ),
-    );
+    return Obx(() => RichText(
+          text: TextSpan(
+            text: marketDataProvider.value,
+            children: [imageSpan],
+            style: const TextTheme().sp4.greyColor,
+          ),
+        ));
   }
 
   Widget buildCloudFunctionCol() {
