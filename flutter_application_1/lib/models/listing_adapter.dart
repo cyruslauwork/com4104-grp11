@@ -39,8 +39,8 @@ class ListingAdapter {
 
     listSymbolAndName = json
         .map((row) => SymbolAndName(
-              symbol: row['symbol'],
-              name: row['name'],
+              symbol: row['symbol'].toString(),
+              name: row['name'].toString(),
             ))
         .where((symbolAndName) =>
             !symbolAndName.symbol.contains('/') &&

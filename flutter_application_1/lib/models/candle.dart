@@ -17,8 +17,6 @@ class Candle {
   Candle._();
 
   Future<List<CandleData>> init({String? stockSymbol}) {
-    // PrefsService.to.prefs
-    //     .setString(SharedPreferencesConstant.stockSymbol, 'SPY');
     stockSymbol ??= MainPresenter.to.financialInstrumentSymbol.value;
     // print(stockSymbol);
     return CandleAdapter().listListTolistCandledata(

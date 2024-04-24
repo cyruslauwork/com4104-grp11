@@ -32,7 +32,7 @@ class Listing {
 
     await for (var response in responses) {
       // process each response
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         // print(response.body);
         // JSON object received, store the data
         var parsedResponse = await jsonDecode(response.body);

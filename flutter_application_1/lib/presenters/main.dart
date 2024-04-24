@@ -154,6 +154,14 @@ class MainPresenter extends GetxController {
 
   @override
   void onInit() {
+    // PrefsService.to.prefs
+    //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
+    // PrefsService.to.prefs.setString(
+    //     SharedPreferencesConstant.financialInstrumentName,
+    //     'SPDR S&P 500 ETF Trust');
+    // PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, 5);
+    // PrefsService.to.prefs.setInt(SharedPreferencesConstant.tolerance, 100);
+
     super.onInit();
     if (!isDarkModeInit) {
       if (darkMode.value) {
@@ -239,8 +247,6 @@ class MainPresenter extends GetxController {
     } else {
       showAnalytics.value = true;
     }
-    // PrefsService.to.prefs
-    //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
     await Candle().init();
     if (showAverageNotifier.value) {
       Candle().computeTrendLines();
