@@ -19,8 +19,7 @@ class HTTPService extends GetxService {
     return this;
   }
 
-  Future<http.Response> fetchCandleCsv(int callbackTime,
-      {required String stockSymbol}) async {
+  Future<http.Response> fetchCandleCsv({required String stockSymbol}) async {
     /* 
     US exchanges – such as the NYSE or NASDAQ – which are open Monday through Friday from 9:30 am to 4:00 pm Eastern Daylight Time (GMT-04:00) i.e. 14:30 to 21:00 (UTC).
     Eastern Standard Time (Winter Time) or EST: It is 5 hours behind the Greenwich Mean Time/Coordinated Universal Time or UTC-5. 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/styles/styles.dart';
@@ -189,7 +190,12 @@ class SubsequentAnalyticsView extends StatelessWidget {
         SizedBox(
           width: 40.w,
           height: 40.h,
-          child: const CircularProgressIndicator(),
+          child: LoadingAnimationWidget.discreteCircle(
+            color: ThemeColor.primary.value,
+            secondRingColor: ThemeColor.secondary.value,
+            thirdRingColor: ThemeColor.tertiary.value,
+            size: 40.w,
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),

@@ -136,6 +136,20 @@ class _SearchViewState extends State<SearchView> {
           'Search 🔍',
           style: const TextTheme().sp7,
         ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(2.h), // Thickness of the progress bar
+          child: Obx(
+            () => Visibility(
+              visible: MainPresenter.to.isWaitingForReply
+                  .value, // Show only when isLoading is true
+              child: LinearProgressIndicator(
+                backgroundColor: ThemeColor.secondary.value, // Background color
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    ThemeColor.tertiary.value), // Progress color
+              ),
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 3.w, vertical: 6.w),

@@ -49,6 +49,9 @@ class _ChatViewState extends State<ChatView> {
 
   void _sendMessage(String message) async {
     MainPresenter.to.messages.add(message);
+    PrefsService.to.prefs.setStringList(
+        SharedPreferencesConstant.messages, MainPresenter.to.messages);
+
     MainPresenter.to.isWaitingForReply.value =
         true; // Set the flag to true when the SymbolAndName sends a message
     if (MainPresenter.to.firstQuestion.value) {
@@ -72,6 +75,8 @@ class _ChatViewState extends State<ChatView> {
     MainPresenter.to.aiResponseTime.value = downloadTime;
 
     MainPresenter.to.messages.add(newsAnalytics);
+    PrefsService.to.prefs.setStringList(
+        SharedPreferencesConstant.messages, MainPresenter.to.messages);
     Timer(const Duration(milliseconds: 500), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 20.h,
@@ -85,6 +90,8 @@ class _ChatViewState extends State<ChatView> {
 
   void _handleOptionSelected(String option) async {
     MainPresenter.to.messages.add(option);
+    PrefsService.to.prefs.setStringList(
+        SharedPreferencesConstant.messages, MainPresenter.to.messages);
 
     if (option == Question.affecting.question) {
       option = 'Are there any recent news that may affecting the prices of ';
@@ -115,6 +122,8 @@ class _ChatViewState extends State<ChatView> {
     MainPresenter.to.aiResponseTime.value = downloadTime;
 
     MainPresenter.to.messages.add(newsAnalytics);
+    PrefsService.to.prefs.setStringList(
+        SharedPreferencesConstant.messages, MainPresenter.to.messages);
     Timer(const Duration(milliseconds: 500), () {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 20.h,
@@ -209,6 +218,20 @@ class _ChatViewState extends State<ChatView> {
             ),
           ],
         ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(2.h), // Thickness of the progress bar
+          child: Obx(
+            () => Visibility(
+              visible: MainPresenter.to.isWaitingForReply
+                  .value, // Show only when isLoading is true
+              child: LinearProgressIndicator(
+                backgroundColor: ThemeColor.secondary.value, // Background color
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    ThemeColor.tertiary.value), // Progress color
+              ),
+            ),
+          ),
+        ),
       ),
       body: Obx(
         () => Column(
@@ -273,7 +296,31 @@ class _ChatViewState extends State<ChatView> {
                 ],
               ),
             ),
-            SizedBox(height: 50.h)
+            SizedBox(height: 5.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: 15.h,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColor.greyColor.withOpacity(0.5)),
+                      child: IconButton(
+                        onPressed: () => MainPresenter.to.clearMsg(),
+                        icon: const Icon(
+                          Icons.clean_hands_outlined,
+                        ),
+                        color: AppColor.whiteColor,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 40.h)
           ],
         ),
       ),

@@ -97,9 +97,12 @@ class MainPresenter extends GetxController {
   bool isSearchCountListenerAdded = false;
 
   /* Chat */
-  RxList<String> messages = [
-    "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred stocks or ETFs! ^_^"
-  ].obs;
+  RxList<String> messages = (PrefsService.to.prefs
+              .getStringList(SharedPreferencesConstant.messages) ??
+          [
+            "Hi! I'm your dedicated News AI, here to assist you in analyzing news related to your preferred stocks or ETFs! ^_^"
+          ])
+      .obs;
   RxBool isWaitingForReply = false.obs;
   RxInt aiResponseTime = 0.obs;
   RxBool firstQuestion = true.obs;
@@ -156,13 +159,13 @@ class MainPresenter extends GetxController {
 
   @override
   void onInit() {
-    PrefsService.to.prefs
-        .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
-    PrefsService.to.prefs.setString(
-        SharedPreferencesConstant.financialInstrumentName,
-        'SPDR S&P 500 ETF Trust');
-    PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, 5);
-    PrefsService.to.prefs.setInt(SharedPreferencesConstant.tolerance, 100);
+    // PrefsService.to.prefs
+    //     .setString(SharedPreferencesConstant.financialInstrumentSymbol, 'SPY');
+    // PrefsService.to.prefs.setString(
+    //     SharedPreferencesConstant.financialInstrumentName,
+    //     'SPDR S&P 500 ETF Trust');
+    // PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, 5);
+    // PrefsService.to.prefs.setInt(SharedPreferencesConstant.tolerance, 100);
 
     super.onInit();
     if (!isDarkModeInit) {
@@ -516,5 +519,11 @@ class MainPresenter extends GetxController {
     }
     PrefsService.to.prefs
         .setBool(SharedPreferencesConstant.darkMode, darkMode.value);
+  }
+
+  clearMsg() {
+    messages.value = messages.sublist(0, 1); // newList will be ["first"]
+    PrefsService.to.prefs
+        .setStringList(SharedPreferencesConstant.messages, messages);
   }
 }

@@ -23,12 +23,12 @@ class Candle {
         Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
   }
 
-  Future<String> getCsv(int callbackTime, {required String stockSymbol}) async {
+  Future<String> getCsv({required String stockSymbol}) async {
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
 
-    final response = await HTTPService()
-        .fetchCandleCsv(callbackTime, stockSymbol: stockSymbol);
+    final response =
+        await HTTPService().fetchCandleCsv(stockSymbol: stockSymbol);
 
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
@@ -38,13 +38,8 @@ class Candle {
 
     try {
       if (response.statusCode == 200) {
-        // print(response.body);
-        // if (response.headers['content-type'] == 'text/csv') {
-        // CSV object received, pass the data
+        // print(response.body.runtimeType);
         return response.body;
-        // } else {
-        //   return getCSV(callbackTime + 1);
-        // }
       } else {
         MainPresenter.to.marketDataProvider.value =
             '${response.statusCode} error from';
@@ -125,7 +120,7 @@ class Candle {
   Future<List<List<dynamic>>> checkAPIProvider(
       {required bool init, required String stockSymbol}) {
     if (FlavorService.to.srcFileType == SrcFileType.csv) {
-      return CandleAdapter().csvToListList(getCsv(0, stockSymbol: stockSymbol));
+      return CandleAdapter().csvToListList(getCsv(stockSymbol: stockSymbol));
     } else if (FlavorService.to.srcFileType == SrcFileType.json) {
       return CandleAdapter().jsonToListList(getJSON(init: init));
     } else {

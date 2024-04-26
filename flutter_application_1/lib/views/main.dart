@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/utils/utils.dart';
@@ -450,6 +451,22 @@ class _MainViewState extends State<MainView> {
                     ),
                   ]
               : null,
+          bottom: PreferredSize(
+            preferredSize:
+                Size.fromHeight(2.h), // Thickness of the progress bar
+            child: Obx(
+              () => Visibility(
+                visible: MainPresenter.to.isWaitingForReply
+                    .value, // Show only when isLoading is true
+                child: LinearProgressIndicator(
+                  backgroundColor:
+                      ThemeColor.secondary.value, // Background color
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      ThemeColor.tertiary.value), // Progress color
+                ),
+              ),
+            ),
+          ),
         ),
         body: SafeArea(
           minimum: EdgeInsets.all(1.w),
@@ -604,7 +621,10 @@ class _MainViewState extends State<MainView> {
                     SizedBox(
                       width: 40.w,
                       height: 40.h,
-                      child: const CircularProgressIndicator(),
+                      child: LoadingAnimationWidget.staggeredDotsWave(
+                        color: ThemeColor.primary.value,
+                        size: 25.w,
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10.h),
