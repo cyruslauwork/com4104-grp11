@@ -90,6 +90,7 @@ class MainPresenter extends GetxController {
       [const SymbolAndName(symbol: '', name: '')].obs;
   RxString listingErr = ''.obs;
   RxBool isListingInit = false.obs;
+  RxString listingsProviderMsg = 'Latest stock listings on'.obs;
 
   /* Search */
   ValueNotifier<int> searchCountNotifier = ValueNotifier<int>(0);
@@ -418,7 +419,7 @@ class MainPresenter extends GetxController {
 
     return RichText(
       text: TextSpan(
-        text: 'Latest stock listings on',
+        text: listingsProviderMsg.value,
         children: [imageSpan, imageSpan2, imageSpan3],
         style: const TextTheme().sp4.greyColor,
       ),

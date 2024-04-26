@@ -126,7 +126,7 @@ class HTTPService extends GetxService {
         return parsedErrorResponse;
       }
     } catch (e) {
-      return {'error': 'Unable to connect to web server'};
+      return {'error': 'Unable to connect to $url'};
     }
   }
 
@@ -137,9 +137,7 @@ class HTTPService extends GetxService {
     final headers = {
       'Accept': 'application/json',
       'Connection': 'Keep-Alive',
-      'connection': 'keep-alive',
       'Keep-Alive': 'timeout=5, max=1000',
-      'keep-alive': 'timeout=5, max=1000'
     };
 
     try {
@@ -165,7 +163,10 @@ class HTTPService extends GetxService {
         return parsedErrorResponse;
       }
     } catch (e) {
-      return {'error': 'Unable to connect to web server'};
+      return {
+        'error':
+            'Trouble connecting to $url. It could be due to large data volume. Try a wider date range and smaller tolerance, or check the connection and URL.'
+      };
     }
   }
 
@@ -189,7 +190,7 @@ class HTTPService extends GetxService {
         return response.body;
       }
     } catch (e) {
-      return 'Unable to connect to web server';
+      return 'Unable to connect to $url';
     }
   }
 
@@ -214,7 +215,7 @@ class HTTPService extends GetxService {
         return response.body;
       }
     } catch (e) {
-      return 'Unable to connect to web server';
+      return 'Unable to connect to $url';
     }
   }
 

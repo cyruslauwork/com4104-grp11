@@ -20,6 +20,7 @@ class Listing {
 
   Future<List<Map<String, dynamic>>> getListingJson() async {
     List<Map<String, dynamic>> parsedResponses = [];
+    List<String> errorResponseStatus = [];
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
@@ -39,12 +40,12 @@ class Listing {
           var parsedResponse = await jsonDecode(response.body);
           parsedResponses.add(parsedResponse);
         } else {
-          throw ArgumentError(
-              'Failed to fetch listing JSON data: ${response.statusCode}');
+          errorResponseStatus.add(response.statusCode.toString());
         }
       }
     } catch (e) {
-      return ListingAdapter().jsonsToJson(parsedResponses);
+      MainPresenter.to.listingsProviderMsg.value =
+          '${errorResponseStatus.toString()}: Failed to fetch listings from';
     }
     return ListingAdapter().jsonsToJson(parsedResponses);
   }

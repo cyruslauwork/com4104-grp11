@@ -36,17 +36,23 @@ class Candle {
     int downloadTime = downloadDuration.inMilliseconds;
     MainPresenter.to.candledownloadTime.value = downloadTime;
 
-    if (response.statusCode == 200) {
-      // print(response.body);
-      // if (response.headers['content-type'] == 'text/csv') {
-      // CSV object received, pass the data
-      return response.body;
-      // } else {
-      //   return getCSV(callbackTime + 1);
-      // }
-    } else {
+    try {
+      if (response.statusCode == 200) {
+        // print(response.body);
+        // if (response.headers['content-type'] == 'text/csv') {
+        // CSV object received, pass the data
+        return response.body;
+        // } else {
+        //   return getCSV(callbackTime + 1);
+        // }
+      } else {
+        MainPresenter.to.marketDataProvider.value =
+            '${response.statusCode} error from';
+        return 'Date,Open,High,Low,Close,Adj Close,Volume\n1993-01-29,43.968750,43.968750,43.750000,43.937500,24.763748,1003200\n1993-02-01,43.968750,44.250000,43.968750,44.250000,24.939869,480500\n1993-02-02,44.218750,44.375000,44.125000,44.343750,24.992701,201300';
+      }
+    } on Exception catch (e) {
       MainPresenter.to.marketDataProvider.value =
-          '${response.statusCode} Failed to fetch market data from';
+          '$e: Failed to connect to market data provider';
       return 'Date,Open,High,Low,Close,Adj Close,Volume\n1993-01-29,43.968750,43.968750,43.750000,43.937500,24.763748,1003200\n1993-02-01,43.968750,44.250000,43.968750,44.250000,24.939869,480500\n1993-02-02,44.218750,44.375000,44.125000,44.343750,24.992701,201300';
     }
   }
@@ -92,12 +98,12 @@ class Candle {
             }
           }
         } else {
-          throw ArgumentError(
-              'Failed to fetch JSON data in loop ${i.toString()}: ${response.statusCode}');
+          MainPresenter.to.marketDataProvider.value =
+              '${response.statusCode} error from';
         }
-      } catch (e) {
+      } on Exception catch (e) {
         MainPresenter.to.marketDataProvider.value =
-            'Failed to fetch market data from';
+            '$e: Failed to connect to market data provider';
       }
       // Subtract 7 from the current date to get the next end date
       currentDate = currentDate.subtract(const Duration(days: 7));
