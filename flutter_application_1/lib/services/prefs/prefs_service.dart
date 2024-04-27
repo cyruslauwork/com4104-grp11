@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-export 'package:flutter_application_1/services/prefs/prefs_const.dart';
 
 class PrefsService extends GetxService {
   // Singleton implementation

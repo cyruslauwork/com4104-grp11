@@ -93,9 +93,9 @@ class _ChatViewState extends State<ChatView> {
     PrefsService.to.prefs.setStringList(
         SharedPreferencesConstant.messages, MainPresenter.to.messages);
 
-    if (option == Question.affecting.question) {
+    if (option == Question.getQuestionText(Question.affecting)) {
       option = 'Are there any recent news that may affecting the prices of ';
-    } else if (option == Question.challenges.question) {
+    } else if (option == Question.getQuestionText(Question.challenges)) {
       option = 'What are the major challenges facing the ';
     }
 
@@ -157,14 +157,16 @@ class _ChatViewState extends State<ChatView> {
           ElevatedButton(
             onPressed: MainPresenter.to.isWaitingForReply.value
                 ? null
-                : () => _handleOptionSelected(Question.affecting.question),
-            child: Text(Question.affecting.question),
+                : () => _handleOptionSelected(
+                    Question.getQuestionText(Question.affecting)),
+            child: Text(Question.getQuestionText(Question.affecting)),
           ),
           ElevatedButton(
             onPressed: MainPresenter.to.isWaitingForReply.value
                 ? null
-                : () => _handleOptionSelected(Question.challenges.question),
-            child: Text(Question.challenges.question),
+                : () => _handleOptionSelected(
+                    Question.getQuestionText(Question.challenges)),
+            child: Text(Question.getQuestionText(Question.challenges)),
           ),
         ],
       ),
@@ -178,7 +180,7 @@ class _ChatViewState extends State<ChatView> {
         title: Row(
           children: [
             Text(
-              'Chat with News AI',
+              'news_ai_title'.tr,
               style: const TextTheme().sp7,
             ),
             Padding(
@@ -187,7 +189,7 @@ class _ChatViewState extends State<ChatView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Powered by',
+                    'power_by'.tr,
                     style: const TextTheme().sp4.greyColor,
                   ),
                   Container(
@@ -285,14 +287,14 @@ class _ChatViewState extends State<ChatView> {
                         decoration: InputDecoration(
                           hintText: (MainPresenter.to.listingErr.value != ''
                               ? MainPresenter.to.listingErr.value
-                              : "Type and select your interest 😊"),
+                              : 'input_placeholder2'.tr),
                         ),
                         enabled: !MainPresenter.to.isWaitingForReply
                             .value, // Disable text field when waiting for a reply,
                       );
                     },
                   ),
-                  MainPresenter.to.buildListingSourceRichText(),
+                  Obx(() => MainPresenter.to.buildListingSourceRichText()),
                 ],
               ),
             ),

@@ -1,8 +1,8 @@
+import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:get/get.dart';
-import 'package:flutter_application_1/services/l10n/lang.dart';
-export 'package:flutter_application_1/services/l10n/lang.dart';
-export 'package:flutter_application_1/services/l10n/msg.dart';
-import 'package:flutter_application_1/services/prefs/prefs_service.dart';
+
+import 'package:flutter_application_1/services/l10n/l10n.dart';
+import 'package:flutter_application_1/services/prefs/prefs.dart';
 
 class LangService extends GetxService {
   // Singleton implementation
@@ -37,5 +37,12 @@ class LangService extends GetxService {
         .setString(SharedPreferencesConstant.saveLanguageKey, lang.localeKey);
 
     Get.updateLocale(lang.locale);
+
+    if (!MainPresenter.to.isMarketDataProviderErr.value) {
+      MainPresenter.to.marketDataProviderMsg.value = 'mkt_data'.tr;
+    }
+    if (!MainPresenter.to.isListingsProviderErr.value) {
+      MainPresenter.to.listingsProviderMsg.value = 'listings'.tr;
+    }
   }
 }

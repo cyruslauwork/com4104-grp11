@@ -82,7 +82,8 @@ class MainPresenter extends GetxController {
   ].obs;
   ValueNotifier<bool> showAverageNotifier = ValueNotifier<bool>(true);
   bool isShowAverageListenerAdded = false;
-  RxString marketDataProvider = 'Market data provided by'.obs;
+  late RxString marketDataProviderMsg = Rx('mkt_data'.tr)().obs;
+  RxBool isMarketDataProviderErr = false.obs;
 
   /* Listing */
   RxInt listingDownloadTime = 0.obs;
@@ -90,7 +91,8 @@ class MainPresenter extends GetxController {
       [const SymbolAndName(symbol: '', name: '')].obs;
   RxString listingErr = ''.obs;
   RxBool isListingInit = false.obs;
-  RxString listingsProviderMsg = 'Latest stock listings on'.obs;
+  late RxString listingsProviderMsg = Rx('listings'.tr)().obs;
+  RxBool isListingsProviderErr = false.obs;
 
   /* Search */
   ValueNotifier<int> searchCountNotifier = ValueNotifier<int>(0);
@@ -138,6 +140,9 @@ class MainPresenter extends GetxController {
   RxList<int> matchRows = [0].obs;
   RxBool trendMatched = false.obs;
   RxBool showAnalytics = false.obs;
+  ValueNotifier<bool> showAnalyticsNotifier = ValueNotifier<bool>(false);
+  bool isShowAnalyticsNotifierAdded = false;
+  late RxDouble candleChartHeight = (showAnalytics.value ? 50.h : 100.h).obs;
 
   /* Subsequent analytics */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
@@ -157,6 +162,7 @@ class MainPresenter extends GetxController {
   List<Map<String, dynamic>> lastJson = [];
   RxInt lastCandledataLength = 0.obs;
 
+  // A 2nd initialization will be triggered when starting the app
   @override
   void onInit() {
     // PrefsService.to.prefs
@@ -202,6 +208,11 @@ class MainPresenter extends GetxController {
           true; // Must set the value to true before invoking the method
       Listing().init();
     }
+
+    if (!isShowAnalyticsNotifierAdded) {
+      showAnalyticsNotifier.addListener(showAnalyticsListener);
+      isShowAnalyticsNotifierAdded = true;
+    }
   }
 
   void showAverageListener() {
@@ -219,12 +230,12 @@ class MainPresenter extends GetxController {
     devMode.toggle();
     if (devModeNotifier.value) {
       Get.snackbar(
-          'System Info',
+          'system_info'.tr,
           colorText: AppColor.whiteColor,
           backgroundColor: AppColor.greyColor,
           icon: const Icon(Icons.settings),
-          'Developer mode is on');
-      showAnalytics.value = true;
+          'dev_mode'.tr);
+      showAnalyticsNotifier.value = true;
     }
   }
 
@@ -240,17 +251,28 @@ class MainPresenter extends GetxController {
     futureListCandledata.value = init();
   }
 
+  void showAnalyticsListener() {
+    if (showAnalyticsNotifier.value) {
+      showAnalytics.value = true;
+      candleChartHeight.value = 50.h;
+    } else {
+      showAnalytics.value = false;
+      candleChartHeight.value = 100.h;
+    }
+  }
+
   void reload() {
     Get.delete<MainPresenter>();
     Get.put(MainPresenter());
+    logger.d('Instance "MainPresenter" has been reloaded');
     super.onInit();
   }
 
   Future<List<CandleData>> init() async {
     if (!alwaysShowAnalytics.value) {
-      showAnalytics.value = false;
+      showAnalyticsNotifier.value = false;
     } else {
-      showAnalytics.value = true;
+      showAnalyticsNotifier.value = true;
     }
     await Candle().init();
     if (showAverageNotifier.value) {
@@ -271,7 +293,7 @@ class MainPresenter extends GetxController {
     Get.back();
   }
 
-  /* UI Logic*/
+  /* UI Logic (mainly focused on show/hide) */
   List<Widget> buildListingRelatedIcons() {
     if (isListingInit.value) {
       return [
@@ -313,14 +335,14 @@ class MainPresenter extends GetxController {
           padding: EdgeInsets.symmetric(horizontal: 2.w),
           child: ElevatedButton.icon(
             onPressed: () {
-              MainPresenter.to.showAnalytics.value = true;
+              MainPresenter.to.showAnalyticsNotifier.value = true;
             },
             icon: Icon(
               Icons.analytics_outlined,
               size: 20.h,
             ),
             label: Text(
-              'Historical trend matching and analytics',
+              'btn_tm_sa'.tr,
               style: const TextTheme().sp5.w700,
             ),
           ),
@@ -447,7 +469,7 @@ class MainPresenter extends GetxController {
 
     return Obx(() => RichText(
           text: TextSpan(
-            text: marketDataProvider.value,
+            text: marketDataProviderMsg.value,
             children: [imageSpan],
             style: const TextTheme().sp4.greyColor,
           ),
@@ -494,7 +516,7 @@ class MainPresenter extends GetxController {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Text(
-            'Computing power comes from',
+            'power_from'.tr,
             style: const TextTheme().sp4.greyColor,
           ),
         ),

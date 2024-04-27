@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
@@ -199,8 +200,7 @@ class SubsequentAnalyticsView extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
-          child: Text('Awaiting subsequent trend analytics result...',
-              style: const TextTheme().sp5),
+          child: Text('sub_analyzing'.tr, style: const TextTheme().sp5),
         ),
         SizedBox(height: 10.h),
       ],

@@ -104,27 +104,27 @@ class _SearchViewState extends State<SearchView> {
           MainPresenter.to.back();
         } else if (textMatchesName.length > 1) {
           Get.snackbar(
-              "Alert!",
+              'notice'.tr,
               colorText: AppColor.whiteColor,
               backgroundColor: AppColor.errorColor,
               icon: const Icon(Icons.error),
-              "Too many matches. It is recommended to select the financial instrument from the drop-down list.");
+              'too_many_matches'.tr);
         } else {
           Get.snackbar(
-              "Alert!",
+              'notice'.tr,
               colorText: AppColor.whiteColor,
               backgroundColor: AppColor.errorColor,
               icon: const Icon(Icons.error),
-              "No match found. It is recommended to select the financial instrument from the drop-down list.");
+              'no_match_found'.tr);
         }
       }
     } else {
       Get.snackbar(
-          "Alert!",
+          'notice'.tr,
           colorText: AppColor.whiteColor,
           backgroundColor: AppColor.errorColor,
           icon: const Icon(Icons.error),
-          'A financial instrument should be selected before the submission.');
+          'no_input'.tr);
     }
   }
 
@@ -133,7 +133,7 @@ class _SearchViewState extends State<SearchView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Search 🔍',
+          'search'.tr,
           style: const TextTheme().sp7,
         ),
         bottom: PreferredSize(
@@ -161,7 +161,7 @@ class _SearchViewState extends State<SearchView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Trend Match Tolerance',
+                      'tolerance'.tr,
                       style: const TextTheme().sp5.primaryTextColor,
                     ),
                     Padding(
@@ -204,7 +204,7 @@ class _SearchViewState extends State<SearchView> {
                           style: const TextTheme().sp4,
                         ),
                         Text(
-                          '200 %',
+                          '200%',
                           style: const TextTheme().sp4,
                         ),
                       ],
@@ -217,7 +217,7 @@ class _SearchViewState extends State<SearchView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Date Range',
+                      'date_range'.tr,
                       style: const TextTheme().sp5.primaryTextColor,
                     ),
                     Padding(
@@ -244,19 +244,11 @@ class _SearchViewState extends State<SearchView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '2 Days',
+                          '2days'.tr,
                           style: const TextTheme().sp4,
                         ),
-                        // Text(
-                        //   '10 Days',
-                        //   style: const TextTheme().sp4,
-                        // ),
-                        // Text(
-                        //   '15 Days',
-                        //   style: const TextTheme().sp4,
-                        // ),
                         Text(
-                          '20 Days',
+                          '20days'.tr,
                           style: const TextTheme().sp4,
                         ),
                       ],
@@ -314,7 +306,7 @@ class _SearchViewState extends State<SearchView> {
                           border: const OutlineInputBorder(),
                           labelText: (MainPresenter.to.listingErr.value != ''
                               ? MainPresenter.to.listingErr.value
-                              : "Type what you're interested in 😊"),
+                              : 'input_placeholder'.tr),
                         ),
                       );
                     },
@@ -358,14 +350,14 @@ class _SearchViewState extends State<SearchView> {
                   ElevatedButton(
                     onPressed: _resetForm,
                     child: Text(
-                      'Reset',
+                      'reset'.tr,
                       style: const TextTheme().sp5,
                     ),
                   ),
                   ElevatedButton(
                     onPressed: _submitForm,
                     child: Text(
-                      'Submit',
+                      'submit'.tr,
                       style: const TextTheme().sp5,
                     ),
                   ),

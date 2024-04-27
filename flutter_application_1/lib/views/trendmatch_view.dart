@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:get/get.dart';
+
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/styles/styles.dart';
 import 'package:flutter_application_1/utils/utils.dart';
@@ -41,7 +43,7 @@ class TrendMatchView extends StatelessWidget {
                 message:
                     '1) We adjusted last prices to be the same as the last selected price and apply to previous prices. \n2) adjusted first prices to be the same as the last selected price and apply to subsequent prices.',
                 child: Text(
-                  'Recent ${MainPresenter.to.range.toString()}-day(s) trend with matched historical trend(s) and their subsequent trend(s) (${MainPresenter.to.tolerance.toString()}% tolerance)',
+                  '${'recent'.tr}${MainPresenter.to.range.toString()}${'tm_title1'.tr}${MainPresenter.to.tolerance.toString()}${'tm_title2'.tr}',
                   style: const TextTheme().sp5.w700,
                 ),
               ),
@@ -86,7 +88,7 @@ class TrendMatchView extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
-          child: Text('Trend matching...', style: const TextTheme().sp5),
+          child: Text('trend_matching'.tr, style: const TextTheme().sp5),
         ),
       ],
     );

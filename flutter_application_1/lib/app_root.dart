@@ -46,7 +46,7 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      logger.d("resumed: $state");
+      logger.d('resumed: $state');
       MainPresenter.to.reload;
     }
   }

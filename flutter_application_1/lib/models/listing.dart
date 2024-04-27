@@ -46,6 +46,7 @@ class Listing {
     } catch (e) {
       MainPresenter.to.listingsProviderMsg.value =
           '${errorResponseStatus.toString()}: Failed to fetch listings from';
+      MainPresenter.to.isListingsProviderErr.value = true;
     }
     return ListingAdapter().jsonsToJson(parsedResponses);
   }

@@ -41,13 +41,15 @@ class Candle {
         // print(response.body.runtimeType);
         return response.body;
       } else {
-        MainPresenter.to.marketDataProvider.value =
+        MainPresenter.to.marketDataProviderMsg.value =
             '${response.statusCode} error from';
+        MainPresenter.to.isMarketDataProviderErr.value = true;
         return 'Date,Open,High,Low,Close,Adj Close,Volume\n1993-01-29,43.968750,43.968750,43.750000,43.937500,24.763748,1003200\n1993-02-01,43.968750,44.250000,43.968750,44.250000,24.939869,480500\n1993-02-02,44.218750,44.375000,44.125000,44.343750,24.992701,201300';
       }
     } on Exception catch (e) {
-      MainPresenter.to.marketDataProvider.value =
+      MainPresenter.to.marketDataProviderMsg.value =
           '$e: Failed to connect to market data provider';
+      MainPresenter.to.isMarketDataProviderErr.value = true;
       return 'Date,Open,High,Low,Close,Adj Close,Volume\n1993-01-29,43.968750,43.968750,43.750000,43.937500,24.763748,1003200\n1993-02-01,43.968750,44.250000,43.968750,44.250000,24.939869,480500\n1993-02-02,44.218750,44.375000,44.125000,44.343750,24.992701,201300';
     }
   }
@@ -93,12 +95,14 @@ class Candle {
             }
           }
         } else {
-          MainPresenter.to.marketDataProvider.value =
+          MainPresenter.to.marketDataProviderMsg.value =
               '${response.statusCode} error from';
+          MainPresenter.to.isMarketDataProviderErr.value = true;
         }
       } on Exception catch (e) {
-        MainPresenter.to.marketDataProvider.value =
+        MainPresenter.to.marketDataProviderMsg.value =
             '$e: Failed to connect to market data provider';
+        MainPresenter.to.isMarketDataProviderErr.value = true;
       }
       // Subtract 7 from the current date to get the next end date
       currentDate = currentDate.subtract(const Duration(days: 7));
