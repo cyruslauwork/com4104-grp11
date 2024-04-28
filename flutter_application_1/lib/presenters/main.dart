@@ -145,6 +145,7 @@ class MainPresenter extends GetxController {
   late RxDouble candleChartHeight = (showAnalytics.value ? 50.h : 100.h).obs;
   ValueNotifier<bool> chartExpandNotifier = ValueNotifier<bool>(true);
   bool isChartExpandNotifierAdded = false;
+  Rx<IconData> expandOrShrinkIcon = Icons.vertical_align_center_rounded.obs;
 
   /* Subsequent analytics */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
@@ -274,8 +275,10 @@ class MainPresenter extends GetxController {
   void chartExpandListener() {
     if (chartExpandNotifier.value) {
       candleChartHeight.value = 100.h;
+      expandOrShrinkIcon.value = Icons.vertical_align_center_rounded;
     } else {
       candleChartHeight.value = 50.h;
+      expandOrShrinkIcon.value = Icons.expand;
     }
   }
 

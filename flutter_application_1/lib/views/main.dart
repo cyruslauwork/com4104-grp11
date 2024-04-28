@@ -616,8 +616,11 @@ class _MainViewState extends State<MainView> {
                                           .to.chartExpandNotifier.value),
                                   icon: Transform.translate(
                                     offset: Offset(0.0, -1.h),
-                                    child: const Icon(
-                                      Icons.expand,
+                                    child: Obx(
+                                      () => Icon(
+                                        MainPresenter
+                                            .to.expandOrShrinkIcon.value,
+                                      ),
                                     ),
                                   ),
                                   color: AppColor.whiteColor,

@@ -108,6 +108,6 @@ class SubsequentAnalytics {
     MainPresenter.to.numOfClusters.value = csvPngFiles['num_of_clusters'];
 
     MainPresenter.to.maxSilhouetteScore.value =
-        csvPngFiles['max_silhouette_score'];
+        double.parse(csvPngFiles['max_silhouette_score']).toStringAsFixed(3);
   }
 }
