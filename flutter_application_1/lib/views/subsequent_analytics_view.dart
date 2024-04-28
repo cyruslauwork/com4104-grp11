@@ -108,7 +108,7 @@ class SubsequentAnalyticsView extends StatelessWidget {
               tag: 'img4',
               child: Image.memory(MainPresenter.to.img4Bytes.value)),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: 5.h),
       ],
     );
   }
@@ -173,7 +173,7 @@ class SubsequentAnalyticsView extends StatelessWidget {
               tag: 'img7',
               child: Image.memory(MainPresenter.to.img7Bytes.value)),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: 5.h),
       ],
     );
   }
@@ -187,22 +187,19 @@ class SubsequentAnalyticsView extends StatelessWidget {
 
   Widget showCircularProgressIndicator() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: 40.w,
-          height: 40.h,
-          child: LoadingAnimationWidget.discreteCircle(
-            color: ThemeColor.primary.value,
-            secondRingColor: ThemeColor.secondary.value,
-            thirdRingColor: ThemeColor.tertiary.value,
-            size: 40.w,
-          ),
+        LoadingAnimationWidget.discreteCircle(
+          color: ThemeColor.primary.value,
+          secondRingColor: ThemeColor.secondary.value,
+          thirdRingColor: ThemeColor.tertiary.value,
+          size: 20.w,
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: Text('sub_analyzing'.tr, style: const TextTheme().sp5),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: 5.h),
       ],
     );
   }

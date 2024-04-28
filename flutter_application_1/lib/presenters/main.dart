@@ -85,8 +85,8 @@ class MainPresenter extends GetxController {
   late RxString marketDataProviderMsg = Rx('mkt_data'.tr)().obs;
   RxBool isMarketDataProviderErr = false.obs;
 
-  /* Listing */
-  RxInt listingDownloadTime = 0.obs;
+  /* Listings */
+  RxInt listingsDownloadTime = 0.obs;
   RxList<SymbolAndName> listSymbolAndName =
       [const SymbolAndName(symbol: '', name: '')].obs;
   RxString listingErr = ''.obs;
@@ -143,6 +143,8 @@ class MainPresenter extends GetxController {
   ValueNotifier<bool> showAnalyticsNotifier = ValueNotifier<bool>(false);
   bool isShowAnalyticsNotifierAdded = false;
   late RxDouble candleChartHeight = (showAnalytics.value ? 50.h : 100.h).obs;
+  ValueNotifier<bool> chartExpandNotifier = ValueNotifier<bool>(true);
+  bool isChartExpandNotifierAdded = false;
 
   /* Subsequent analytics */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
@@ -157,6 +159,7 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   RxString subsequentAnalyticsErr = ''.obs;
   RxInt numOfClusters = 0.obs;
+  RxString maxSilhouetteScore = ''.obs;
 
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
@@ -213,6 +216,11 @@ class MainPresenter extends GetxController {
       showAnalyticsNotifier.addListener(showAnalyticsListener);
       isShowAnalyticsNotifierAdded = true;
     }
+
+    if (!isChartExpandNotifierAdded) {
+      chartExpandNotifier.addListener(chartExpandListener);
+      isChartExpandNotifierAdded = true;
+    }
   }
 
   void showAverageListener() {
@@ -242,8 +250,10 @@ class MainPresenter extends GetxController {
   void isEnListener() {
     if (isEnNotifier.value) {
       LangService.to.changeLanguage(Lang.en);
+      SubsequentAnalytics().init();
     } else {
       LangService.to.changeLanguage(Lang.zh);
+      SubsequentAnalytics().init();
     }
   }
 
@@ -254,10 +264,18 @@ class MainPresenter extends GetxController {
   void showAnalyticsListener() {
     if (showAnalyticsNotifier.value) {
       showAnalytics.value = true;
-      candleChartHeight.value = 50.h;
+      chartExpandNotifier.value = false;
     } else {
       showAnalytics.value = false;
+      chartExpandNotifier.value = true;
+    }
+  }
+
+  void chartExpandListener() {
+    if (chartExpandNotifier.value) {
       candleChartHeight.value = 100.h;
+    } else {
+      candleChartHeight.value = 50.h;
     }
   }
 

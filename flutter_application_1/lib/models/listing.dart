@@ -29,7 +29,7 @@ class Listing {
     // Calculate the time difference
     Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
     int downloadTime = downloadDuration.inMilliseconds;
-    MainPresenter.to.listingDownloadTime.value = downloadTime;
+    MainPresenter.to.listingsDownloadTime.value = downloadTime;
 
     try {
       await for (var response in responses) {

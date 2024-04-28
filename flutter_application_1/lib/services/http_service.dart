@@ -103,7 +103,12 @@ class HTTPService extends GetxService {
 
   Future<Map<String, dynamic>> getFetchJson(String url) async {
     // Modify the request headers to accept JSON data
-    final headers = {'Accept': 'text/json'};
+    // final headers = {'Accept': 'text/json'};
+    final headers = {
+      'Accept': 'application/json',
+      'Connection': 'Keep-Alive',
+      'Keep-Alive': 'timeout=5, max=1000',
+    };
 
     try {
       // Make an HTTP GET request to retrieve the JSON response
@@ -171,7 +176,11 @@ class HTTPService extends GetxService {
 
   Future<String> getFetchString(String url) async {
     // Modify the request headers to accept plain text
-    final headers = {'Accept': 'text/plain'};
+    final headers = {
+      'Accept': 'text/plain',
+      'Connection': 'Keep-Alive',
+      'Keep-Alive': 'timeout=5, max=1000',
+    };
 
     try {
       // Make an HTTP GET request to retrieve the String response
@@ -195,7 +204,11 @@ class HTTPService extends GetxService {
 
   Future<String> postFetchString(String url, Map<String, dynamic> body) async {
     // Modify the request headers to accept plain text
-    final headers = {'Accept': 'text/plain'};
+    final headers = {
+      'Accept': 'text/plain',
+      'Connection': 'Keep-Alive',
+      'Keep-Alive': 'timeout=5, max=1000',
+    };
 
     try {
       // Make an HTTP GET request to retrieve the String response

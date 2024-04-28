@@ -34,7 +34,7 @@ class MainView extends StatefulWidget {
     return Column(children: [
       Column(children: [
         Text(
-          'Trend Match',
+          'trend_match'.tr,
           style: const TextTheme().sp5.w700,
         ),
         Obx(
@@ -43,18 +43,20 @@ class MainView extends StatefulWidget {
                 color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
             children: [
               TableRow(children: [
+                Column(children: [Text('dl'.tr, style: const TextTheme().sp4)]),
                 Column(
-                    children: [Text('DL(ms)', style: const TextTheme().sp4)]),
-                Column(children: [Text('rows', style: const TextTheme().sp4)]),
+                    children: [Text('rows'.tr, style: const TextTheme().sp4)]),
+                Column(
+                    children: [Text('range'.tr, style: const TextTheme().sp4)]),
                 Column(children: [
-                  Text('Sel count', style: const TextTheme().sp4)
+                  Text('tm_rows'.tr, style: const TextTheme().sp4)
                 ]),
                 Column(
-                    children: [Text('TM rows', style: const TextTheme().sp4)]),
+                    children: [Text('exe'.tr, style: const TextTheme().sp4)]),
                 Column(
-                    children: [Text('Exe(ms)', style: const TextTheme().sp4)]),
-                Column(children: [Text('True', style: const TextTheme().sp4)]),
-                Column(children: [Text('False', style: const TextTheme().sp4)])
+                    children: [Text('true'.tr, style: const TextTheme().sp4)]),
+                Column(
+                    children: [Text('false'.tr, style: const TextTheme().sp4)])
               ]),
               TableRow(children: [
                 Column(children: [
@@ -92,9 +94,9 @@ class MainView extends StatefulWidget {
             ],
           ),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: 5.h),
         Text(
-          'Misc',
+          'sa_title'.tr,
           style: const TextTheme().sp5.w700,
         ),
         Obx(
@@ -104,25 +106,17 @@ class MainView extends StatefulWidget {
             children: [
               TableRow(children: [
                 Column(children: [
-                  Text('Listing DL(ms)', style: const TextTheme().sp4)
+                  Text('sa_prep'.tr, style: const TextTheme().sp4)
+                ]),
+                Column(children: [Text('sa'.tr, style: const TextTheme().sp4)]),
+                Column(children: [
+                  Text('clusters'.tr, style: const TextTheme().sp4)
                 ]),
                 Column(children: [
-                  Text('SA prep(ms)', style: const TextTheme().sp4)
-                ]),
-                Column(
-                    children: [Text('SA(ms)', style: const TextTheme().sp4)]),
-                Column(children: [
-                  Text('SA Cluster(s)', style: const TextTheme().sp4)
-                ]),
-                Column(children: [
-                  Text('AI res(ms)', style: const TextTheme().sp4)
+                  Text('max_ss'.tr, style: const TextTheme().sp4)
                 ]),
               ]),
               TableRow(children: [
-                Column(children: [
-                  Text(MainPresenter.to.listingDownloadTime.toString(),
-                      style: const TextTheme().sp4)
-                ]),
                 Column(children: [
                   Text(
                       MainPresenter.to.lastClosePriceAndSubsequentTrendsExeTime
@@ -138,6 +132,37 @@ class MainView extends StatefulWidget {
                       style: const TextTheme().sp4)
                 ]),
                 Column(children: [
+                  Text(MainPresenter.to.maxSilhouetteScore.value,
+                      style: const TextTheme().sp4)
+                ]),
+              ]),
+            ],
+          ),
+        ),
+        SizedBox(height: 5.h),
+        Text(
+          'misc'.tr,
+          style: const TextTheme().sp5.w700,
+        ),
+        Obx(
+          () => Table(
+            border: TableBorder.all(
+                color: AppColor.blackColor, style: BorderStyle.solid, width: 2),
+            children: [
+              TableRow(children: [
+                Column(children: [
+                  Text('listings_dl'.tr, style: const TextTheme().sp4)
+                ]),
+                Column(children: [
+                  Text('ai_res'.tr, style: const TextTheme().sp4)
+                ]),
+              ]),
+              TableRow(children: [
+                Column(children: [
+                  Text(MainPresenter.to.listingsDownloadTime.toString(),
+                      style: const TextTheme().sp4)
+                ]),
+                Column(children: [
                   Text(MainPresenter.to.aiResponseTime.toString(),
                       style: const TextTheme().sp4)
                 ]),
@@ -145,7 +170,7 @@ class MainView extends StatefulWidget {
             ],
           ),
         ),
-        SizedBox(height: 10.h),
+        SizedBox(height: 5.h),
       ]),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -156,7 +181,7 @@ class MainView extends StatefulWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Always show analytics',
+                    'always_show_analytics'.tr,
                     style: const TextTheme().sp5.w700,
                   ),
                 ),
@@ -172,12 +197,12 @@ class MainView extends StatefulWidget {
               ],
             ),
             const Divider(),
-            SizedBox(height: 10.h),
+            SizedBox(height: 5.h),
           ],
         ),
       ),
       Text(
-        'Percentage differences between selected period',
+        'percent_diff_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
@@ -189,7 +214,7 @@ class MainView extends StatefulWidget {
           columns: MainPresenter.to.selectedPeriodPercentDifferencesList
               .mapIndexed((i, e) => DataColumn(
                       label: Text(
-                    'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                    '${'close_price'.tr} ${(i + 1).toString()} - ${'close_price'.tr} ${(i + 2).toString()}',
                     style: const TextTheme().sp4,
                   )))
               .toList(),
@@ -205,9 +230,9 @@ class MainView extends StatefulWidget {
           ],
         ),
       ),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Actual differences between selected period',
+        'actual_diff_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
@@ -219,7 +244,7 @@ class MainView extends StatefulWidget {
           columns: MainPresenter.to.selectedPeriodActualDifferencesList
               .mapIndexed((i, e) => DataColumn(
                       label: Text(
-                    'Close Price ${(i + 1).toString()} - Close Price ${(i + 2).toString()}',
+                    '${'close_price'.tr} ${(i + 1).toString()} - ${'close_price'.tr} ${(i + 2).toString()}',
                     style: const TextTheme().sp4,
                   )))
               .toList(),
@@ -235,9 +260,9 @@ class MainView extends StatefulWidget {
           ],
         ),
       ),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Selected period Actual Prices',
+        'actual_price_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
@@ -249,7 +274,7 @@ class MainView extends StatefulWidget {
           columns: MainPresenter.to.selectedPeriodActualPricesList
               .mapIndexed((i, e) => DataColumn(
                       label: Text(
-                    'Close Price ${(i + 1).toString()}',
+                    '${'close_price'.tr} ${(i + 1).toString()}',
                     style: const TextTheme().sp4,
                   )))
               .toList(),
@@ -265,9 +290,30 @@ class MainView extends StatefulWidget {
           ],
         ),
       ),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
+      const Divider(),
       Text(
-        'Matched Historical Trend Row(s)',
+        'matched_title'.tr,
+        style: const TextTheme().sp5.w700,
+      ),
+      SimpleLineChart(),
+      SizedBox(height: 5.h),
+      Text(
+        'normalized_matched_title'.tr,
+        style: const TextTheme().sp5.w700,
+      ),
+      SimpleLineChart(
+        normalized: true,
+      ),
+      SizedBox(height: 5.h),
+    ]);
+  }
+
+  Widget devModeViewTwo() {
+    return Column(children: [
+      const Divider(),
+      Text(
+        'matched_rows_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchRows.isNotEmpty
@@ -279,29 +325,9 @@ class MainView extends StatefulWidget {
               ),
             )
           : Text('0', style: const TextTheme().sp4)),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Matched Historical Trend(s)',
-        style: const TextTheme().sp5.w700,
-      ),
-      SimpleLineChart(),
-      SizedBox(height: 10.h),
-      Text(
-        'Normalized Matched Historical Trend(s)',
-        style: const TextTheme().sp5.w700,
-      ),
-      SimpleLineChart(
-        normalized: true,
-      ),
-      SizedBox(height: 10.h),
-    ]);
-  }
-
-  Widget devModeViewTwo() {
-    return Column(children: [
-      SizedBox(height: 10.h),
-      Text(
-        'Matched Historical Trend(s) Percentage Differences',
+        'matched_percent_diff_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchPercentDifferencesListList.isNotEmpty
@@ -313,9 +339,9 @@ class MainView extends StatefulWidget {
               ),
             )
           : Text('0', style: const TextTheme().sp4)),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Matched Historical Trend(s) Actual Differences',
+        'matched_actual_diff_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchActualDifferencesListList.isNotEmpty
@@ -327,9 +353,9 @@ class MainView extends StatefulWidget {
               ),
             )
           : Text('0', style: const TextTheme().sp4)),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Matched Historical Trend(s) Actual Prices',
+        'matched_actual_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       (MainPresenter.to.matchActualPricesListList.isNotEmpty
@@ -341,9 +367,9 @@ class MainView extends StatefulWidget {
               ),
             )
           : Text('0', style: const TextTheme().sp4)),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Comparison Historical Trends Percentage Differences',
+        'Comparison_percent_diff_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
@@ -353,9 +379,9 @@ class MainView extends StatefulWidget {
           style: const TextTheme().sp4,
         ),
       ),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Comparison Historical Trends Actual Differences',
+        'Comparison_actual_diff_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
@@ -365,9 +391,9 @@ class MainView extends StatefulWidget {
           style: const TextTheme().sp4,
         ),
       ),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
       Text(
-        'Comparison Historical Trends Actual Prices',
+        'comparison_actual_title'.tr,
         style: const TextTheme().sp5.w700,
       ),
       SingleChildScrollView(
@@ -377,7 +403,8 @@ class MainView extends StatefulWidget {
           style: const TextTheme().sp4,
         ),
       ),
-      SizedBox(height: 10.h),
+      SizedBox(height: 5.h),
+      const Divider(),
     ]);
   }
 
@@ -533,15 +560,11 @@ class _MainViewState extends State<MainView> {
                                   Paint()
                                     ..strokeWidth = 1.0
                                     ..strokeCap = StrokeCap.round
-                                    ..color = Colors.lightBlue,
+                                    ..color = Colors.red,
                                   Paint()
                                     ..strokeWidth = 1.0
                                     ..strokeCap = StrokeCap.round
                                     ..color = Colors.purple[300]!,
-                                  Paint()
-                                    ..strokeWidth = 1.0
-                                    ..strokeCap = StrokeCap.round
-                                    ..color = Colors.pink[300]!,
                                   Paint()
                                     ..strokeWidth = 1.0
                                     ..strokeCap = StrokeCap.round
@@ -567,14 +590,50 @@ class _MainViewState extends State<MainView> {
                             ),
                           ),
                         ),
-                        MainPresenter.to.buildMktDataProviderRichText(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              '🟠MA5 🔴MA20 🟣MA60 🔵MA120 🟢MA240',
+                              style: const TextTheme().sp4.greyColor,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MainPresenter.to.buildMktDataProviderRichText(),
+                            SizedBox(
+                              height: 10.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColor.greyColor.withOpacity(0.5)),
+                                child: IconButton(
+                                  onPressed: () => (MainPresenter
+                                          .to.chartExpandNotifier.value =
+                                      !MainPresenter
+                                          .to.chartExpandNotifier.value),
+                                  icon: Transform.translate(
+                                    offset: Offset(0.0, -1.h),
+                                    child: const Icon(
+                                      Icons.expand,
+                                    ),
+                                  ),
+                                  color: AppColor.whiteColor,
+                                  iconSize: 7.h,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                         const Divider(),
-                        SizedBox(height: 10.h),
+                        SizedBox(height: 5.h),
                         MainPresenter.to.showDevModeViewOne(
                             MainPresenter.to.devModeNotifier.value),
-                        TrendMatchView(),
                         MainPresenter.to.showDevModeViewTwo(
                             MainPresenter.to.devModeNotifier.value),
+                        TrendMatchView(),
                         SizedBox(height: 10.h),
                         SubsequentAnalyticsView(context: context),
                         MainPresenter.to.buildCloudFunctionCol(),
@@ -619,7 +678,7 @@ class _MainViewState extends State<MainView> {
                       color: ThemeColor.primary.value,
                       colorBlendMode: BlendMode.color,
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(height: 5.h),
                     SizedBox(
                       width: 40.w,
                       height: 40.h,

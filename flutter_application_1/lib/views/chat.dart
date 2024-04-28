@@ -56,6 +56,13 @@ class _ChatViewState extends State<ChatView> {
         true; // Set the flag to true when the SymbolAndName sends a message
     if (MainPresenter.to.firstQuestion.value) {
       MainPresenter.to.firstQuestion.value = false;
+      if (MainPresenter.to.messages.length > 2) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent + 20.h,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
     } else {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 20.h,
@@ -66,6 +73,9 @@ class _ChatViewState extends State<ChatView> {
 
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
+    if (MainPresenter.to.isEnNotifier.value) {
+      message = ' (一定要以繁體中文回答)';
+    }
     String newsAnalytics =
         await CloudService().getNewsAnalytics(symbolAndName: message);
     DateTime downloadEndTime = DateTime.now(); // Record the download end time
@@ -94,15 +104,22 @@ class _ChatViewState extends State<ChatView> {
         SharedPreferencesConstant.messages, MainPresenter.to.messages);
 
     if (option == Question.getQuestionText(Question.affecting)) {
-      option = 'Are there any recent news that may affecting the prices of ';
+      option = 'question1_trimmed'.tr;
     } else if (option == Question.getQuestionText(Question.challenges)) {
-      option = 'What are the major challenges facing the ';
+      option = 'question2_trimmed'.tr;
     }
 
     MainPresenter.to.isWaitingForReply.value =
         true; // Set the flag to true when the SymbolAndName sends a message
     if (MainPresenter.to.firstQuestion.value) {
       MainPresenter.to.firstQuestion.value = false;
+      if (MainPresenter.to.messages.length > 2) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent + 20.h,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
     } else {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent + 20.h,

@@ -34,7 +34,7 @@ class TrendMatchView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: Tooltip(
@@ -48,28 +48,25 @@ class TrendMatchView extends StatelessWidget {
                 ),
               ),
             ),
-            Transform.translate(
-              offset: Offset(-5.w, 2.h),
-              child: SizedBox(
-                height: 10.h,
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: ThemeColor.primary.value),
-                  child: Transform.scale(
-                    scale: 0.75,
-                    child: Transform.translate(
-                      offset: Offset(0.0, -2.h),
-                      child: IconButton(
-                        onPressed: () =>
-                            tooltipkey.currentState?.ensureTooltipVisible(),
-                        icon: const Icon(Icons.question_mark),
-                        color: AppColor.whiteColor,
-                      ),
+            SizedBox(
+              height: 10.h,
+              child: Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: ThemeColor.primary.value),
+                child: IconButton(
+                  onPressed: () =>
+                      tooltipkey.currentState?.ensureTooltipVisible(),
+                  icon: Transform.translate(
+                    offset: Offset(0.0, -1.5.h),
+                    child: const Icon(
+                      Icons.question_mark,
                     ),
                   ),
+                  color: AppColor.whiteColor,
+                  iconSize: 7.h,
                 ),
               ),
-            ),
+            )
           ],
         ),
         AdjustedLineChart()

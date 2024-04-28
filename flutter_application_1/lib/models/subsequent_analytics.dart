@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/utils/utils.dart';
+// import 'package:flutter_application_1/utils/utils.dart';
 
 class SubsequentAnalytics {
   // Singleton implementation
@@ -10,7 +10,7 @@ class SubsequentAnalytics {
   factory SubsequentAnalytics() => _instance;
   SubsequentAnalytics._();
 
-  void init() {
+  void init() async {
     MainPresenter.to.hasSubsequentAnalytics.value = false;
 
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
@@ -28,10 +28,11 @@ class SubsequentAnalytics {
 
     if (lastClosePriceAndSubsequentTrends.length >= 4) {
       exeStartTime = DateTime.now(); // Record the download start time
+      // log(lastClosePriceAndSubsequentTrends.toString());
       CloudService()
           .getCsvAndPng(lastClosePriceAndSubsequentTrends)
           .then((parsedResponse) {
-        log(parsedResponse.toString());
+        // log(parsedResponse.toString());
         exeEndTime = DateTime.now(); // Record the download end time
         // Calculate the time difference
         exeDuration = exeEndTime.difference(exeStartTime);
@@ -105,5 +106,8 @@ class SubsequentAnalytics {
     MainPresenter.to.img7Bytes.value = base64Decode(img7);
 
     MainPresenter.to.numOfClusters.value = csvPngFiles['num_of_clusters'];
+
+    MainPresenter.to.maxSilhouetteScore.value =
+        csvPngFiles['max_silhouette_score'];
   }
 }

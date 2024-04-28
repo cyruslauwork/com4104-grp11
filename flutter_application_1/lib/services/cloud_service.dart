@@ -22,10 +22,15 @@ class CloudService extends GetxService {
     String encodedTrends = jsonEncode(lastClosePriceAndSubsequentTrends);
     // log(encodedTrends);
 
+    String lang = LangService.to.currentLang.langCode;
+
     /* POST method */
     Map<String, dynamic> parsedResponse = await HTTPService().postFetchJson(
-        'http://35.221.170.30/',
-        {'sub_trend': encodedTrends, 'func': 'subtrend-to-csv-png'});
+        'http://35.221.170.30/', {
+      'sub_trend': encodedTrends,
+      'func': 'subtrend-to-csv-png',
+      'lang': lang
+    });
 
     /* GET method */
     // String urlEncodedTrends = Uri.encodeComponent(encodedTrends);

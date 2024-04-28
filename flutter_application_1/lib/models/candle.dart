@@ -134,7 +134,7 @@ class Candle {
 
   computeTrendLines() {
     final ma5 = CandleData.computeMA(MainPresenter.to.listCandledata, 5);
-    final ma10 = CandleData.computeMA(MainPresenter.to.listCandledata, 10);
+    // final ma10 = CandleData.computeMA(MainPresenter.to.listCandledata, 10);
     final ma20 = CandleData.computeMA(MainPresenter.to.listCandledata, 20);
     final ma60 = CandleData.computeMA(MainPresenter.to.listCandledata, 60);
     final ma120 = CandleData.computeMA(MainPresenter.to.listCandledata, 120);
@@ -146,7 +146,7 @@ class Candle {
     for (int i = 0; i < MainPresenter.to.listCandledata.length; i++) {
       MainPresenter.to.listCandledata[i].trends = [
         ma5[i],
-        ma10[i],
+        // ma10[i],
         ma20[i],
         ma60[i],
         ma120[i],
