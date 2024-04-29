@@ -16,4 +16,5 @@ class SharedPreferencesConstant {
   static String isEn = 'isEn';
   static String alwaysShowAnalytics = 'alwaysShowAnalytics';
   static String messages = 'messages';
+  static String watchlist = 'watchlist';
 }

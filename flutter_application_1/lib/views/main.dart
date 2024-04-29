@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/listing_adapter.dart';
 
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
@@ -454,17 +455,6 @@ class _MainViewState extends State<MainView> {
                           )
                         : const SizedBox.shrink()),
                     IconButton(
-                      icon: Icon(MainPresenter.to.devModeNotifier.value
-                          ? Icons.code
-                          : Icons.code_off),
-                      onPressed: () {
-                        setState(() {
-                          MainPresenter.to.devModeNotifier.value =
-                              !MainPresenter.to.devModeNotifier.value;
-                        });
-                      },
-                    ),
-                    IconButton(
                       icon: Icon(MainPresenter.to.isEnNotifier.value
                           ? Icons.g_translate
                           : Icons.translate),
@@ -474,6 +464,58 @@ class _MainViewState extends State<MainView> {
                         PrefsService.to.prefs.setBool(
                             SharedPreferencesConstant.isEn,
                             MainPresenter.to.isEnNotifier.value);
+                      },
+                    ),
+                    PopupMenuButton<String>(
+                      icon: const Icon(Icons.more_vert_outlined),
+                      itemBuilder: (BuildContext context) =>
+                          <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              value: 'devMode',
+                              child: ListTile(
+                                leading: Icon(
+                                  MainPresenter.to.devModeNotifier.value
+                                      ? Icons.code
+                                      : Icons.code_off,
+                                  color: ThemeColor.primary.value,
+                                ),
+                                title: Text(
+                                  'Dev Mode',
+                                  style: const TextTheme().sp4.primaryTextColor,
+                                ),
+                              ),
+                            ),
+                            const PopupMenuDivider(),
+                          ] +
+                          MainPresenter.to.popMenuItems(),
+                      onSelected: (String value) {
+                        // Handle the selected value here
+                        if (value == 'devMode') {
+                          setState(() {
+                            MainPresenter.to.devModeNotifier.value =
+                                !MainPresenter.to.devModeNotifier.value;
+                          });
+                        } else if (value != 'watchlistEmpty') {
+                          List<SymbolAndName> listSymbolAndName =
+                              MainPresenter.to.listSymbolAndName;
+                          String newName = listSymbolAndName
+                              .firstWhere((SymbolAndName symbolAndName) =>
+                                  symbolAndName.symbol == value)
+                              .name;
+                          PrefsService.to.prefs.setString(
+                              SharedPreferencesConstant.financialInstrumentName,
+                              newName);
+                          MainPresenter.to.financialInstrumentName.value =
+                              newName;
+                          String newSymbol = value;
+                          PrefsService.to.prefs.setString(
+                              SharedPreferencesConstant
+                                  .financialInstrumentSymbol,
+                              newSymbol);
+                          MainPresenter.to.financialInstrumentSymbol.value =
+                              newSymbol;
+                          MainPresenter.to.searchCountNotifier.value++;
+                        }
                       },
                     ),
                   ]
@@ -527,9 +569,26 @@ class _MainViewState extends State<MainView> {
                             ),
                           ],
                         ),
-                        Text(
-                          '\$${MainPresenter.to.candleListList.last[4].toString()}',
-                          style: const TextTheme().sp10.primaryTextColor.w700,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '\$${MainPresenter.to.candleListList.last[4].toString()}',
+                              style:
+                                  const TextTheme().sp10.primaryTextColor.w700,
+                            ),
+                            IconButton(
+                              onPressed: () => MainPresenter.to
+                                  .bookmarkThis(context: context),
+                              icon: Obx(
+                                () => Icon(
+                                  MainPresenter.to.bookmarked.value,
+                                ),
+                              ),
+                              color: ThemeColor.primary.value,
+                              iconSize: 10.h,
+                            ),
+                          ],
                         ),
                         Text(
                           '${'as_of'.tr} ${MainPresenter.to.candleListList.last[0].toString()}.',

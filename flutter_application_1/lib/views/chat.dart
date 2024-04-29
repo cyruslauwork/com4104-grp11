@@ -99,57 +99,67 @@ class _ChatViewState extends State<ChatView> {
   }
 
   void _handleOptionSelected(String option) async {
-    MainPresenter.to.messages.add(option);
-    PrefsService.to.prefs.setStringList(
-        SharedPreferencesConstant.messages, MainPresenter.to.messages);
+    List<String> watchlist = MainPresenter.to.watchlist;
+    if (watchlist.isNotEmpty) {
+      MainPresenter.to.messages.add(option);
+      PrefsService.to.prefs.setStringList(
+          SharedPreferencesConstant.messages, MainPresenter.to.messages);
 
-    if (option == Question.getQuestionText(Question.affecting)) {
-      option = 'question1_trimmed'.tr;
-    } else if (option == Question.getQuestionText(Question.challenges)) {
-      option = 'question2_trimmed'.tr;
-    }
+      if (option == Question.getQuestionText(Question.affecting)) {
+        option = 'question1_trimmed'.tr;
+      } else if (option == Question.getQuestionText(Question.challenges)) {
+        option = 'question2_trimmed'.tr;
+      }
 
-    MainPresenter.to.isWaitingForReply.value =
-        true; // Set the flag to true when the SymbolAndName sends a message
-    if (MainPresenter.to.firstQuestion.value) {
-      MainPresenter.to.firstQuestion.value = false;
-      if (MainPresenter.to.messages.length > 2) {
+      MainPresenter.to.isWaitingForReply.value =
+          true; // Set the flag to true when the SymbolAndName sends a message
+      if (MainPresenter.to.firstQuestion.value) {
+        MainPresenter.to.firstQuestion.value = false;
+        if (MainPresenter.to.messages.length > 2) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent + 20.h,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      } else {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent + 20.h,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       }
+
+      DateTime downloadStartTime =
+          DateTime.now(); // Record the download start time
+      String newsAnalytics = await CloudService()
+          .getNewsAnalytics(symbols: watchlist.join(' '), question: option);
+      DateTime downloadEndTime = DateTime.now(); // Record the download end time
+      // Calculate the time difference
+      Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
+      int downloadTime = downloadDuration.inMilliseconds;
+      MainPresenter.to.aiResponseTime.value = downloadTime;
+
+      MainPresenter.to.messages.add(newsAnalytics);
+      PrefsService.to.prefs.setStringList(
+          SharedPreferencesConstant.messages, MainPresenter.to.messages);
+      Timer(const Duration(milliseconds: 500), () {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent + 20.h,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      });
+      MainPresenter.to.isWaitingForReply.value =
+          false; // Set the flag to false after the non-sender replies
     } else {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 20.h,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+      Get.snackbar(
+          'notice'.tr,
+          colorText: AppColor.whiteColor,
+          backgroundColor: AppColor.errorColor,
+          icon: const Icon(Icons.error),
+          'watchlistEmpty'.tr);
     }
-
-    DateTime downloadStartTime =
-        DateTime.now(); // Record the download start time
-    String newsAnalytics = await CloudService()
-        .getNewsAnalytics(symbols: 'AAPL MSFT GOOG', question: option);
-    DateTime downloadEndTime = DateTime.now(); // Record the download end time
-    // Calculate the time difference
-    Duration downloadDuration = downloadEndTime.difference(downloadStartTime);
-    int downloadTime = downloadDuration.inMilliseconds;
-    MainPresenter.to.aiResponseTime.value = downloadTime;
-
-    MainPresenter.to.messages.add(newsAnalytics);
-    PrefsService.to.prefs.setStringList(
-        SharedPreferencesConstant.messages, MainPresenter.to.messages);
-    Timer(const Duration(milliseconds: 500), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 20.h,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    });
-    MainPresenter.to.isWaitingForReply.value =
-        false; // Set the flag to false after the non-sender replies
   }
 
   Widget _buildChatBubble(String message, bool isQuestionObject) {

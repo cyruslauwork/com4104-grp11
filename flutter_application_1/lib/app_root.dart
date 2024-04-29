@@ -152,10 +152,4 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
       ),
     );
   }
-
-  void snackBar(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(text),
-    ));
-  }
 }

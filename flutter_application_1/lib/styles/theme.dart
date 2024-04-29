@@ -25,11 +25,11 @@ extension ThemeColorExtension on ThemeColor {
   Color get value {
     switch (this) {
       case ThemeColor.primary:
-        return Colors.red;
+        return const Color(0xfff44336);
       case ThemeColor.secondary:
-        return Colors.blue;
+        return const Color(0xffB71C1C);
       case ThemeColor.tertiary:
-        return Colors.yellow;
+        return const Color(0xffff9800);
     }
   }
 }

@@ -37,6 +37,15 @@ class MainPresenter extends GetxController {
               .getBool(SharedPreferencesConstant.alwaysShowAnalytics) ??
           false)
       .obs;
+  RxList<String> watchlist = (PrefsService.to.prefs
+              .getStringList(SharedPreferencesConstant.watchlist) ??
+          [])
+      .obs;
+  late Rx<IconData> bookmarked =
+      (watchlist.contains(financialInstrumentSymbol.value)
+              ? Icons.bookmark_outlined
+              : Icons.bookmark_border_outlined)
+          .obs;
 
   /* Candlestick-related */
   RxString financialInstrumentSymbol = (PrefsService.to.prefs
@@ -176,6 +185,8 @@ class MainPresenter extends GetxController {
     //     'SPDR S&P 500 ETF Trust');
     // PrefsService.to.prefs.setInt(SharedPreferencesConstant.range, 5);
     // PrefsService.to.prefs.setInt(SharedPreferencesConstant.tolerance, 100);
+    // PrefsService.to.prefs
+    //     .setStringList(SharedPreferencesConstant.watchlist, []);
 
     super.onInit();
     if (!isDarkModeInit) {
@@ -259,6 +270,9 @@ class MainPresenter extends GetxController {
   }
 
   void isSearchCountListener() {
+    bookmarked.value = watchlist.contains(financialInstrumentSymbol.value)
+        ? Icons.bookmark_outlined
+        : Icons.bookmark_border_outlined;
     futureListCandledata.value = init();
   }
 
@@ -568,5 +582,68 @@ class MainPresenter extends GetxController {
     messages.value = messages.sublist(0, 1); // newList will be ["first"]
     PrefsService.to.prefs
         .setStringList(SharedPreferencesConstant.messages, messages);
+  }
+
+  void bookmarkThis({required BuildContext context}) {
+    if (watchlist.contains(financialInstrumentSymbol.value)) {
+      bookmarked.value = Icons.bookmark_border_outlined;
+      watchlist.remove(financialInstrumentSymbol.value);
+      PrefsService.to.prefs
+          .setStringList(SharedPreferencesConstant.watchlist, watchlist);
+    } else {
+      if (watchlist.length > 4) {
+        Get.snackbar(
+            'notice'.tr,
+            colorText: AppColor.whiteColor,
+            backgroundColor: AppColor.errorColor,
+            icon: const Icon(Icons.error),
+            'watchlist_max'.tr);
+      } else {
+        bookmarked.value = Icons.bookmark_outlined;
+        watchlist.add(financialInstrumentSymbol.value);
+        PrefsService.to.prefs
+            .setStringList(SharedPreferencesConstant.watchlist, watchlist);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Center(
+            child: Text(
+              'bookmarked'.tr,
+              style: const TextTheme().sp5.greyColor,
+            ),
+          ),
+        ));
+      }
+    }
+  }
+
+  List<PopupMenuEntry<String>> popMenuItems() {
+    List<PopupMenuEntry<String>> watchlistMenuItems;
+    if (watchlist.isEmpty) {
+      watchlistMenuItems = [
+        PopupMenuItem<String>(
+          value: 'watchlistEmpty',
+          child: Text(
+            'watchlistEmpty'.tr,
+            style: const TextTheme().sp4.primaryTextColor,
+          ),
+        ),
+      ];
+    } else {
+      watchlistMenuItems = watchlist.map((String item) {
+        return PopupMenuItem<String>(
+          value: item,
+          child: ListTile(
+            leading: Icon(
+              Icons.bookmark_outlined,
+              color: ThemeColor.primary.value,
+            ),
+            title: Text(
+              item,
+              style: const TextTheme().sp4.primaryTextColor,
+            ),
+          ),
+        );
+      }).toList();
+    }
+    return watchlistMenuItems;
   }
 }

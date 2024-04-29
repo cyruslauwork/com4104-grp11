@@ -87,6 +87,10 @@ class Msg extends Translations {
               'Comparison Historical Trends Actual Prices',
           'sa_title': 'Subsequent Analytics',
           'max_ss': 'Max SS',
+          'watchlist_max':
+              'You can only add up to 5 financial instruments to the watchlist',
+          'bookmarked': 'Added to bookmarked',
+          'watchlistEmpty': 'There are no items in the watchlist',
         },
         'zh_HK': {
           'app_name': '市場慧眼📈',
@@ -153,6 +157,9 @@ class Msg extends Translations {
           'comparison_actual_title': '對照歷史走勢的實際價格',
           'sa_title': '走勢分析',
           'max_ss': '最大SS',
+          'watchlist_max': '您最多只能將 5 個金融工具新增至監察名單',
+          'bookmarked': '已加入監察名單',
+          'watchlistEmpty': '監察名單為空',
         },
       };
 }

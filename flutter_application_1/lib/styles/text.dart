@@ -51,4 +51,5 @@ extension CustomTextStyle on TextStyle {
   //     copyWith(color: AppColor.editTextErrorColor);
   TextStyle get greyColor => copyWith(color: AppColor.greyColor);
   TextStyle get underline => copyWith(decoration: TextDecoration.underline);
+  TextStyle get themeTextColor => copyWith(color: ThemeColor.primary.value);
 }
