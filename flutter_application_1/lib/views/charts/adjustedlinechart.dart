@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_application_1/styles/styles.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_application_1/models/models.dart';
@@ -20,15 +21,20 @@ class AdjustedLineChart extends StatelessWidget {
     return Obx(
       () => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            SizedBox(
-              width: MainPresenter.to.tmChartWidth.value,
-              height: 85.h,
-              child: LineChart(lineChartData),
-            ),
-            MainPresenter.to.sidePlot.value,
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColor.whiteColor.withOpacity(0.5), // Set 50% transparency
+          ),
+          child: Row(
+            children: [
+              SizedBox(
+                width: MainPresenter.to.tmChartWidth.value,
+                height: 85.h,
+                child: LineChart(lineChartData),
+              ),
+              MainPresenter.to.sidePlot.value,
+            ],
+          ),
         ),
       ),
     );
