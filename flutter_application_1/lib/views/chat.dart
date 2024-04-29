@@ -74,7 +74,7 @@ class _ChatViewState extends State<ChatView> {
     DateTime downloadStartTime =
         DateTime.now(); // Record the download start time
     if (MainPresenter.to.isEnNotifier.value) {
-      message = ' (一定要以繁體中文回答)';
+      message += ' (一定要以繁體中文回答)';
     }
     String newsAnalytics =
         await CloudService().getNewsAnalytics(symbolAndName: message);
