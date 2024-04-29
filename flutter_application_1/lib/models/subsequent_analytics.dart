@@ -69,7 +69,7 @@ class SubsequentAnalytics {
             MainPresenter.to.matchRows[index] + selectedLength.toInt()][4];
 
     lastClosePriceAndSubsequentTrend.add(MainPresenter
-        .to.selectedPeriodActualPricesList[selectedLength.toInt() - 1]);
+        .to.selectedPeriodActualPricesList[selectedLength.toInt()]);
 
     for (double i = selectedLength + 1; i < selectedLength * 2 + 2; i++) {
       double adjustedMatchedTrendClosePrice = MainPresenter.to
