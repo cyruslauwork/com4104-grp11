@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
+import 'package:get/get.dart';
 
 import 'package:flutter_application_1/models/models.dart';
+import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/utils/utils.dart';
 
 class AdjustedLineChart extends StatelessWidget {
@@ -15,10 +17,20 @@ class AdjustedLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 393.w,
-      height: 85.h,
-      child: LineChart(lineChartData),
+    return Obx(
+      () => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            SizedBox(
+              width: MainPresenter.to.tmChartWidth.value,
+              height: 85.h,
+              child: LineChart(lineChartData),
+            ),
+            MainPresenter.to.sidePlot.value,
+          ],
+        ),
+      ),
     );
   }
 }

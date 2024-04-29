@@ -124,6 +124,25 @@ class SubsequentAnalyticsView extends StatelessWidget {
                 return Dialog(
                   child: HeroPhotoViewRouteWrapper(
                     imageProvider: MemoryImage(
+                      MainPresenter.to.img9Bytes.value,
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: Hero(
+              tag: 'img9',
+              child: Image.memory(MainPresenter.to.img9Bytes.value)),
+        ),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context!,
+              builder: (BuildContext context) {
+                return Dialog(
+                  child: HeroPhotoViewRouteWrapper(
+                    imageProvider: MemoryImage(
                       MainPresenter.to.img5Bytes.value,
                     ),
                   ),
@@ -172,6 +191,25 @@ class SubsequentAnalyticsView extends StatelessWidget {
           child: Hero(
               tag: 'img7',
               child: Image.memory(MainPresenter.to.img7Bytes.value)),
+        ),
+        GestureDetector(
+          onTap: () {
+            showDialog(
+              context: context!,
+              builder: (BuildContext context) {
+                return Dialog(
+                  child: HeroPhotoViewRouteWrapper(
+                    imageProvider: MemoryImage(
+                      MainPresenter.to.img8Bytes.value,
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          child: Hero(
+              tag: 'img8',
+              child: Image.memory(MainPresenter.to.img8Bytes.value)),
         ),
         SizedBox(height: 5.h),
       ],

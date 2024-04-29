@@ -155,6 +155,8 @@ class MainPresenter extends GetxController {
   ValueNotifier<bool> chartExpandNotifier = ValueNotifier<bool>(true);
   bool isChartExpandNotifierAdded = false;
   Rx<IconData> expandOrShrinkIcon = Icons.vertical_align_center_rounded.obs;
+  Rx<Widget> sidePlot = (const SizedBox.shrink()).obs;
+  late RxDouble tmChartWidth = 135.w.obs;
 
   /* Subsequent analytics */
   RxInt lastClosePriceAndSubsequentTrendsExeTime = 0.obs;
@@ -167,9 +169,14 @@ class MainPresenter extends GetxController {
   Rx<Uint8List> img5Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img6Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   Rx<Uint8List> img7Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img8Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img9Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
+  Rx<Uint8List> img10Bytes = Rx<Uint8List>(Uint8List.fromList([0]));
   RxString subsequentAnalyticsErr = ''.obs;
   RxInt numOfClusters = 0.obs;
   RxString maxSilhouetteScore = ''.obs;
+  ValueNotifier<bool> subsequentAnalyticsNotifier = ValueNotifier<bool>(false);
+  bool isSubsequentAnalyticsNotifierAdded = false;
 
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
@@ -233,6 +240,11 @@ class MainPresenter extends GetxController {
       chartExpandNotifier.addListener(chartExpandListener);
       isChartExpandNotifierAdded = true;
     }
+
+    if (!isSubsequentAnalyticsNotifierAdded) {
+      subsequentAnalyticsNotifier.addListener(subsequentAnalyticsListener);
+      isSubsequentAnalyticsNotifierAdded = true;
+    }
   }
 
   void showAverageListener() {
@@ -293,6 +305,24 @@ class MainPresenter extends GetxController {
     } else {
       candleChartHeight.value = 50.h;
       expandOrShrinkIcon.value = Icons.expand;
+    }
+  }
+
+  void subsequentAnalyticsListener() {
+    if (subsequentAnalyticsNotifier.value) {
+      hasSubsequentAnalytics.value = true;
+      sidePlot.value = SizedBox(
+          child: Image.memory(
+        MainPresenter.to.img10Bytes.value,
+        width: 52.5.w,
+        height: 85.h,
+        fit: BoxFit.fill,
+      ));
+      tmChartWidth.value = 90.w;
+    } else {
+      hasSubsequentAnalytics.value = false;
+      sidePlot.value = const SizedBox.shrink();
+      tmChartWidth.value = 135.w;
     }
   }
 

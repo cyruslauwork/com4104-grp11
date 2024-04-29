@@ -570,7 +570,7 @@ class TrendMatch {
               spots: getAdjustedlineBarsData(index),
               isCurved: true,
               barWidth: 1,
-              color: AppColor.greyColor))
+              color: ThemeColor.secondary.value))
           // .take(5) // Add this line to limit the items to the first 5
           .toList()
         ..add(
@@ -578,9 +578,12 @@ class TrendMatch {
             spots: getSelectedPeriodClosePrices(),
             isCurved: true,
             barWidth: 3,
-            color: AppColor.errorColor,
+            color: ThemeColor.primary.value,
           ),
         ),
+      titlesData: const FlTitlesData(
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      ),
     );
   }
 }

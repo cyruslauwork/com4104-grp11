@@ -11,7 +11,7 @@ class SubsequentAnalytics {
   SubsequentAnalytics._();
 
   void init() async {
-    MainPresenter.to.hasSubsequentAnalytics.value = false;
+    MainPresenter.to.subsequentAnalyticsNotifier.value = false;
 
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
@@ -46,7 +46,7 @@ class SubsequentAnalytics {
           String err = parsedResponse['error'];
           MainPresenter.to.subsequentAnalyticsErr.value = err;
         }
-        MainPresenter.to.hasSubsequentAnalytics.value = true;
+        MainPresenter.to.subsequentAnalyticsNotifier.value = true;
       }).catchError((error) {
         // Handle any errors during the asynchronous operation
         // ...
@@ -54,7 +54,7 @@ class SubsequentAnalytics {
     } else {
       MainPresenter.to.subsequentAnalyticsErr.value =
           'The number of subsequent trends must be equal to or greater than 4.';
-      MainPresenter.to.hasSubsequentAnalytics.value = true;
+      MainPresenter.to.subsequentAnalyticsNotifier.value = true;
     }
   }
 
@@ -95,6 +95,9 @@ class SubsequentAnalytics {
     String img5 = csvPngFiles['img5'];
     String img6 = csvPngFiles['img6'];
     String img7 = csvPngFiles['img7'];
+    String img8 = csvPngFiles['img8'];
+    String img9 = csvPngFiles['img9'];
+    String img10 = csvPngFiles['img10'];
 
     // Convert the base64-encoded image data to bytes
     MainPresenter.to.img1Bytes.value = base64Decode(img1);
@@ -104,6 +107,9 @@ class SubsequentAnalytics {
     MainPresenter.to.img5Bytes.value = base64Decode(img5);
     MainPresenter.to.img6Bytes.value = base64Decode(img6);
     MainPresenter.to.img7Bytes.value = base64Decode(img7);
+    MainPresenter.to.img8Bytes.value = base64Decode(img8);
+    MainPresenter.to.img9Bytes.value = base64Decode(img9);
+    MainPresenter.to.img10Bytes.value = base64Decode(img10);
 
     MainPresenter.to.numOfClusters.value = csvPngFiles['num_of_clusters'];
 
