@@ -18,18 +18,24 @@ class CloudService extends GetxService {
   }
 
   Future<Map<String, dynamic>> getCsvAndPng(
-      List<List<double>> lastClosePriceAndSubsequentTrends) async {
+      {required List<List<double>> lastClosePriceAndSubsequentTrends,
+      required double minValueOfAllTrends,
+      required double maxValueOfAllTrends}) async {
     String encodedTrends = jsonEncode(lastClosePriceAndSubsequentTrends);
     // log(encodedTrends);
 
     String lang = LangService.to.currentLang.langCode;
+    // print(minValueOfAllTrends);
+    // print(maxValueOfAllTrends);
 
     /* POST method */
-    Map<String, dynamic> parsedResponse = await HTTPService().postFetchJson(
-        'http://35.221.170.30/', {
+    Map<String, dynamic> parsedResponse =
+        await HTTPService().postFetchJson('http://35.221.170.30/', {
       'sub_trend': encodedTrends,
       'func': 'subtrend-to-csv-png',
-      'lang': lang
+      'lang': lang,
+      'min_value': "$minValueOfAllTrends",
+      'max_value': "$maxValueOfAllTrends",
     });
 
     /* GET method */

@@ -177,6 +177,9 @@ class MainPresenter extends GetxController {
   RxString maxSilhouetteScore = ''.obs;
   ValueNotifier<bool> subsequentAnalyticsNotifier = ValueNotifier<bool>(false);
   bool isSubsequentAnalyticsNotifierAdded = false;
+  RxList<List<double>> adjustedTrendsAndSelectedTrendList = [
+    [0.0]
+  ].obs;
 
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];

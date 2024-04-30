@@ -41,6 +41,8 @@ class TrendMatch {
     List<List<double>> matchActualDifferencesListList = [];
     List<List<double>> matchActualPricesListList = [];
 
+    MainPresenter.to.adjustedTrendsAndSelectedTrendList.value = [];
+
     int trueCount = 0;
     int falseCount = 0;
     int range = MainPresenter.to.range.value;
@@ -547,16 +549,17 @@ class TrendMatch {
   List<FlSpot> getSelectedPeriodClosePrices() {
     List<FlSpot> flspotList = [];
 
+    List<List<dynamic>> candleListList = MainPresenter.to.candleListList;
+
     for (int i = 0;
         i < MainPresenter.to.selectedPeriodPercentDifferencesList.length + 1;
         i++) {
       flspotList.add(FlSpot(
           i.toDouble(),
-          MainPresenter.to.candleListList[
-              MainPresenter.to.candleListList.length -
-                  MainPresenter.to.selectedPeriodPercentDifferencesList.length +
-                  i -
-                  1][4]));
+          candleListList[MainPresenter.to.candleListList.length -
+              MainPresenter.to.selectedPeriodPercentDifferencesList.length +
+              i -
+              1][4]));
     }
 
     return flspotList;

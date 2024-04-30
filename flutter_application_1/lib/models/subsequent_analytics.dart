@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_application_1/presenters/presenters.dart';
 import 'package:flutter_application_1/services/services.dart';
@@ -20,6 +21,48 @@ class SubsequentAnalytics {
       lastClosePriceAndSubsequentTrends
           .add(getMatchedTrendLastClosePriceAndSubsequentTrend(i));
     }
+    double minValueOfAllTrends = double.infinity;
+    double maxValueOfAllTrends = double.negativeInfinity;
+    List<List<dynamic>> candleListList = MainPresenter.to.candleListList;
+    if (lastClosePriceAndSubsequentTrends.isNotEmpty) {
+      for (List<double> sublist in lastClosePriceAndSubsequentTrends) {
+        for (double value in sublist) {
+          minValueOfAllTrends = min(minValueOfAllTrends, value);
+          maxValueOfAllTrends = max(maxValueOfAllTrends, value);
+        }
+      }
+    }
+    int selectedLength =
+        MainPresenter.to.selectedPeriodPercentDifferencesList.length;
+    int candleListListLength = MainPresenter.to.candleListList.length;
+    // Selected trend
+    for (int i = 0; i < selectedLength; i++) {
+      double value =
+          candleListList[candleListListLength - selectedLength.toInt() + i - 1]
+              [4];
+      minValueOfAllTrends = min(minValueOfAllTrends, value);
+      maxValueOfAllTrends = max(maxValueOfAllTrends, value);
+    }
+    double lastSelectedClosePrice = candleListList[candleListListLength - 1][4];
+    List<int> matchRows = MainPresenter.to.matchRows;
+    // Adjusted trends
+    for (int index in matchRows) {
+      double lastActualDifference =
+          lastSelectedClosePrice / candleListList[index + selectedLength][4];
+      for (int i = 0; i < selectedLength + 1; i++) {
+        double adjustedMatchedTrendClosePrice =
+            candleListList[index + i.toInt()][4] // Close price of matched trend
+                *
+                lastActualDifference;
+        minValueOfAllTrends =
+            min(minValueOfAllTrends, adjustedMatchedTrendClosePrice);
+        maxValueOfAllTrends =
+            max(maxValueOfAllTrends, adjustedMatchedTrendClosePrice);
+      }
+    }
+    // print(minValueOfAllTrends);
+    // print(maxValueOfAllTrends);
+
     DateTime exeEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
     Duration exeDuration = exeEndTime.difference(exeStartTime);
@@ -30,7 +73,11 @@ class SubsequentAnalytics {
       exeStartTime = DateTime.now(); // Record the download start time
       // log(lastClosePriceAndSubsequentTrends.toString());
       CloudService()
-          .getCsvAndPng(lastClosePriceAndSubsequentTrends)
+          .getCsvAndPng(
+        lastClosePriceAndSubsequentTrends: lastClosePriceAndSubsequentTrends,
+        minValueOfAllTrends: minValueOfAllTrends,
+        maxValueOfAllTrends: maxValueOfAllTrends,
+      )
           .then((parsedResponse) {
         // log(parsedResponse.toString());
         exeEndTime = DateTime.now(); // Record the download end time
