@@ -35,7 +35,7 @@ class MainView extends StatefulWidget {
     return Column(children: [
       Column(children: [
         Text(
-          'trend_match'.tr,
+          'trend_match_title'.tr,
           style: const TextTheme().sp5.w700,
         ),
         Obx(

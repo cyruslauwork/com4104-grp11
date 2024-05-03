@@ -52,7 +52,7 @@ class Msg extends Translations {
           'question1_trimmed':
               'Are there any recent news that may affecting the prices of ',
           'question2_trimmed': 'What are the major challenges facing the ',
-          'trend_match': 'Trend Match',
+          'trend_match_title': 'Trend Matching',
           'dl': 'DL(ms)',
           'rows': 'Rows',
           'range': 'Range',
@@ -127,7 +127,7 @@ class Msg extends Translations {
           'question2': '我的觀察清單中的股票或 ETF 面臨哪些主要挑戰？',
           'question1_trimmed': '以繁體中文回答: 近期消息中是否有可能影響價格於',
           'question2_trimmed': '以繁體中文回答: 有什麼主要面臨的挑戰於',
-          'trend_match': '走勢匹配',
+          'trend_match_title': '走勢匹配',
           'dl': '下載(ms)',
           'rows': '列數',
           'range': '範圍',
