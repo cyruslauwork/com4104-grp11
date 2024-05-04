@@ -28,6 +28,8 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   TextEditingController _controller = TextEditingController();
   final _scrollController = ScrollController();
+  bool isScrollControllerListenerAdded = false;
+  double bottomSizedBoxH = 3.h;
 
   @override
   void initState() {
@@ -88,13 +90,15 @@ class _ChatViewState extends State<ChatView> {
     MainPresenter.to.messages.add(newsAnalytics);
     PrefsService.to.prefs.setStringList(
         SharedPreferencesConstant.messages, MainPresenter.to.messages);
-    Timer(const Duration(milliseconds: 500), () {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 20.h,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
-    });
+    if (MainPresenter.to.messages.length > 2) {
+      Timer(const Duration(milliseconds: 500), () {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent + 20.h,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      });
+    }
     MainPresenter.to.isWaitingForReplyNotifier.value =
         false; // Set the flag to false after the non-sender replies
   }
@@ -144,13 +148,15 @@ class _ChatViewState extends State<ChatView> {
       MainPresenter.to.messages.add(newsAnalytics);
       PrefsService.to.prefs.setStringList(
           SharedPreferencesConstant.messages, MainPresenter.to.messages);
-      Timer(const Duration(milliseconds: 500), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent + 20.h,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      });
+      if (MainPresenter.to.messages.length > 2) {
+        Timer(const Duration(milliseconds: 500), () {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent + 20.h,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        });
+      }
       MainPresenter.to.isWaitingForReplyNotifier.value =
           false; // Set the flag to false after the non-sender replies
     } else {
@@ -309,6 +315,17 @@ class _ChatViewState extends State<ChatView> {
                         FocusNode focusNode,
                         VoidCallback onFieldSubmitted) {
                       _controller = textEditingController;
+                      focusNode.addListener(() {
+                        if (focusNode.hasFocus) {
+                          setState(() {
+                            bottomSizedBoxH = 40.h;
+                          });
+                        } else {
+                          setState(() {
+                            bottomSizedBoxH = 3.h;
+                          });
+                        }
+                      });
                       return TextField(
                         controller: textEditingController,
                         focusNode: focusNode,
@@ -353,7 +370,7 @@ class _ChatViewState extends State<ChatView> {
                 ],
               ),
             ),
-            SizedBox(height: 40.h)
+            SizedBox(height: bottomSizedBoxH)
           ],
         ),
       ),
