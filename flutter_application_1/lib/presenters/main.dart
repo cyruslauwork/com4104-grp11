@@ -117,6 +117,8 @@ class MainPresenter extends GetxController {
   RxBool isWaitingForReply = false.obs;
   RxInt aiResponseTime = 0.obs;
   RxBool firstQuestion = true.obs;
+  ValueNotifier<bool> isWaitingForReplyNotifier = ValueNotifier<bool>(false);
+  bool isWaitingForReplyNotifierAdded = false;
 
   /* Trend match */
   RxInt range =
@@ -248,6 +250,11 @@ class MainPresenter extends GetxController {
       subsequentAnalyticsNotifier.addListener(subsequentAnalyticsListener);
       isSubsequentAnalyticsNotifierAdded = true;
     }
+
+    if (!isWaitingForReplyNotifierAdded) {
+      isWaitingForReplyNotifier.addListener(isWaitingForReplyListener);
+      isWaitingForReplyNotifierAdded = true;
+    }
   }
 
   void showAverageListener() {
@@ -312,20 +319,36 @@ class MainPresenter extends GetxController {
   }
 
   void subsequentAnalyticsListener() {
-    if (subsequentAnalyticsNotifier.value) {
+    if (subsequentAnalyticsNotifier.value &&
+        subsequentAnalyticsErr.value != '') {
+      hasSubsequentAnalytics.value = true;
+      sidePlot.value = const SizedBox.shrink();
+      tmChartWidth.value = 135.w;
+    } else if (subsequentAnalyticsNotifier.value) {
       hasSubsequentAnalytics.value = true;
       sidePlot.value = SizedBox(
-          child: Image.memory(
-        MainPresenter.to.img10Bytes.value,
-        width: 52.5.w,
-        height: 85.h,
-        fit: BoxFit.fill,
+          child: Padding(
+        padding: EdgeInsets.only(top: 5.h),
+        child: Image.memory(
+          MainPresenter.to.img10Bytes.value,
+          width: 52.5.w,
+          height: 85.h,
+          fit: BoxFit.fill,
+        ),
       ));
       tmChartWidth.value = 90.w;
     } else {
-      hasSubsequentAnalytics.value = false;
       sidePlot.value = const SizedBox.shrink();
       tmChartWidth.value = 135.w;
+      hasSubsequentAnalytics.value = false;
+    }
+  }
+
+  void isWaitingForReplyListener() {
+    if (isWaitingForReplyNotifier.value) {
+      isWaitingForReply.value = true;
+    } else {
+      isWaitingForReply.value = false;
     }
   }
 
@@ -615,6 +638,7 @@ class MainPresenter extends GetxController {
     messages.value = messages.sublist(0, 1); // newList will be ["first"]
     PrefsService.to.prefs
         .setStringList(SharedPreferencesConstant.messages, messages);
+    firstQuestion.value = true;
   }
 
   void bookmarkThis({required BuildContext context}) {

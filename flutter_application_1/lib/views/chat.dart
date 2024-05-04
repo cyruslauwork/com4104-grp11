@@ -34,7 +34,8 @@ class _ChatViewState extends State<ChatView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // To run codes after the UI is built
-      if (!MainPresenter.to.firstQuestion.value) {
+      if (!MainPresenter.to.firstQuestion.value &&
+          MainPresenter.to.messages.length > 3) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent + 20.h,
           duration: const Duration(milliseconds: 1000),
@@ -52,7 +53,7 @@ class _ChatViewState extends State<ChatView> {
     PrefsService.to.prefs.setStringList(
         SharedPreferencesConstant.messages, MainPresenter.to.messages);
 
-    MainPresenter.to.isWaitingForReply.value =
+    MainPresenter.to.isWaitingForReplyNotifier.value =
         true; // Set the flag to true when the SymbolAndName sends a message
     if (MainPresenter.to.firstQuestion.value) {
       MainPresenter.to.firstQuestion.value = false;
@@ -94,7 +95,7 @@ class _ChatViewState extends State<ChatView> {
         curve: Curves.easeInOut,
       );
     });
-    MainPresenter.to.isWaitingForReply.value =
+    MainPresenter.to.isWaitingForReplyNotifier.value =
         false; // Set the flag to false after the non-sender replies
   }
 
@@ -111,7 +112,7 @@ class _ChatViewState extends State<ChatView> {
         option = 'question2_trimmed'.tr;
       }
 
-      MainPresenter.to.isWaitingForReply.value =
+      MainPresenter.to.isWaitingForReplyNotifier.value =
           true; // Set the flag to true when the SymbolAndName sends a message
       if (MainPresenter.to.firstQuestion.value) {
         MainPresenter.to.firstQuestion.value = false;
@@ -150,7 +151,7 @@ class _ChatViewState extends State<ChatView> {
           curve: Curves.easeInOut,
         );
       });
-      MainPresenter.to.isWaitingForReply.value =
+      MainPresenter.to.isWaitingForReplyNotifier.value =
           false; // Set the flag to false after the non-sender replies
     } else {
       Get.snackbar(
@@ -338,7 +339,10 @@ class _ChatViewState extends State<ChatView> {
                           shape: BoxShape.circle,
                           color: AppColor.greyColor.withOpacity(0.5)),
                       child: IconButton(
-                        onPressed: () => MainPresenter.to.clearMsg(),
+                        onPressed: () =>
+                            (MainPresenter.to.isWaitingForReply.value
+                                ? null
+                                : MainPresenter.to.clearMsg()),
                         icon: const Icon(
                           Icons.clean_hands_outlined,
                         ),

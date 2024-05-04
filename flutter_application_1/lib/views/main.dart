@@ -414,14 +414,14 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  final ScrollController scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
           title: GestureDetector(
-            onTap: () => scrollController.animateTo(
+            onTap: () => _scrollController.animateTo(
               0.0,
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeInOut,
@@ -547,7 +547,7 @@ class _MainViewState extends State<MainView> {
                 return RefreshIndicator(
                   onRefresh: () => MainPresenter.to.init(),
                   child: SingleChildScrollView(
-                    controller: scrollController,
+                    controller: _scrollController,
                     scrollDirection: Axis.vertical,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,6 +35,9 @@ class _SearchViewState extends State<SearchView> {
   TextEditingController _textEditingController = TextEditingController();
   bool _autocomplete = true;
   List<SymbolAndName> listSymbolAndName = MainPresenter.to.listSymbolAndName;
+
+  Widget sizedBox = const SizedBox.shrink();
+  final ScrollController _scrollController = ScrollController();
 
   // @override
   // void dispose() {
@@ -154,6 +159,7 @@ class _SearchViewState extends State<SearchView> {
       body: SafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 3.w, vertical: 6.w),
         child: SingleChildScrollView(
+          controller: _scrollController,
           scrollDirection: Axis.vertical,
           child: Column(
             children: <Widget>[
@@ -290,14 +296,32 @@ class _SearchViewState extends State<SearchView> {
                           FocusNode focusNode,
                           VoidCallback onFieldSubmitted) {
                         _textEditingController = textEditingController;
-                        // focusNode.addListener(() {
-                        //   if (!focusNode.hasFocus) {
-                        //     // Clear the text field when losing focus if no selection was made
-                        //     if (_autocomplete) {
-                        //       _textEditingController.text = '';
-                        //     }
-                        //   }
-                        // });
+                        focusNode.addListener(() {
+                          if (focusNode.hasFocus) {
+                            Timer(const Duration(milliseconds: 100), () {
+                              if (MediaQuery.of(context).viewInsets.bottom !=
+                                  0) {
+                                setState(() {
+                                  sizedBox = SizedBox(height: 50.h);
+                                  _scrollController.animateTo(
+                                    _scrollController.position.maxScrollExtent +
+                                        50.h,
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeInOut,
+                                  );
+                                });
+                              }
+                            });
+                          } else {
+                            // Clear the text field when losing focus if no selection was made
+                            // if (_autocomplete) {
+                            //   _textEditingController.text = '';
+                            // }
+                            if (sizedBox != const SizedBox.shrink()) {
+                              sizedBox = const SizedBox.shrink();
+                            }
+                          }
+                        });
                         return TextField(
                           onChanged: (String value) {
                             _autocomplete = true;
@@ -365,7 +389,8 @@ class _SearchViewState extends State<SearchView> {
                     ),
                   ],
                 ),
-              )
+              ),
+              sizedBox,
             ],
           ),
         ),
