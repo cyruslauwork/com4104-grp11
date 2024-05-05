@@ -126,6 +126,7 @@ class SubsequentAnalyticsView extends StatelessWidget {
                     imageProvider: MemoryImage(
                       MainPresenter.to.img9Bytes.value,
                     ),
+                    minScale: 0.77,
                   ),
                 );
               },
@@ -202,6 +203,7 @@ class SubsequentAnalyticsView extends StatelessWidget {
                     imageProvider: MemoryImage(
                       MainPresenter.to.img8Bytes.value,
                     ),
+                    minScale: 0.48,
                   ),
                 );
               },
