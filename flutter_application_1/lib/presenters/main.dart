@@ -328,11 +328,11 @@ class MainPresenter extends GetxController {
       hasSubsequentAnalytics.value = true;
       sidePlot.value = SizedBox(
           child: Padding(
-        padding: EdgeInsets.only(top: 5.h),
+        padding: EdgeInsets.only(top: 7.5.h),
         child: Image.memory(
           MainPresenter.to.img10Bytes.value,
           width: 52.5.w,
-          height: 85.h,
+          height: 78.h,
           fit: BoxFit.fill,
         ),
       ));

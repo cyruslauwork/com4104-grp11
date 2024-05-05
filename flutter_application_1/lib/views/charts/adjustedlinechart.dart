@@ -20,6 +20,7 @@ class AdjustedLineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.horizontal,
         child: Container(
           decoration: BoxDecoration(
