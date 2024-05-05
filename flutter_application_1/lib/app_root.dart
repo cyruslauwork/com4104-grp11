@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'package:flutter_application_1/services/services.dart';
 import 'package:flutter_application_1/views/views.dart';
@@ -63,6 +65,9 @@ class _AppRootWidgetState extends State<AppRoot> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    // The following line will enable the Android and iOS wakelock.
+    Wakelock.enable();
+
     return Obx(
       () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
