@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/utils/utils.dart';
-import 'package:flutter_application_1/models/models.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/views/views.dart';
+import 'package:market_ai/styles/styles.dart';
+import 'package:market_ai/utils/utils.dart';
+import 'package:market_ai/models/models.dart';
+import 'package:market_ai/services/services.dart';
+import 'package:market_ai/views/views.dart';
 
 class MainPresenter extends GetxController {
   // Singleton implementation
@@ -186,6 +186,7 @@ class MainPresenter extends GetxController {
   Rx<DateTime> lastJsonEndDate = DateTime(2023).obs;
   List<Map<String, dynamic>> lastJson = [];
   RxInt lastCandledataLength = 0.obs;
+  RxInt saCount = 0.obs;
 
   // A 2nd initialization will be triggered when starting the app
   @override
@@ -369,8 +370,7 @@ class MainPresenter extends GetxController {
     if (showAverageNotifier.value) {
       Candle().computeTrendLines();
     }
-    TrendMatch().init(init: true);
-    // print(matchRows.length);
+    TrendMatch().init();
     SubsequentAnalytics().init();
     return listCandledata;
   }

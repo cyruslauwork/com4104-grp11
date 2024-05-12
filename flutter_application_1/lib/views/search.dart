@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_application_1/models/models.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/utils/utils.dart';
+import 'package:market_ai/models/models.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/services/services.dart';
+import 'package:market_ai/styles/styles.dart';
+import 'package:market_ai/utils/utils.dart';
 
 class SearchView extends StatefulWidget {
   // const SearchView({Key? key}) : super(key: key);
@@ -23,8 +23,6 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  // DateTimeRange? selectedDateRange;
-  // final TextEditingController _dateRangeController = TextEditingController();
   double _currentTolerance =
       (PrefsService.to.prefs.getInt(SharedPreferencesConstant.tolerance) ?? 100)
           .toDouble();
@@ -36,12 +34,6 @@ class _SearchViewState extends State<SearchView> {
 
   Widget sizedBox = const SizedBox.shrink();
   final ScrollController _scrollController = ScrollController();
-
-  // @override
-  // void dispose() {
-  //   // _dateRangeController.dispose();
-  //   super.dispose();
-  // }
 
   static String _displayStringForOption(SymbolAndName option) =>
       '${option.symbol} (${option.name.length >= 40 ? '${option.name.substring(0, 40)}...' : option.name})';

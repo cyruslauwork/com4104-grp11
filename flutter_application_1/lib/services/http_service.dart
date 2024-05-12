@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import 'time_service.dart';
 
-// import 'package:flutter_application_1/utils/utils.dart';
+// import 'package:market_ai/utils/utils.dart';
 
 class HTTPService extends GetxService {
   // Singleton implementation
@@ -103,7 +103,6 @@ class HTTPService extends GetxService {
 
   Future<Map<String, dynamic>> getFetchJson(String url) async {
     // Modify the request headers to accept JSON data
-    // final headers = {'Accept': 'text/json'};
     final headers = {
       'Accept': 'application/json',
       'Connection': 'Keep-Alive',
@@ -121,12 +120,10 @@ class HTTPService extends GetxService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         var parsedResponse =
             await jsonDecode(response.body); // Parse the JSON response
-        // print(response.body.runtimeType);
         return parsedResponse; // Return the parsed JSON
       } else {
         var parsedErrorResponse =
             await jsonDecode(response.body); // Parse the JSON error response
-        // logger.d('${response.statusCode}, $parsedErrorResponse');
         return parsedErrorResponse;
       }
     } catch (e) {
@@ -137,8 +134,8 @@ class HTTPService extends GetxService {
   Future<Map<String, dynamic>> postFetchJson(
       String url, Map<String, dynamic> body) async {
     // Modify the request headers to accept JSON data
-    // final headers = {'Accept': 'text/json'};
     final headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
       'Connection': 'Keep-Alive',
       'Keep-Alive': 'timeout=5, max=1000',
@@ -157,13 +154,11 @@ class HTTPService extends GetxService {
         // log(response.body);
         var parsedResponse =
             await jsonDecode(response.body); // Parse the JSON response
-        // print(response.body.runtimeType);
         return parsedResponse; // Return the parsed JSON
       } else {
         // log(response.body);
         var parsedErrorResponse =
             await jsonDecode(response.body); // Parse the JSON error response
-        // logger.d('${response.statusCode}, $parsedErrorResponse');
         return parsedErrorResponse;
       }
     } catch (e) {
@@ -191,10 +186,8 @@ class HTTPService extends GetxService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // print(response.body.runtimeType);
         return response.body;
       } else {
-        // logger.d('${response.statusCode}, ${response.body}');
         return response.body;
       }
     } catch (e) {
@@ -220,10 +213,8 @@ class HTTPService extends GetxService {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // print(response.body.runtimeType);
         return response.body;
       } else {
-        // logger.d('${response.statusCode}, ${response.body}');
         return response.body;
       }
     } catch (e) {

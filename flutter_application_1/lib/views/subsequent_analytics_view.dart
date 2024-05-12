@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/utils/utils.dart';
-import 'package:flutter_application_1/views/herophotoview_routewrapper.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/styles/styles.dart';
+import 'package:market_ai/utils/utils.dart';
+import 'package:market_ai/views/herophotoview_routewrapper.dart';
 
 class SubsequentAnalyticsView extends StatelessWidget {
   final BuildContext? context;

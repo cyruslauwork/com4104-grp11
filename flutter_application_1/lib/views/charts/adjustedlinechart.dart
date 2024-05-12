@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_application_1/styles/styles.dart';
+import 'package:market_ai/styles/styles.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_application_1/models/models.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/utils/utils.dart';
+import 'package:market_ai/models/models.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/utils/utils.dart';
 
 class AdjustedLineChart extends StatelessWidget {
   final LineChartData lineChartData;

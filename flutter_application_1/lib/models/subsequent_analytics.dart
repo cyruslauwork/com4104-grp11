@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/services/services.dart';
-// import 'package:flutter_application_1/utils/utils.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/services/services.dart';
+// import 'package:market_ai/utils/utils.dart';
 
 class SubsequentAnalytics {
   // Singleton implementation
@@ -13,6 +13,8 @@ class SubsequentAnalytics {
 
   void init() async {
     MainPresenter.to.subsequentAnalyticsNotifier.value = false;
+    MainPresenter.to.saCount++;
+    int saCount = MainPresenter.to.saCount.value;
 
     List<List<double>> lastClosePriceAndSubsequentTrends = [];
 
@@ -60,8 +62,6 @@ class SubsequentAnalytics {
             max(maxValueOfAllTrends, adjustedMatchedTrendClosePrice);
       }
     }
-    // print(minValueOfAllTrends);
-    // print(maxValueOfAllTrends);
 
     DateTime exeEndTime = DateTime.now(); // Record the download end time
     // Calculate the time difference
@@ -71,7 +71,6 @@ class SubsequentAnalytics {
 
     if (lastClosePriceAndSubsequentTrends.length >= 4) {
       exeStartTime = DateTime.now(); // Record the download start time
-      // log(lastClosePriceAndSubsequentTrends.toString());
       CloudService()
           .getCsvAndPng(
         lastClosePriceAndSubsequentTrends: lastClosePriceAndSubsequentTrends,
@@ -79,30 +78,34 @@ class SubsequentAnalytics {
         maxValueOfAllTrends: maxValueOfAllTrends,
       )
           .then((parsedResponse) {
-        // log(parsedResponse.toString());
-        exeEndTime = DateTime.now(); // Record the download end time
-        // Calculate the time difference
-        exeDuration = exeEndTime.difference(exeStartTime);
-        exeTime = exeDuration.inMilliseconds;
-        MainPresenter.to.cloudSubsequentAnalyticsTime.value = exeTime;
-        try {
-          Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
-          MainPresenter.to.subsequentAnalyticsErr.value = '';
-          parseJson(csvPngFiles);
-        } catch (e) {
-          String err = parsedResponse['error'];
-          MainPresenter.to.subsequentAnalyticsErr.value = err;
+        // Check if multiple SAs are queued
+        if (MainPresenter.to.saCount.value == saCount) {
+          exeEndTime = DateTime.now(); // Record the download end time
+          // Calculate the time difference
+          exeDuration = exeEndTime.difference(exeStartTime);
+          exeTime = exeDuration.inMilliseconds;
+          MainPresenter.to.cloudSubsequentAnalyticsTime.value = exeTime;
+          try {
+            Map<String, dynamic> csvPngFiles = parsedResponse['csv_png_files'];
+            MainPresenter.to.subsequentAnalyticsErr.value = '';
+            parseJson(csvPngFiles);
+          } catch (e) {
+            String err = parsedResponse['error'];
+            MainPresenter.to.subsequentAnalyticsErr.value = err;
+          }
+        } else {
+          return;
         }
-        MainPresenter.to.subsequentAnalyticsNotifier.value = true;
       }).catchError((error) {
         // Handle any errors during the asynchronous operation
-        // ...
+        MainPresenter.to.subsequentAnalyticsErr.value =
+            'An unexpected error occurred in getCsvAndPng()';
       });
     } else {
       MainPresenter.to.subsequentAnalyticsErr.value =
           'The number of subsequent trends must be equal to or greater than 4.';
-      MainPresenter.to.subsequentAnalyticsNotifier.value = true;
     }
+    MainPresenter.to.subsequentAnalyticsNotifier.value = true;
   }
 
   List<double> getMatchedTrendLastClosePriceAndSubsequentTrend(int index) {
@@ -128,8 +131,6 @@ class SubsequentAnalytics {
       lastClosePriceAndSubsequentTrend.add(adjustedMatchedTrendClosePrice);
     }
 
-    // ignore: avoid_print
-    // print(lastClosePriceAndSubsequentTrend);
     return lastClosePriceAndSubsequentTrend;
   }
 

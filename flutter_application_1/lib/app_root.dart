@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:wakelock/wakelock.dart';
 
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/views/views.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/styles/styles.dart';
+import 'package:market_ai/services/services.dart';
+import 'package:market_ai/views/views.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/styles/styles.dart';
 
 var logger = Logger();
 

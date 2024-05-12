@@ -1,8 +1,8 @@
-import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:market_ai/presenters/presenters.dart';
 import 'package:get/get.dart';
 
-import 'package:flutter_application_1/services/l10n/l10n.dart';
-import 'package:flutter_application_1/services/prefs/prefs.dart';
+import 'package:market_ai/services/l10n/l10n.dart';
+import 'package:market_ai/services/prefs/prefs.dart';
 
 class LangService extends GetxService {
   // Singleton implementation

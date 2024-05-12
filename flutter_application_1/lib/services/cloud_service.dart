@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 
-import 'package:flutter_application_1/services/services.dart';
+import 'package:market_ai/services/services.dart';
 
-// import 'package:flutter_application_1/utils/utils.dart';
+// import 'package:market_ai/utils/utils.dart';
 
 class CloudService extends GetxService {
   // Singleton implementation
@@ -22,11 +22,7 @@ class CloudService extends GetxService {
       required double minValueOfAllTrends,
       required double maxValueOfAllTrends}) async {
     String encodedTrends = jsonEncode(lastClosePriceAndSubsequentTrends);
-    // log(encodedTrends);
-
     String lang = LangService.to.currentLang.langCode;
-    // print(minValueOfAllTrends);
-    // print(maxValueOfAllTrends);
 
     /* POST method */
     Map<String, dynamic> parsedResponse =
@@ -40,7 +36,6 @@ class CloudService extends GetxService {
 
     /* GET method */
     // String urlEncodedTrends = Uri.encodeComponent(encodedTrends);
-    // log(urlEncodedTrends);
     // Map<String, dynamic> parsedResponse = await HTTPService().getFetchJson(
     //     'http://35.221.170.30/?func=subtrend-to-csv-png&sub_trend=$urlEncodedTrends');
     return parsedResponse;
@@ -51,7 +46,6 @@ class CloudService extends GetxService {
     if (symbolAndName != null) {
       /* GET method */
       String urlEncodedSymbolAndName = Uri.encodeComponent(symbolAndName);
-      // log(urlEncodedSymbolAndName);
       String response = await HTTPService().getFetchString(
           'http://35.221.170.30/?func=gemini-pro-news&symbol_and_name=$urlEncodedSymbolAndName');
       return response;
@@ -59,8 +53,6 @@ class CloudService extends GetxService {
       /* GET method */
       String urlEncodedSymbols = Uri.encodeComponent(symbols);
       String urlEncodedQuestion = Uri.encodeComponent(question);
-      // log(urlEncodedSymbols);
-      // log(urlEncodedQuestion);
       String response = await HTTPService().getFetchString(
           'http://35.221.170.30/?func=gemini-pro-news-custom&symbols=$urlEncodedSymbols&question=$urlEncodedQuestion');
       return response;

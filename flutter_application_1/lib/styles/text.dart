@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/utils/utils.dart';
+import 'package:market_ai/services/services.dart';
+import 'package:market_ai/styles/styles.dart';
+import 'package:market_ai/utils/utils.dart';
 
 extension CustomStyles on TextTheme {
   TextStyle get sp4 => TextStyle(

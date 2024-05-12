@@ -4,10 +4,8 @@ import 'dart:math';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-
-import 'package:flutter_application_1/utils/utils.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/styles/styles.dart';
 
 class TrendMatch {
   // Singleton implementation
@@ -15,11 +13,10 @@ class TrendMatch {
   factory TrendMatch() => _instance;
   TrendMatch._();
 
-  init({required bool init}) {
+  init() {
     MainPresenter.to.trendMatched.value = false;
 
     List<CandleData> listCandledata = MainPresenter.to.listCandledata;
-    // logger.d(listCandledata.length.toString());
 
     List<double> selectedPeriodPercentageDifferencesList = [];
     List<double> selectedPeriodActualDifferencesList = [];
@@ -53,326 +50,123 @@ class TrendMatch {
 
     DateTime startTime = DateTime.now(); // Record the start time
 
-    // init is false if and only if added new JSON data
-    try {
-      if (init) {
-        try {
-          MainPresenter.to.matchRows.value = [];
-          MainPresenter.to.matchPercentDifferencesListList.value = [];
-          MainPresenter.to.matchActualDifferencesListList.value = [];
-          MainPresenter.to.matchActualPricesListList.value = [];
-        } catch (e) {
-          logger.d('1.1: An error occurred: $e');
-        }
+    MainPresenter.to.matchRows.value = [];
+    MainPresenter.to.matchPercentDifferencesListList.value = [];
+    MainPresenter.to.matchActualDifferencesListList.value = [];
+    MainPresenter.to.matchActualPricesListList.value = [];
 
-        // Loop selected data
-        try {
-          for (int i = range; i > 1; i--) {
-            try {
-              double percentage =
-                  (listCandledata[listCandledata.length - (i - 1)].close! -
-                          listCandledata[listCandledata.length - i].close!) /
-                      (listCandledata[listCandledata.length - i].close!);
-              selectedPeriodPercentageDifferencesList.add(percentage);
-            } catch (e) {
-              logger.d('1.3: An error occurred: $e');
-            }
-            try {
-              selectedPeriodActualDifferencesList.add(
-                  listCandledata[listCandledata.length - (i - 1)].close! -
-                      listCandledata[listCandledata.length - i].close!);
-            } catch (e) {
-              logger.d('1.4: An error occurred: $e');
-            }
-          }
-        } catch (e) {
-          logger.d('1.2: An error occurred: $e');
-        }
-        try {
-          for (int i = range; i > 0; i--) {
-            try {
-              selectedPeriodActualPricesList
-                  .add(listCandledata[listCandledata.length - i].close!);
-            } catch (e) {
-              logger.d('1.6: An error occurred: $e');
-            }
-          }
-        } catch (e) {
-          logger.d('1.5: An error occurred: $e');
-        }
-        // logger.d('selected data: ${selectedPeriodList.length}');
-        try {
-          MainPresenter.to.selectedPeriodPercentDifferencesList.value =
-              selectedPeriodPercentageDifferencesList;
-          MainPresenter.to.selectedPeriodActualDifferencesList.value =
-              selectedPeriodActualDifferencesList;
-          MainPresenter.to.selectedPeriodActualPricesList.value =
-              selectedPeriodActualPricesList;
-        } catch (e) {
-          logger.d('1.7: An error occurred: $e');
-        }
-        // difference between start and user selected date --> l
-        // user selected range
-        // --> 整daterange field
-        // for (int i = 0; i < selectedCount - 1; i++) {
-        //   double percentage =
-        //       (listCandledata[l + (i + 1)].close! - listCandledata[l + i].close!) /
-        //           (listCandledata[l + i].close!);
-        //   selectedPeriodList.add(percentage);
-        // }
-      }
-    } catch (e) {
-      logger.d('1: An error occurred: $e');
+    // Loop selected data
+    for (int i = range; i > 1; i--) {
+      double percentage =
+          (listCandledata[listCandledata.length - (i - 1)].close! -
+                  listCandledata[listCandledata.length - i].close!) /
+              (listCandledata[listCandledata.length - i].close!);
+      selectedPeriodPercentageDifferencesList.add(percentage);
+
+      selectedPeriodActualDifferencesList.add(
+          listCandledata[listCandledata.length - (i - 1)].close! -
+              listCandledata[listCandledata.length - i].close!);
     }
-    // else {
-    //   selectedPeriodPercentageDifferencesList =
-    //       MainPresenter.to.selectedPeriodPercentDifferencesList;
-    //   selectedPeriodActualDifferencesList =
-    //       MainPresenter.to.selectedPeriodActualDifferencesList;
-    //   selectedPeriodActualPricesList =
-    //       MainPresenter.to.selectedPeriodActualPricesList;
-    // }
+    for (int i = range; i > 0; i--) {
+      selectedPeriodActualPricesList
+          .add(listCandledata[listCandledata.length - i].close!);
+    }
+
+    MainPresenter.to.selectedPeriodPercentDifferencesList.value =
+        selectedPeriodPercentageDifferencesList;
+    MainPresenter.to.selectedPeriodActualDifferencesList.value =
+        selectedPeriodActualDifferencesList;
+    MainPresenter.to.selectedPeriodActualPricesList.value =
+        selectedPeriodActualPricesList;
 
     // Loop all data
-    // logger.d('listCandledata: ${listCandledata.length}');
-    try {
-      for (int l = 0;
-          l <
-              (init
-                  ? listCandledata.length - range * 2
-                  : listCandledata.length -
-                      MainPresenter.to.lastCandledataLength
-                          .value); // init is false if and only if added new JSON data
-          l++) {
-        try {
-          // Minus selectedCount to avoid counting selected data as a same match
-          for (int i = 0; i < range - 1; i++) {
-            try {
-              double percentage = (listCandledata[l + (i + 1)].close! -
-                      listCandledata[l + i].close!) /
-                  (listCandledata[l + i].close!);
-              comparePeriodPercentageDifferencesList.add(percentage);
-            } catch (e) {
-              logger.d('2.2: An error occurred: $e');
-            }
-            try {
-              comparePeriodActualDifferencesList.add(
-                  listCandledata[l + (i + 1)].close! -
-                      listCandledata[l + i].close!);
-            } catch (e) {
-              logger.d('2.3: An error occurred: $e');
-            }
-          }
-        } catch (e) {
-          logger.d('2.1: An error occurred: $e');
-        }
-        try {
-          for (int i = 0; i < range; i++) {
-            try {
-              comparePeriodActualPricesList.add(listCandledata[l + i].close!);
-            } catch (e) {
-              logger.d('2.5: An error occurred: $e');
-            }
-          }
-          // logger.d('all data: ${comparePeriodList.length}');
-        } catch (e) {
-          logger.d('2.4: An error occurred: $e');
-        }
-        try {
-          (
-            bool,
-            List<double>
-          ) comparisonResult = areDifferencesLessThanOrEqualToCertainPercent(
-              selectedPeriodPercentageDifferencesList,
-              comparePeriodPercentageDifferencesList); // Record data type in Dart is equivalent to Tuple in Java and Python
-
-          try {
-            if (comparisonResult.$1) {
-              trueCount += 1;
-
-              // matchPercentDifferencesList = comparePeriodPercentageDifferencesList;
-              try {
-                MainPresenter.to.matchRows.add(l);
-                matchPercentDifferencesListList.add(comparisonResult.$2);
-              } catch (e) {
-                logger.d('2.8: An error occurred: $e');
-              }
-              try {
-                for (int i = 0; i < comparisonResult.$2.length; i++) {
-                  try {
-                    double actual = listCandledata[l + (i + 1)].close! -
-                        listCandledata[l + i].close!;
-                    matchActualDifferencesList.add(actual);
-                  } catch (e) {
-                    logger.d('2.9.1: An error occurred: $e');
-                  }
-                }
-              } catch (e) {
-                logger.d('2.9: An error occurred: $e');
-              }
-              try {
-                for (int i = 0; i < comparisonResult.$2.length + 1; i++) {
-                  try {
-                    matchActualPricesList.add(listCandledata[l + i].close!);
-                  } catch (e) {
-                    logger.d('2.9.3: An error occurred: $e');
-                  }
-                }
-              } catch (e) {
-                logger.d('2.9.2: An error occurred: $e');
-              }
-              try {
-                matchActualDifferencesListList.add(matchActualDifferencesList);
-                matchActualPricesListList.add(matchActualPricesList);
-              } catch (e) {
-                logger.d('2.9.4: An error occurred: $e');
-              }
-            } else {
-              falseCount += 1;
-            }
-          } catch (e) {
-            logger.d('2.7: An error occurred: $e');
-          }
-        } catch (e) {
-          logger.d('2.6: An error occurred: $e');
-        }
-        try {
-          comparePeriodPercentageDifferencesListList
-              .add(comparePeriodPercentageDifferencesList);
-          comparePeriodActualDifferencesListList
-              .add(comparePeriodActualDifferencesList);
-          comparePeriodActualPricesListList.add(comparePeriodActualPricesList);
-          comparePeriodPercentageDifferencesList = [];
-          comparePeriodActualDifferencesList = [];
-          comparePeriodActualPricesList = [];
-
-          matchActualDifferencesList = [];
-          matchActualPricesList = [];
-        } catch (e) {
-          logger.d('2.9.4: An error occurred: $e');
-        }
+    for (int l = 0; l < listCandledata.length - range * 2; l++) {
+      // Minus selectedCount to avoid counting selected data as a same match
+      for (int i = 0; i < range - 1; i++) {
+        double percentage = (listCandledata[l + (i + 1)].close! -
+                listCandledata[l + i].close!) /
+            (listCandledata[l + i].close!);
+        comparePeriodPercentageDifferencesList.add(percentage);
+        comparePeriodActualDifferencesList.add(
+            listCandledata[l + (i + 1)].close! - listCandledata[l + i].close!);
       }
-    } catch (e) {
-      logger.d('2: An error occurred: $e');
-    }
-
-    try {
-      // init is false if and only if added new JSON data
-      if (init) {
-        MainPresenter.to.comparePeriodPercentDifferencesListList.value =
-            comparePeriodPercentageDifferencesListList;
-        MainPresenter.to.comparePeriodActualDifferencesListList.value =
-            comparePeriodActualDifferencesListList;
-        MainPresenter.to.comparePeriodActualPricesListList.value =
-            comparePeriodActualPricesListList;
-
-        MainPresenter.to.matchPercentDifferencesListList.value =
-            matchPercentDifferencesListList;
-        MainPresenter.to.matchActualDifferencesListList.value =
-            matchActualDifferencesListList;
-        MainPresenter.to.matchActualPricesListList.value =
-            matchActualPricesListList;
+      for (int i = 0; i < range; i++) {
+        comparePeriodActualPricesList.add(listCandledata[l + i].close!);
       }
-    } catch (e) {
-      logger.d('3: An error occurred: $e');
-    }
-    // else {
-    //   // Insert each row of new JSON data into the original list
-    //   for (List<double> comparePeriodPercentageList
-    //       in comparePeriodPercentageDifferencesListList.reversed) {
-    //     MainPresenter.to.comparePeriodPercentDifferencesListList
-    //         .insert(0, comparePeriodPercentageList);
-    //   }
-    //   // Insert each row of new JSON data into the original list
-    //   for (List<double> comparePeriodActualDifferencesList
-    //       in comparePeriodActualDifferencesListList.reversed) {
-    //     MainPresenter.to.comparePeriodActualDifferencesListList
-    //         .insert(0, comparePeriodActualDifferencesList);
-    //   }
-    //   // Insert each row of new JSON data into the original list
-    //   for (List<double> comparePeriodActualPriceList
-    //       in comparePeriodActualPricesListList.reversed) {
-    //     MainPresenter.to.comparePeriodActualPricesListList
-    //         .insert(0, comparePeriodActualPriceList);
-    //   }
-    //   // Insert each row of new JSON data into the original list
-    //   for (List<double> matchPercentDifferencesList
-    //       in matchPercentDifferencesListList.reversed) {
-    //     MainPresenter.to.matchPercentDifferencesListList
-    //         .insert(0, matchPercentDifferencesList);
-    //   }
-    //   // Insert each row of new JSON data into the original list
-    //   for (List<double> matchActualDifferencesList
-    //       in matchActualDifferencesListList.reversed) {
-    //     MainPresenter.to.matchActualDifferencesListList
-    //         .insert(0, matchActualDifferencesList);
-    //   }
-    //   // Insert each row of new JSON data into the original list
-    //   for (List<double> matchActualPricesList
-    //       in matchActualPricesListList.reversed) {
-    //     MainPresenter.to.matchActualPricesListList
-    //         .insert(0, matchActualPricesList);
-    //   }
-    // }
-    try {
-      MainPresenter.to.lastCandledataLength.value = listCandledata.length;
 
-      DateTime endTime = DateTime.now(); // Record the end time
-      // Calculate the time difference
-      Duration executionDuration = endTime.difference(startTime);
-      int executionTime = executionDuration.inMilliseconds;
+      (
+        bool,
+        List<double>
+      ) comparisonResult = areDifferencesLessThanOrEqualToCertainPercent(
+          selectedPeriodPercentageDifferencesList,
+          comparePeriodPercentageDifferencesList); // Record data type in Dart is equivalent to Tuple in Java and Python
 
-      MainPresenter.to.trendMatchOutput.value = [
-        trueCount,
-        falseCount,
-        executionTime,
-        listCandledata.length,
-        range,
-      ];
-    } catch (e) {
-      logger.d('4: An error occurred: $e');
+      if (comparisonResult.$1) {
+        trueCount += 1;
+
+        MainPresenter.to.matchRows.add(l);
+        matchPercentDifferencesListList.add(comparisonResult.$2);
+
+        for (int i = 0; i < comparisonResult.$2.length; i++) {
+          double actual =
+              listCandledata[l + (i + 1)].close! - listCandledata[l + i].close!;
+          matchActualDifferencesList.add(actual);
+        }
+
+        for (int i = 0; i < comparisonResult.$2.length + 1; i++) {
+          matchActualPricesList.add(listCandledata[l + i].close!);
+        }
+
+        matchActualDifferencesListList.add(matchActualDifferencesList);
+        matchActualPricesListList.add(matchActualPricesList);
+      } else {
+        falseCount += 1;
+      }
+
+      comparePeriodPercentageDifferencesListList
+          .add(comparePeriodPercentageDifferencesList);
+      comparePeriodActualDifferencesListList
+          .add(comparePeriodActualDifferencesList);
+      comparePeriodActualPricesListList.add(comparePeriodActualPricesList);
+      comparePeriodPercentageDifferencesList = [];
+      comparePeriodActualDifferencesList = [];
+      comparePeriodActualPricesList = [];
+
+      matchActualDifferencesList = [];
+      matchActualPricesList = [];
     }
+
+    MainPresenter.to.comparePeriodPercentDifferencesListList.value =
+        comparePeriodPercentageDifferencesListList;
+    MainPresenter.to.comparePeriodActualDifferencesListList.value =
+        comparePeriodActualDifferencesListList;
+    MainPresenter.to.comparePeriodActualPricesListList.value =
+        comparePeriodActualPricesListList;
+
+    MainPresenter.to.matchPercentDifferencesListList.value =
+        matchPercentDifferencesListList;
+    MainPresenter.to.matchActualDifferencesListList.value =
+        matchActualDifferencesListList;
+    MainPresenter.to.matchActualPricesListList.value =
+        matchActualPricesListList;
+
+    MainPresenter.to.lastCandledataLength.value = listCandledata.length;
+
+    DateTime endTime = DateTime.now(); // Record the end time
+    // Calculate the time difference
+    Duration executionDuration = endTime.difference(startTime);
+    int executionTime = executionDuration.inMilliseconds;
+
+    MainPresenter.to.trendMatchOutput.value = [
+      trueCount,
+      falseCount,
+      executionTime,
+      listCandledata.length,
+      range,
+    ];
 
     MainPresenter.to.trendMatched.value = true;
-
-    // logger.d('True${MainPresenter.to.trendMatchOutput[0]}');
-    // logger.d('False${MainPresenter.to.trendMatchOutput[1]}');
-    // logger.d('executionTime${MainPresenter.to.trendMatchOutput[2]}');
-    // logger.d('listCandledata.length${MainPresenter.to.trendMatchOutput[3]}');
-    // logger.d('selectedCount${MainPresenter.to.trendMatchOutput[4]}');
-    // logger.d('candleListList${MainPresenter.to.candleListList.length}');
-    // logger.d('listCandledata${MainPresenter.to.listCandledata.length}');
-    // logger.d('selectedPeriodPercentDifferencesList${MainPresenter.to.selectedPeriodPercentDifferencesList.length}');
-    // logger.d('selectedPeriodActualDifferencesList${MainPresenter.to.selectedPeriodActualDifferencesList.length}');
-    // logger.d('selectedPeriodActualPricesList${MainPresenter.to.selectedPeriodActualPricesList.length}');
-    // logger.d('comparePeriodPercentDifferencesListList${MainPresenter.to.comparePeriodPercentDifferencesListList.length}');
-    // logger.d('comparePeriodActualDifferencesListList${MainPresenter.to.comparePeriodActualDifferencesListList.length}');
-    // logger.d('comparePeriodActualPricesListList${MainPresenter.to.comparePeriodActualPricesListList.length}');
-    // logger.d('matchPercentDifferencesListList${MainPresenter.to.matchPercentDifferencesListList.length}');
-    // logger.d('matchActualDifferencesListList${MainPresenter.to.matchActualDifferencesListList.length}');
-    // logger.d('matchActualPricesListList${MainPresenter.to.matchActualPricesListList.length}');
-    // logger.d('matchRows${MainPresenter.to.matchRows.length}');
-    // logger.d('lastCandleDataLength${MainPresenter.to.lastCandleDataLength}');
   }
-
-  // (bool, List<double>) areDifferencesLessThanOrEqualToCertainPercent(
-  //     List<double> selList, List<double> comList) {
-  //   if (selList.length != comList.length) {
-  //     // logger.d('${selList.length} != ${comList.length}');
-  //     throw ArgumentError('Both lists must have the same length.');
-  //   }
-
-  //   for (int i = 0; i < selList.length; i++) {
-  //     double difference = (comList[i] - selList[i]).abs();
-  //     double percentageDifferenceAllowance = (selList[i] * 1).abs();
-
-  //     if (difference >= percentageDifferenceAllowance) {
-  //       return (false, []); // Difference is larger than or equal to certain %
-  //     }
-  //   }
-
-  //   return (true, comList); // All differences are less than certain %
-  // }
 
   (bool, List<double>) areDifferencesLessThanOrEqualToCertainPercent(
       List<double> selList, List<double> comList) {

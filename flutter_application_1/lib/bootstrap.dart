@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'package:flutter_application_1/services/services.dart';
+import 'package:market_ai/services/services.dart';
 import 'app_root.dart';
 
 var logger = Logger();

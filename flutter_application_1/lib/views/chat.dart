@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 
-import 'package:flutter_application_1/models/models.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/utils/utils.dart';
-import 'package:flutter_application_1/styles/styles.dart';
+import 'package:market_ai/models/models.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/services/services.dart';
+import 'package:market_ai/utils/utils.dart';
+import 'package:market_ai/styles/styles.dart';
 
 class ChatView extends StatefulWidget {
   // const ChatView({Key? key}) : super(key: key);

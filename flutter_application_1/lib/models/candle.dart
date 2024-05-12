@@ -4,11 +4,11 @@ import 'dart:convert';
 
 import 'package:interactive_chart/interactive_chart.dart';
 
-import 'package:flutter_application_1/services/services.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:market_ai/services/services.dart';
+import 'package:market_ai/presenters/presenters.dart';
 import 'candle_adapter.dart';
 
-// import 'package:flutter_application_1/utils/utils.dart';
+// import 'package:market_ai/utils/utils.dart';
 
 class Candle {
   // Singleton implementation
@@ -18,7 +18,6 @@ class Candle {
 
   Future<List<CandleData>> init({String? stockSymbol}) {
     stockSymbol ??= MainPresenter.to.financialInstrumentSymbol.value;
-    // print(stockSymbol);
     return CandleAdapter().listListTolistCandledata(
         Candle().checkAPIProvider(init: true, stockSymbol: stockSymbol));
   }
@@ -38,7 +37,6 @@ class Candle {
 
     try {
       if (response.statusCode == 200) {
-        // print(response.body.runtimeType);
         return response.body;
       } else {
         MainPresenter.to.marketDataProviderMsg.value =
@@ -139,9 +137,6 @@ class Candle {
     final ma60 = CandleData.computeMA(MainPresenter.to.listCandledata, 60);
     final ma120 = CandleData.computeMA(MainPresenter.to.listCandledata, 120);
     final ma240 = CandleData.computeMA(MainPresenter.to.listCandledata, 240);
-    // final vwap = _computeVWAP(MainPresenter.to.listCandledata);
-
-    // log(vwap.toString());
 
     for (int i = 0; i < MainPresenter.to.listCandledata.length; i++) {
       MainPresenter.to.listCandledata[i].trends = [
@@ -151,33 +146,9 @@ class Candle {
         ma60[i],
         ma120[i],
         ma240[i],
-        // vwap[i]
       ];
     }
   }
-
-  // List<double?> _computeVWAP(List<CandleData> data) {
-  //   final vwapList = <double?>[];
-  //   double cumulativeTypicalPriceVolume = 0;
-  //   double cumulativeVolume = 0;
-
-  //   for (int i = 0; i < data.length; i++) {
-  //     final candle = data[i];
-  //     final typicalPrice = (candle.high! + candle.low! + candle.close!) / 3;
-  //     final volume = candle.volume!;
-  //     cumulativeTypicalPriceVolume += typicalPrice * volume;
-  //     cumulativeVolume += volume;
-
-  //     if (cumulativeVolume != 0) {
-  //       final vwap = (cumulativeTypicalPriceVolume / cumulativeVolume) + 160;
-  //       vwapList.add(vwap);
-  //     } else {
-  //       vwapList.add(null);
-  //     }
-  //   }
-
-  //   return vwapList;
-  // }
 
   removeTrendLines() {
     for (final data in MainPresenter.to.listCandledata) {

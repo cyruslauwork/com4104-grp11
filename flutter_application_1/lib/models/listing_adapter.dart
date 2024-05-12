@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/presenters/presenters.dart';
+import 'package:market_ai/presenters/presenters.dart';
 
-// import 'package:flutter_application_1/utils/utils.dart';
+// import 'package:market_ai/utils/utils.dart';
 
 class ListingAdapter {
   // Singleton implementation
@@ -28,7 +28,6 @@ class ListingAdapter {
       MainPresenter.to.listingErr.value =
           'Unable to fetch listings from api.nasdaq.com due to maintenance: $e';
     }
-    // log(json.toString());
     return json;
   }
 
@@ -46,7 +45,6 @@ class ListingAdapter {
             !symbolAndName.symbol.contains('/') &&
             !symbolAndName.symbol.contains('^'))
         .toList();
-    // print(listSymbolAndName);
     return listSymbolAndName;
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/utils/utils.dart';
-import 'package:flutter_application_1/views/charts/charts.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/styles/styles.dart';
+import 'package:market_ai/utils/utils.dart';
+import 'package:market_ai/views/charts/charts.dart';
 
 class TrendMatchView extends StatelessWidget {
   // const TrendMatchView({super.key});

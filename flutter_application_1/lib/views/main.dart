@@ -1,16 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/models/listing_adapter.dart';
+import 'package:market_ai/models/listing_adapter.dart';
 
 import 'package:get/get.dart';
 import 'package:interactive_chart/interactive_chart.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import 'package:flutter_application_1/presenters/presenters.dart';
-import 'package:flutter_application_1/utils/utils.dart';
-import 'package:flutter_application_1/views/views.dart';
-import 'package:flutter_application_1/styles/styles.dart';
-import 'package:flutter_application_1/services/services.dart';
+import 'package:market_ai/presenters/presenters.dart';
+import 'package:market_ai/utils/utils.dart';
+import 'package:market_ai/views/views.dart';
+import 'package:market_ai/styles/styles.dart';
+import 'package:market_ai/services/services.dart';
 
 class MainView extends StatefulWidget {
   // const MainView({Key? key}) : super(key: key);

@@ -1,4 +1,4 @@
-package com.example.flutter_application_1
+package com.example.market_ai
 
 import io.flutter.embedding.android.FlutterActivity
 
